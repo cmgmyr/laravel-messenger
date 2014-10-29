@@ -30,6 +30,16 @@ class Thread extends Eloquent
     }
 
     /**
+     * Returns the latest message from a thread
+     *
+     * @return \Cmgmyr\Messenger\Models\Message
+     */
+    public function latestMessage()
+    {
+        return $this->messages()->latest()->first();
+    }
+
+    /**
      * Participants relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
