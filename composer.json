@@ -1,0 +1,25 @@
+{
+    "name": "cmgmyr/messenger",
+    "description": "Simple user messaging tool for Laravel",
+    "keywords": ["laravel", "messenger", "messaging", "user messaging"],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Chris Gmyr",
+            "email": "cmgmyr@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "4.2.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "Cmgmyr\\Messenger\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
