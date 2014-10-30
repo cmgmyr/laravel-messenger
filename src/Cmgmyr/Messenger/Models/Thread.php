@@ -50,6 +50,16 @@ class Thread extends Eloquent
     }
 
     /**
+     * Returns an array of user ids that are associated with the thread
+     *
+     * @return array
+     */
+    public function participantsUserIds()
+    {
+        return $this->participants->lists('user_id');
+    }
+
+    /**
      * Returns threads that the user is associated with
      *
      * @param $query
