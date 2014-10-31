@@ -1,5 +1,6 @@
 <?php namespace Cmgmyr\Messenger\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Thread extends Eloquent
@@ -130,6 +131,34 @@ class Thread extends Eloquent
                 ]);
             }
         }
+    }
+
+    /**
+     * Mark a thread as read for a user
+     *
+     * @param null|integer $userId
+     */
+    public function markAsRead($userId = null)
+    {
+        $participant = $this->getParticipantFromUser($userId);
+
+        if ($participant) {
+            $participant->last_read = new Carbon;
+            $participant->save();
+        }
+    }
+
+    /**
+     * Finds the participant record from a user id
+     *
+     * @param $userId
+     * @return mixed
+     */
+    public function getParticipantFromUser($userId)
+    {
+        $userId = $userId ?: \Auth::user()->id;
+
+        return $this->participants()->where('user_id', $userId)->first();
     }
 
 }

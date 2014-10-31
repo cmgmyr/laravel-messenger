@@ -11,7 +11,8 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "illuminate/support": "4.2.*"
+        "illuminate/support": "4.2.*",
+        "nesbot/carbon": "~1.0"
     },
     "autoload": {
         "classmap": [
