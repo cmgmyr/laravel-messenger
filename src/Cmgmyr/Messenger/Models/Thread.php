@@ -87,7 +87,7 @@ class Thread extends Eloquent
     {
         $user = $user ?: \Auth::user()->id;
 
-        return $query->join('participants', 'thread.id', '=', 'participants.thread_id')
+        return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
             ->where('participants.user_id', $user)
             ->where('threads.updated_at', '>', \DB::raw('participants.last_read'))
             ->select('threads.*');
