@@ -21,6 +21,13 @@ class Participant extends Eloquent
     protected $fillable = ['thread_id', 'user_id', 'last_read'];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'last_read'];
+
+    /**
      * Thread relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo

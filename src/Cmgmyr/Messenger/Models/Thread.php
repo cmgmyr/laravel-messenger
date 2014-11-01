@@ -149,6 +149,23 @@ class Thread extends Eloquent
     }
 
     /**
+     * See if the current thread is unread by the user
+     *
+     * @param null|integer $userId
+     * @return bool
+     */
+    public function isUnread($userId = null)
+    {
+        $participant = $this->getParticipantFromUser($userId);
+
+        if ($participant && ($this->updated_at > $participant->last_read)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Finds the participant record from a user id
      *
      * @param $userId
