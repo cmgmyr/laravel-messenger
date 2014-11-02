@@ -57,7 +57,10 @@ class Thread extends Eloquent
      */
     public function participantsUserIds()
     {
-        return $this->participants->lists('user_id');
+        $users = $this->participants->lists('user_id');
+        $users[] = \Auth::user()->id;
+
+        return $users;
     }
 
     /**
