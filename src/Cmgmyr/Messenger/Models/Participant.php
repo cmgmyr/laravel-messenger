@@ -47,32 +47,4 @@ class Participant extends Eloquent
         return $this->belongsTo(Config::get('messenger::user_model'));
     }
 
-    /**
-     * Finds the participant that is the current user
-     *
-     * @param $query
-     * @param null $user
-     * @return mixed
-     */
-    public function scopeMe($query, $user = null)
-    {
-        $user = $user ?: \Auth::user()->id;
-
-        return $query->where('user_id', '=', $user);
-    }
-
-    /**
-     * Finds the participant that is not the current user
-     *
-     * @param $query
-     * @param null $user
-     * @return mixed
-     */
-    public function scopeNotMe($query, $user = null)
-    {
-        $user = $user ?: \Auth::user()->id;
-
-        return $query->where('user_id', '!=', $user);
-    }
-
 }
