@@ -22,6 +22,14 @@ Add the trait to your user model:
     	use Messagable;
     }
 
+Migrate your database:
+
+    php artisan migrate --package=cmgmyr/messenger
+
+Move and alter the config file (optional):
+
+    php artisan config:publish cmgmyr/messenger
+
 ## Updates
 More coming soon...
 
