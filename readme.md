@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/cmgmyr/laravel-messenger.svg?branch=master)](https://travis-ci.org/cmgmyr/laravel-messenger)
+
 # Laravel Messenger
 Simple user messaging tool for Laravel
 
@@ -30,8 +32,8 @@ Move and alter the config file (optional):
 
     php artisan config:publish cmgmyr/messenger
 
-## Updates
-More coming soon...
+## Examples
+coming soon...
 
-## Special Thanks
+### Special Thanks
 This package used [AndreasHeiberg/laravel-messenger](https://github.com/AndreasHeiberg/laravel-messenger) as a starting point.
