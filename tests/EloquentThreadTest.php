@@ -26,11 +26,11 @@ class EloquentThreadTest extends TestCase
     public function it_can_retrieve_the_latest_message()
     {
         $old_message = $this->faktory->build('message', [
-            'created_at' => Carbon::yesterday('America/New_York')
+            'created_at' => Carbon::yesterday()
         ]);
 
         $new_message = $this->faktory->build('message', [
-            'created_at' => Carbon::now('America/New_York'),
+            'created_at' => Carbon::now(),
             'body' => 'This is the most recent message'
         ]);
 

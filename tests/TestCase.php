@@ -1,5 +1,7 @@
 <?php namespace Cmgmyr\Messenger\Tests;
 
+date_default_timezone_set('America/New_York');
+
 use Illuminate\Database\Capsule\Manager as DB;
 use AdamWathan\Faktory\Faktory;
 
