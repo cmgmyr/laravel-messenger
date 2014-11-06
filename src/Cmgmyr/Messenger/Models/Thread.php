@@ -57,7 +57,7 @@ class Thread extends Eloquent
      */
     public function participantsUserIds()
     {
-        $users = $this->participants->lists('user_id');
+        $users = $this->participants()->withTrashed()->lists('user_id');
         $users[] = \Auth::user()->id;
 
         return $users;
@@ -76,7 +76,10 @@ class Thread extends Eloquent
 
         return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
             ->where('participants.user_id', $user)
-            ->select('threads.*');
+            ->where('participants.deleted_at', null)
+            ->select('threads.*')
+            ->latest('updated_at')
+            ->get();
     }
 
     /**
@@ -86,14 +89,17 @@ class Thread extends Eloquent
      * @param null $user
      * @return mixed
      */
-    public function scopeWithNewMessages($query, $user = null)
+    public function scopeForUserWithNewMessages($query, $user = null)
     {
         $user = $user ?: \Auth::user()->id;
 
         return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
             ->where('participants.user_id', $user)
+            ->where('participants.deleted_at', null)
             ->where('threads.updated_at', '>', \DB::raw('participants.last_read'))
-            ->select('threads.*');
+            ->select('threads.*')
+            ->latest('updated_at')
+            ->get();
     }
 
     /**
