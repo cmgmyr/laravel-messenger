@@ -1,14 +1,21 @@
 <?php namespace Cmgmyr\Messenger\Tests;
 
 use Illuminate\Database\Capsule\Manager as DB;
+use AdamWathan\Faktory\Faktory;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+    protected $faktory;
 
     public function setUp()
     {
         $this->configureDatabase();
         $this->migrateTables();
+        $this->faktory = new Faktory;
+        $load_factories = function ($faktory) {
+            require(__DIR__ . '/factories.php');
+        };
+        $load_factories($this->faktory);
     }
 
     private function configureDatabase()
@@ -91,4 +98,4 @@ class TestCase extends \PHPUnit_Framework_TestCase
             }
         );
     }
-} 
+}
