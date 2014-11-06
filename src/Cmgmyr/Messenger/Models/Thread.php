@@ -51,6 +51,16 @@ class Thread extends Eloquent
     }
 
     /**
+     * Returns all of the latest threads by updated_at date
+     *
+     * @return mixed
+     */
+    public static function getAllLatest()
+    {
+        return self::latest('updated_at')->get();
+    }
+
+    /**
      * Returns an array of user ids that are associated with the thread
      *
      * @return array
