@@ -1,5 +1,6 @@
 <?php namespace Cmgmyr\Messenger\Tests;
 
+use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
@@ -25,11 +26,11 @@ class EloquentThreadTest extends TestCase
     public function it_can_retrieve_the_latest_message()
     {
         $old_message = $this->faktory->build('message', [
-            'created_at' => new \DateTime('5 days ago')
+            'created_at' => Carbon::yesterday()
         ]);
 
         $new_message = $this->faktory->build('message', [
-            'created_at' => new \DateTime,
+            'created_at' => Carbon::now(),
             'body' => 'This is the most recent message'
         ]);
 
