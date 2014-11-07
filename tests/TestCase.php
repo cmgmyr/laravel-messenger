@@ -7,8 +7,15 @@ use AdamWathan\Faktory\Faktory;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
+
+    /**
+     * @var \AdamWathan\Faktory\Faktory
+     */
     protected $faktory;
 
+    /**
+     * Set up the database, migrations, and initial data
+     */
     public function setUp()
     {
         $this->configureDatabase();
@@ -20,6 +27,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $load_factories($this->faktory);
     }
 
+    /**
+     * Configure the database
+     */
     private function configureDatabase()
     {
         $db = new DB;
@@ -37,6 +47,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $db->setAsGlobal();
     }
 
+    /**
+     * Run the migrations for the database
+     */
     private function migrateTables()
     {
         $this->createUsersTable();
@@ -45,6 +58,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->createParticipantsTable();
     }
 
+    /**
+     * Create the users table in the database
+     */
     private function createUsersTable()
     {
         DB::schema()->create(
@@ -60,6 +76,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Create the threads table in the database
+     */
     private function createThreadsTable()
     {
         DB::schema()->create(
@@ -72,6 +91,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Create the messages table in the database
+     */
     private function createMessagesTable()
     {
         DB::schema()->create(
@@ -86,6 +108,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
         );
     }
 
+    /**
+     * Create the participants table in the database
+     */
     private function createParticipantsTable()
     {
         DB::schema()->create(

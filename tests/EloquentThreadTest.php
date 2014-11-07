@@ -14,28 +14,43 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_sets_a_thread_subject()
+    public function it_creates_a_new_thread()
     {
-        $thread = new Thread;
-        $thread->subject = 'Test Thread';
+        $thread = $this->faktory->build('thread');
+        $this->assertEquals('Sample thread', $thread->subject);
 
-        $this->assertEquals('Test Thread', $thread->subject);
+        $thread = $this->faktory->build('thread', ['subject' => 'Second sample thread']);
+        $this->assertEquals('Second sample thread', $thread->subject);
     }
 
     /** @test */
     public function it_can_retrieve_the_latest_message()
     {
-        $old_message = $this->faktory->build('message', [
+        $oldMessage = $this->faktory->build('message', [
             'created_at' => Carbon::yesterday()
         ]);
 
-        $new_message = $this->faktory->build('message', [
+        $newMessage = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
             'body' => 'This is the most recent message'
         ]);
 
         $thread = $this->faktory->create('thread');
-        $thread->messages()->saveMany([$old_message, $new_message]);
-        $this->assertEquals($new_message->body, $thread->latestMessage()->body);
+        $thread->messages()->saveMany([$oldMessage, $newMessage]);
+        $this->assertEquals($newMessage->body, $thread->latestMessage()->body);
+    }
+
+    /** @test */
+    public function it_should_return_all_threads()
+    {
+        $threadCount = rand(5, 20);
+
+        foreach (range(1, $threadCount) as $index) {
+            $this->faktory->create('thread', ['id' => ($index + 1)]);
+        }
+
+        $threads = Thread::getAllLatest();
+
+        $this->assertCount($threadCount, $threads);
     }
 }
