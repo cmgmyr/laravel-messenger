@@ -197,4 +197,15 @@ class Thread extends Eloquent
         return $this->participants()->where('user_id', $userId)->first();
     }
 
+    /**
+     * Restores all participants within a thread that has a new message
+     */
+    public function activateAllParticipants()
+    {
+        $participants = $this->participants()->withTrashed()->get();
+        foreach ($participants as $participant) {
+            $participant->restore();
+        }
+    }
+
 }
