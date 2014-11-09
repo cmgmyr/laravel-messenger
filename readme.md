@@ -33,7 +33,9 @@ Move and alter the config file (optional):
     php artisan config:publish cmgmyr/messenger
 
 ## Examples
-coming soon...
+* [Controller](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/MessagesController.php)
+* [Routes](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/routes.php)
+* [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/views)
 
 ### Special Thanks
 This package used [AndreasHeiberg/laravel-messenger](https://github.com/AndreasHeiberg/laravel-messenger) as a starting point.
