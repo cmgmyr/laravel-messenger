@@ -9,3 +9,8 @@ $faktory->define(['message', 'Cmgmyr\Messenger\Models\Message'], function ($f) {
     $f->thread_id = 1;
     $f->body = "A message";
 });
+
+$faktory->define(['participant', 'Cmgmyr\Messenger\Models\Participant'], function ($f) {
+    $f->user_id = 1;
+    $f->thread_id = 1;
+});

@@ -53,4 +53,23 @@ class EloquentThreadTest extends TestCase
 
         $this->assertCount($threadCount, $threads);
     }
+
+    /** @test */
+    public function it_gets_thread_participants()
+    {
+        $thread = $this->faktory->create('thread');
+        $participants = $thread->participantsUserIds();
+        $this->assertCount(0, $participants);
+
+        $user_1 = $this->faktory->build('participant');
+        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $user_3 = $this->faktory->build('participant', ['user_id' => 3]);
+
+        $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
+
+        $participants = $thread->participantsUserIds();
+        $this->assertCount(3, $participants);
+
+        $this->assertInternalType('array', $participants);
+    }
 }
