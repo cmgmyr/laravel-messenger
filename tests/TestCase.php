@@ -119,7 +119,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
                 $table->increments('id');
                 $table->integer('thread_id')->unsigned();
                 $table->integer('user_id')->unsigned();
-                $table->timestamp('last_read');
+                $table->timestamp('last_read')->default('CURRENT_TIMESTAMP');
                 $table->timestamps();
                 $table->softDeletes();
             }
