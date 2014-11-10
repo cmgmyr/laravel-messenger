@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Thread;
 use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
+use Illuminate\Support\Facades\Auth;
 
 class MessagesController extends BaseController
 {
@@ -46,7 +47,13 @@ class MessagesController extends BaseController
     public function show($id)
     {
         $thread = Thread::findOrFail($id);
-        $users = User::whereNotIn('id', $thread->participantsUserIds())->get();
+
+        // show current user in list if not a current participant
+        //$users = User::whereNotIn('id', $thread->participantsUserIds())->get();
+
+        // don't show the current user in list
+        $userId = Auth::user()->id;
+        $users = User::whereNotIn('id', $thread->participantsUserIds($userId))->get();
 
         $thread->markAsRead();
 

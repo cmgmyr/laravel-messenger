@@ -63,12 +63,16 @@ class Thread extends Eloquent
     /**
      * Returns an array of user ids that are associated with the thread
      *
+     * @param null $userId
      * @return array
      */
-    public function participantsUserIds()
+    public function participantsUserIds($userId = null)
     {
         $users = $this->participants()->withTrashed()->lists('user_id');
-        $users[] = \Auth::user()->id;
+
+        if ($userId) {
+            $users[] = $userId;
+        }
 
         return $users;
     }
