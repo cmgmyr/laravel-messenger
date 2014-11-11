@@ -26,11 +26,13 @@ class MessagesController extends BaseController
      */
     public function index()
     {
+        $userId = Auth::user()->id;
+
         // All threads, ignore deleted/archived participants
         $threads = Thread::getAllLatest();
 
         // All threads that user is participating in
-        // $threads = Thread::forUser();
+        // $threads = Thread::forUser($userId);
 
         // All threads that user is participating in, with new messages
         // $threads = Thread::forUserWithNewMessages();
