@@ -14,7 +14,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_creates_a_new_thread()
+    public function it_should_create_a_new_thread()
     {
         $thread = $this->faktory->build('thread');
         $this->assertEquals('Sample thread', $thread->subject);
@@ -24,7 +24,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_can_retrieve_the_latest_message()
+    public function it_should_return_the_latest_message()
     {
         $oldMessage = $this->faktory->build('message', [
             'created_at' => Carbon::yesterday()
@@ -55,7 +55,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_gets_thread_participants()
+    public function it_should_get_all_thread_participants()
     {
         $thread = $this->faktory->create('thread');
         $participants = $thread->participantsUserIds();
@@ -71,5 +71,22 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(3, $participants);
 
         $this->assertInternalType('array', $participants);
+    }
+
+    /** @test */
+    public function it_should_get_all_threads_for_a_user()
+    {
+        $userId = 1;
+
+        $participant_1 = $this->faktory->create('participant', ['user_id' => $userId]);
+        $thread = $this->faktory->create('thread');
+        $thread->participants()->saveMany([$participant_1]);
+
+        $thread2 = $this->faktory->create('thread', ['subject' => 'Second Thread']);
+        $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id]);
+        $thread2->participants()->saveMany([$participant_2]);
+
+        $threads = Thread::forUser($userId);
+        $this->assertCount(2, $threads);
     }
 }
