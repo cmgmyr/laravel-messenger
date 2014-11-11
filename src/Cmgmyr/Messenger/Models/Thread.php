@@ -81,15 +81,13 @@ class Thread extends Eloquent
      * Returns threads that the user is associated with
      *
      * @param $query
-     * @param null $user
+     * @param $userId
      * @return mixed
      */
-    public function scopeForUser($query, $user = null)
+    public function scopeForUser($query, $userId)
     {
-        $user = $user ?: \Auth::user()->id;
-
         return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
-            ->where('participants.user_id', $user)
+            ->where('participants.user_id', $userId)
             ->where('participants.deleted_at', null)
             ->select('threads.*')
             ->latest('updated_at')
