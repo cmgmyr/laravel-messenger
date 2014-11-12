@@ -98,17 +98,15 @@ class Thread extends Eloquent
      * Returns threads with new messages that the user is associated with
      *
      * @param $query
-     * @param null $user
+     * @param $userId
      * @return mixed
      */
-    public function scopeForUserWithNewMessages($query, $user = null)
+    public function scopeForUserWithNewMessages($query, $userId)
     {
-        $user = $user ?: \Auth::user()->id;
-
         return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
-            ->where('participants.user_id', $user)
+            ->where('participants.user_id', $userId)
             ->where('participants.deleted_at', null)
-            ->where('threads.updated_at', '>', \DB::raw('participants.last_read'))
+            ->where('threads.updated_at', '>', $this->getConnection()->raw('participants.last_read'))
             ->select('threads.*')
             ->latest('updated_at')
             ->get();
