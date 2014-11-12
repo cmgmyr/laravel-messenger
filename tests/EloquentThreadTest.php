@@ -89,4 +89,21 @@ class EloquentThreadTest extends TestCase
         $threads = Thread::forUser($userId);
         $this->assertCount(2, $threads);
     }
+
+    /** @test */
+    public function it_should_get_all_threads_for_a_user_with_new_messages()
+    {
+        $userId = 1;
+
+        $participant_1 = $this->faktory->create('participant', ['user_id' => $userId, 'last_read' => Carbon::now()]);
+        $thread = $this->faktory->create('thread', ['updated_at' => Carbon::yesterday()]);
+        $thread->participants()->saveMany([$participant_1]);
+
+        $thread2 = $this->faktory->create('thread', ['subject' => 'Second Thread', 'updated_at' => Carbon::now()]);
+        $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id, 'last_read' => Carbon::yesterday()]);
+        $thread2->participants()->saveMany([$participant_2]);
+
+        $threads = Thread::forUserWithNewMessages($userId);
+        $this->assertCount(1, $threads);
+    }
 }
