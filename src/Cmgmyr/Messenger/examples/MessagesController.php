@@ -35,7 +35,7 @@ class MessagesController extends BaseController
         // $threads = Thread::forUser($userId);
 
         // All threads that user is participating in, with new messages
-        // $threads = Thread::forUserWithNewMessages();
+        // $threads = Thread::forUserWithNewMessages($userId);
 
         return View::make('messenger.index', compact('threads'));
     }
