@@ -18,7 +18,8 @@
     },
     "require-dev": {
         "phpunit/phpunit": "4.3.*",
-        "adamwathan/faktory": "0.3.*"
+        "adamwathan/faktory": "0.3.*",
+        "fabpot/php-cs-fixer": "1.0.*@dev"
     },
     "autoload": {
         "classmap": [
