@@ -1,4 +1,4 @@
-<?php namespace Cmgmyr\Messenger\Tests;
+<?php namespace Cmgmyr\Messenger\tests;
 
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Thread;
@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class EloquentThreadTest extends TestCase
 {
-
     public function setUp()
     {
         parent::setUp();

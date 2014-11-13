@@ -5,7 +5,6 @@ use Illuminate\Support\Facades\Config;
 
 class Message extends Eloquent
 {
-
     /**
      * The database table used by the model.
      *
@@ -75,5 +74,4 @@ class Message extends Eloquent
     {
         return $this->participants()->where('user_id', '!=', $this->user_id)->get();
     }
-
 }

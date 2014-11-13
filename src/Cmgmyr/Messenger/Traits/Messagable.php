@@ -2,7 +2,6 @@
 
 trait Messagable
 {
-
     /**
      * User relationship
      *
@@ -43,14 +42,11 @@ trait Messagable
         $threadsWithNewMessages = [];
         $participants = \Cmgmyr\Messenger\Models\Participant::where('user_id', $this->id)->lists('last_read', 'thread_id');
 
-        if ($participants)
-        {
+        if ($participants) {
             $threads = \Cmgmyr\Messenger\Models\Thread::whereIn('id', array_keys($participants))->get();
 
-            foreach ($threads as $thread)
-            {
-                if ($thread->updated_at > $participants[$thread->id])
-                {
+            foreach ($threads as $thread) {
+                if ($thread->updated_at > $participants[$thread->id]) {
                     $threadsWithNewMessages[] = $thread->id;
                 }
             }

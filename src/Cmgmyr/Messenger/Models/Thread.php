@@ -5,7 +5,6 @@ use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Thread extends Eloquent
 {
-
     /**
      * The database table used by the model.
      *
@@ -140,10 +139,8 @@ class Thread extends Eloquent
      */
     public function addParticipants(array $participants)
     {
-        if(count($participants))
-        {
-            foreach ($participants as $user_id)
-            {
+        if (count($participants)) {
+            foreach ($participants as $user_id) {
                 Participant::firstOrCreate([
                     'user_id' => $user_id,
                     'thread_id' => $this->id,
@@ -207,5 +204,4 @@ class Thread extends Eloquent
             $participant->restore();
         }
     }
-
 }

@@ -1,4 +1,4 @@
-<?php namespace Cmgmyr\Messenger\Tests;
+<?php namespace Cmgmyr\Messenger\tests;
 
 date_default_timezone_set('America/New_York');
 
@@ -7,7 +7,6 @@ use AdamWathan\Faktory\Faktory;
 
 class TestCase extends \PHPUnit_Framework_TestCase
 {
-
     /**
      * @var \AdamWathan\Faktory\Faktory
      */

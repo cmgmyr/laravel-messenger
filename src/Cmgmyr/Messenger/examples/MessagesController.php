@@ -8,12 +8,11 @@ use Illuminate\Support\Facades\Auth;
 
 class MessagesController extends BaseController
 {
-
     /**
      * Just for testing - the user should be logged in. In a real
      * app, please use standard authentication practices
      */
-    function __construct()
+    public function __construct()
     {
         $user = User::find(1);
         Auth::login($user);

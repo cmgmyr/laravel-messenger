@@ -6,7 +6,6 @@ use Illuminate\Support\Facades\Config;
 
 class Participant extends Eloquent
 {
-
     use SoftDeletingTrait;
 
     /**
@@ -49,5 +48,4 @@ class Participant extends Eloquent
     {
         return $this->belongsTo(Config::get('messenger::user_model'));
     }
-
 }
