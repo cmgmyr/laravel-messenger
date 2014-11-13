@@ -112,26 +112,6 @@ class Thread extends Eloquent
     }
 
     /**
-     * Returns a string of thread participants names
-     *
-     * @param null $user
-     * @return string
-     */
-    public function participantsString($user = null)
-    {
-        $user = $user ?: \Auth::user()->id;
-
-        $participantNames = \DB::table('users')
-            ->join('participants', 'users.id', '=', 'participants.user_id')
-            ->where('users.id', '!=', $user)
-            ->where('participants.thread_id', $this->id)
-            ->select(\DB::raw("concat(users.first_name, ' ', users.last_name) as name"))
-            ->lists('users.name');
-
-        return implode(', ', $participantNames);
-    }
-
-    /**
      * Adds users to this thread
      *
      * @param array $participants list of all participants
