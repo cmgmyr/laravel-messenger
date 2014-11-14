@@ -25,18 +25,18 @@ class MessagesController extends BaseController
      */
     public function index()
     {
-        $userId = Auth::user()->id;
+        $currentUserId = Auth::user()->id;
 
         // All threads, ignore deleted/archived participants
         $threads = Thread::getAllLatest();
 
         // All threads that user is participating in
-        // $threads = Thread::forUser($userId);
+        // $threads = Thread::forUser($currentUserId);
 
         // All threads that user is participating in, with new messages
-        // $threads = Thread::forUserWithNewMessages($userId);
+        // $threads = Thread::forUserWithNewMessages($currentUserId);
 
-        return View::make('messenger.index', compact('threads'));
+        return View::make('messenger.index', compact('threads', 'currentUserId'));
     }
 
     /**
@@ -56,7 +56,7 @@ class MessagesController extends BaseController
         $userId = Auth::user()->id;
         $users = User::whereNotIn('id', $thread->participantsUserIds($userId))->get();
 
-        $thread->markAsRead();
+        $thread->markAsRead($userId);
 
         return View::make('messenger.show', compact('thread', 'users'));
     }
