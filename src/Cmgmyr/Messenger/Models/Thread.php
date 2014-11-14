@@ -132,9 +132,9 @@ class Thread extends Eloquent
     /**
      * Mark a thread as read for a user
      *
-     * @param null|integer $userId
+     * @param integer $userId
      */
-    public function markAsRead($userId = null)
+    public function markAsRead($userId)
     {
         $participant = $this->getParticipantFromUser($userId);
 
@@ -147,10 +147,10 @@ class Thread extends Eloquent
     /**
      * See if the current thread is unread by the user
      *
-     * @param null|integer $userId
+     * @param integer $userId
      * @return bool
      */
-    public function isUnread($userId = null)
+    public function isUnread($userId)
     {
         $participant = $this->getParticipantFromUser($userId);
 
@@ -169,8 +169,6 @@ class Thread extends Eloquent
      */
     public function getParticipantFromUser($userId)
     {
-        $userId = $userId ?: \Auth::user()->id;
-
         return $this->participants()->where('user_id', $userId)->first();
     }
 
