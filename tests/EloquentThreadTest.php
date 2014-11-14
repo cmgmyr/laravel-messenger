@@ -105,4 +105,16 @@ class EloquentThreadTest extends TestCase
         $threads = Thread::forUserWithNewMessages($userId);
         $this->assertCount(1, $threads);
     }
+
+    /** @test */
+    public function it_should_add_participants_to_a_thread()
+    {
+        $participants = [1, 2, 3];
+
+        $thread = $this->faktory->create('thread');
+
+        $thread->addParticipants($participants);
+
+        $this->assertEquals(3, $thread->participants()->count());
+    }
 }
