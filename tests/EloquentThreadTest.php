@@ -150,4 +150,18 @@ class EloquentThreadTest extends TestCase
 
         $this->assertTrue($thread2->isUnread($userId));
     }
+
+    /** @test */
+    public function it_should_get_a_participant_from_userid()
+    {
+        $userId = 1;
+
+        $participant = $this->faktory->create('participant', ['user_id' => $userId]);
+        $thread = $this->faktory->create('thread');
+        $thread->participants()->saveMany([$participant]);
+
+        $newParticipant = $thread->getParticipantFromUser($userId);
+
+        $this->assertInstanceOf('\Cmgmyr\Messenger\Models\Participant', $newParticipant);
+    }
 }
