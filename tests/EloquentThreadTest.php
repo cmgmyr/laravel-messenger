@@ -132,4 +132,22 @@ class EloquentThreadTest extends TestCase
 
         $this->assertNotEquals($thread->getParticipantFromUser($userId)->last_read, $last_read);
     }
+
+    /** @test */
+    public function it_should_see_if_thread_is_unread_by_user()
+    {
+        $userId = 1;
+
+        $participant_1 = $this->faktory->create('participant', ['user_id' => $userId, 'last_read' => Carbon::now()]);
+        $thread = $this->faktory->create('thread', ['updated_at' => Carbon::yesterday()]);
+        $thread->participants()->saveMany([$participant_1]);
+
+        $this->assertFalse($thread->isUnread($userId));
+
+        $thread2 = $this->faktory->create('thread', ['subject' => 'Second Thread', 'updated_at' => Carbon::now()]);
+        $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id, 'last_read' => Carbon::yesterday()]);
+        $thread2->participants()->saveMany([$participant_2]);
+
+        $this->assertTrue($thread2->isUnread($userId));
+    }
 }
