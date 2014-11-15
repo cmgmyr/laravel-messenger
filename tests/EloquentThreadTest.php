@@ -117,4 +117,19 @@ class EloquentThreadTest extends TestCase
 
         $this->assertEquals(3, $thread->participants()->count());
     }
+
+    /** @test */
+    public function it_should_mark_the_participant_as_read()
+    {
+        $userId = 1;
+        $last_read = Carbon::yesterday();
+
+        $participant = $this->faktory->create('participant', ['user_id' => $userId, 'last_read' => $last_read]);
+        $thread = $this->faktory->create('thread');
+        $thread->participants()->saveMany([$participant]);
+
+        $thread->markAsRead($userId);
+
+        $this->assertNotEquals($thread->getParticipantFromUser($userId)->last_read, $last_read);
+    }
 }
