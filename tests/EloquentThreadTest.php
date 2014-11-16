@@ -175,4 +175,25 @@ class EloquentThreadTest extends TestCase
 
         $thread->getParticipantFromUser(99);
     }
+
+    /** @test */
+    public function it_should_activate_all_deleted_participants()
+    {
+        $deleted_at = Carbon::yesterday();
+        $thread = $this->faktory->create('thread');
+
+        $user_1 = $this->faktory->build('participant', ['deleted_at' => $deleted_at]);
+        $user_2 = $this->faktory->build('participant', ['user_id' => 2, 'deleted_at' => $deleted_at]);
+        $user_3 = $this->faktory->build('participant', ['user_id' => 3, 'deleted_at' => $deleted_at]);
+
+        $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
+
+        $participants = $thread->participants();
+        $this->assertEquals(0, $participants->count());
+
+        $thread->activateAllParticipants();
+
+        $participants = $thread->participants();
+        $this->assertEquals(3, $participants->count());
+    }
 }
