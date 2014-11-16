@@ -164,4 +164,15 @@ class EloquentThreadTest extends TestCase
 
         $this->assertInstanceOf('\Cmgmyr\Messenger\Models\Participant', $newParticipant);
     }
+
+    /**
+     * @test
+     * @expectedException \Illuminate\Database\Eloquent\ModelNotFoundException
+     */
+    public function it_should_throw_an_exception_when_participant_is_not_found()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $thread->getParticipantFromUser(99);
+    }
 }
