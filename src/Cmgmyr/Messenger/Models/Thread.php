@@ -136,11 +136,12 @@ class Thread extends Eloquent
      */
     public function markAsRead($userId)
     {
-        $participant = $this->getParticipantFromUser($userId);
-
-        if ($participant) {
+        try {
+            $participant = $this->getParticipantFromUser($userId);
             $participant->last_read = new Carbon;
             $participant->save();
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // do nothing
         }
     }
 
@@ -152,10 +153,13 @@ class Thread extends Eloquent
      */
     public function isUnread($userId)
     {
-        $participant = $this->getParticipantFromUser($userId);
-
-        if ($participant && ($this->updated_at > $participant->last_read)) {
-            return true;
+        try {
+            $participant = $this->getParticipantFromUser($userId);
+            if ($this->updated_at > $participant->last_read) {
+                return true;
+            }
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            // do nothing
         }
 
         return false;
@@ -166,10 +170,11 @@ class Thread extends Eloquent
      *
      * @param $userId
      * @return mixed
+     * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function getParticipantFromUser($userId)
     {
-        return $this->participants()->where('user_id', $userId)->first();
+        return $this->participants()->where('user_id', $userId)->firstOrFail();
     }
 
     /**
