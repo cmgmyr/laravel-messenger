@@ -37,7 +37,8 @@ Move and alter the config file (optional):
 * [Routes](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/routes.php)
 * [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/views)
 
-## Contributing? Please format your code before creating a pull-request
+## Contributing? 
+Please format your code before creating a pull-request:
 
     vendor/bin/php-cs-fixer fix --level psr2 .
 
