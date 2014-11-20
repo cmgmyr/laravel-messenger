@@ -24,9 +24,6 @@
         "classmap": [
             "src/migrations"
         ],
-        "files": [
-            "tests/TestCase.php"
-        ],
         "psr-0": {
             "Cmgmyr\\Messenger\\": "src/"
         }
