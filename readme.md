@@ -4,9 +4,11 @@
 Simple user messaging tool for Laravel
 
 ## Installation
-In composer.json (versioned updates coming soon):
+In composer.json:
 
-    "cmgmyr/messenger": "dev-master"
+    "require": {
+        "cmgmyr/messenger": "~1.0"
+    }
 
 Run:
 
@@ -14,7 +16,9 @@ Run:
 
 Add the service provider to `app/config/app.php` under `providers`:
 
-    'Cmgmyr\Messenger\MessengerServiceProvider'
+    'providers' => [
+        'Cmgmyr\Messenger\MessengerServiceProvider'
+    ]
 
 Add the trait to your user model:
 
