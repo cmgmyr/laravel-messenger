@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/cmgmyr/laravel-messenger.svg?branch=master)](https://travis-ci.org/cmgmyr/laravel-messenger)
+[![Build Status](https://img.shields.io/travis/cmgmyr/laravel-messenger.svg?style=flat-square)](https://travis-ci.org/cmgmyr/laravel-messenger)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
 # Laravel Messenger
 This package will allow you to add a full user messaging system into your Laravel application.
