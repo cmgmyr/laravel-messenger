@@ -2,6 +2,7 @@
 
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class Thread extends Eloquent
 {
@@ -140,7 +141,7 @@ class Thread extends Eloquent
             $participant = $this->getParticipantFromUser($userId);
             $participant->last_read = new Carbon;
             $participant->save();
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             // do nothing
         }
     }
@@ -158,7 +159,7 @@ class Thread extends Eloquent
             if ($this->updated_at > $participant->last_read) {
                 return true;
             }
-        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) {
             // do nothing
         }
 
