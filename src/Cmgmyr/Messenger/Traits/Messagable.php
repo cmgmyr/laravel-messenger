@@ -1,5 +1,8 @@
 <?php namespace Cmgmyr\Messenger\Traits;
 
+use Cmgmyr\Messenger\Models\Thread;
+use Cmgmyr\Messenger\Models\Participant;
+
 trait Messagable
 {
     /**
@@ -40,10 +43,10 @@ trait Messagable
     public function threadsWithNewMessages()
     {
         $threadsWithNewMessages = [];
-        $participants = \Cmgmyr\Messenger\Models\Participant::where('user_id', $this->id)->lists('last_read', 'thread_id');
+        $participants = Participant::where('user_id', $this->id)->lists('last_read', 'thread_id');
 
         if ($participants) {
-            $threads = \Cmgmyr\Messenger\Models\Thread::whereIn('id', array_keys($participants))->get();
+            $threads = Thread::whereIn('id', array_keys($participants))->get();
 
             foreach ($threads as $thread) {
                 if ($thread->updated_at > $participants[$thread->id]) {

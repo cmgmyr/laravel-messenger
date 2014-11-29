@@ -1,7 +1,7 @@
 <?php namespace Cmgmyr\Messenger\Models;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Database\Eloquent\Model as Eloquent;
 
 class Message extends Eloquent
 {
