@@ -1,8 +1,8 @@
 <?php namespace Cmgmyr\Messenger\Models;
 
+use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
-use Illuminate\Support\Facades\Config;
 
 class Participant extends Eloquent
 {
