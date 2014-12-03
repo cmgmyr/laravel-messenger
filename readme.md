@@ -42,6 +42,10 @@ Add the trait to your user model:
     	use Messagable;
     }
 
+Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
+
+__Note:__ if you already have a `users` table and run into any issues with foreign keys, you may have to make the `id` unsigned.
+
 Migrate your database:
 
     php artisan migrate --package=cmgmyr/messenger
