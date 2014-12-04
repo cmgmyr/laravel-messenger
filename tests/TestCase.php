@@ -86,6 +86,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
                 $table->increments('id');
                 $table->string('subject');
                 $table->timestamps();
+                $table->softDeletes();
             }
         );
     }

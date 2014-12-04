@@ -3,9 +3,12 @@
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Database\Eloquent\SoftDeletingTrait;
 
 class Thread extends Eloquent
 {
+    use SoftDeletingTrait;
+
     /**
      * The database table used by the model.
      *
@@ -19,6 +22,13 @@ class Thread extends Eloquent
      * @var array
      */
     protected $fillable = ['subject'];
+
+    /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
      * Messages relationship
