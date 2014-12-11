@@ -12,7 +12,7 @@ class AlterLastReadInParticipantsTable extends Migration
      */
     public function up()
     {
-        DB::statement('ALTER TABLE `participants` CHANGE COLUMN `last_read` `last_read` timestamp NULL DEFAULT NULL;');
+        DB::statement('ALTER TABLE `'.DB::getTablePrefix().'participants` CHANGE COLUMN `last_read` `last_read` timestamp NULL DEFAULT NULL;');
     }
 
 
