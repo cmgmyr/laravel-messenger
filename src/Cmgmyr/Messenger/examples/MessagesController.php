@@ -50,7 +50,7 @@ class MessagesController extends BaseController
         $thread = Thread::findOrFail($id);
 
         // show current user in list if not a current participant
-        //$users = User::whereNotIn('id', $thread->participantsUserIds())->get();
+        // $users = User::whereNotIn('id', $thread->participantsUserIds())->get();
 
         // don't show the current user in list
         $userId = Auth::user()->id;
