@@ -6,7 +6,7 @@ use Cmgmyr\Messenger\Models\Participant;
 trait Messagable
 {
     /**
-     * User relationship
+     * Message relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
