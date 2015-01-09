@@ -26,7 +26,7 @@ class AddSoftDeletesToParticipantsTable extends Migration
     public function down()
     {
         Schema::table('participants', function (Blueprint $table) {
-            $table->dropColumn('deleted_at');
+            $table->dropSoftDeletes();
         });
     }
 }

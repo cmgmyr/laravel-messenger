@@ -26,7 +26,7 @@ class AddSoftdeletesToThreadsTable extends Migration
     public function down()
     {
         Schema::table('threads', function (Blueprint $table) {
-            $table->dropColumn('deleted_at');
+            $table->dropSoftDeletes();
         });
     }
 }
