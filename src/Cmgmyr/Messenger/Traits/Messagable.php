@@ -16,7 +16,7 @@ trait Messagable
     }
 
     /**
-     * User relationship
+     * Thread relationship
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
