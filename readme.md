@@ -45,7 +45,7 @@ Update config file to reference your User Model:
 
 	config/messenger.php
 	
-Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
+Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/blob/develop/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
 
 __Note:__ if you already have a `users` table and run into any issues with foreign keys, you may have to make the `id` unsigned.
 
@@ -63,9 +63,9 @@ Add the trait to your user model:
 
 
 ## Examples
-* [Controller](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/MessagesController.php)
-* [Routes](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/routes.php)
-* [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/views)
+* [Controller](https://github.com/cmgmyr/laravel-messenger/blob/develop/src/Cmgmyr/Messenger/examples/MessagesController.php)
+* [Routes](https://github.com/cmgmyr/laravel-messenger/blob/develop/src/Cmgmyr/Messenger/examples/routes.php)
+* [Views](https://github.com/cmgmyr/laravel-messenger/tree/develop/src/Cmgmyr/Messenger/examples/views)
 
 ## Contributing? 
 Please format your code before creating a pull-request:
