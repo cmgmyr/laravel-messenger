@@ -19,7 +19,7 @@ This package will allow you to add a full user messaging system into your Larave
 * Group messaging (only participants can see their threads)
 * One to one messaging (private or direct thread)
 
-## Installation
+## Installation (Laravel 4.x)
 In composer.json:
 
     "require": {
