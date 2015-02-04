@@ -1,6 +1,7 @@
 [![Build Status](https://img.shields.io/travis/cmgmyr/laravel-messenger.svg?style=flat-square)](https://travis-ci.org/cmgmyr/laravel-messenger)
 [![Code Climate](https://img.shields.io/codeclimate/github/cmgmyr/laravel-messenger.svg?style=flat-square)](https://codeclimate.com/github/cmgmyr/laravel-messenger)
 [![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg?style=flat-square)](https://github.com/cmgmyr/laravel-messenger/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg?style=flat-square)](https://packagist.org/packages/cmgmyr/messenger)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
 # Laravel Messenger
@@ -19,42 +20,47 @@ This package will allow you to add a full user messaging system into your Larave
 * Group messaging (only participants can see their threads)
 * One to one messaging (private or direct thread)
 
-## Installation
+## Installation (Laravel 5.x)
 In composer.json:
 
     "require": {
-        "cmgmyr/messenger": "~1.0"
+        "cmgmyr/messenger": "dev-develop"
     }
 
 Run:
 
     composer update
 
-Add the service provider to `app/config/app.php` under `providers`:
+Add the service provider to `config/app.php` under `providers`:
 
     'providers' => [
         'Cmgmyr\Messenger\MessengerServiceProvider'
     ]
 
-Add the trait to your user model:
+Publish Assets
 
-    use Cmgmyr\Messenger\Traits\Messagable;
-    
-    class User extends Eloquent {
-    	use Messagable;
-    }
+	php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider"
+	
+Update config file to reference your User Model:
 
+	config/messenger.php
+	
 Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
 
 __Note:__ if you already have a `users` table and run into any issues with foreign keys, you may have to make the `id` unsigned.
 
 Migrate your database:
 
-    php artisan migrate --package=cmgmyr/messenger
+    php artisan migrate
 
-Move and alter the config file (optional):
+Add the trait to your user model:
 
-    php artisan config:publish cmgmyr/messenger
+    use Cmgmyr\Messenger\Traits\Messagable;
+    
+    class User extends Model {
+    	use Messagable;
+    }
+
 
 ## Examples
 * [Controller](https://github.com/cmgmyr/laravel-messenger/blob/master/src/Cmgmyr/Messenger/examples/MessagesController.php)

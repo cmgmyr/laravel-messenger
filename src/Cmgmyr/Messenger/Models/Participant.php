@@ -2,11 +2,11 @@
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Participant extends Eloquent
 {
-    use SoftDeletingTrait;
+    use SoftDeletes;
 
     /**
      * The database table used by the model.
@@ -46,6 +46,6 @@ class Participant extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo(Config::get('messenger::user_model'));
+        return $this->belongsTo(Config::get('messenger.user_model'));
     }
 }
