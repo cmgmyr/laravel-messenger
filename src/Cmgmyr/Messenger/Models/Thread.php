@@ -3,11 +3,11 @@
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Thread extends Eloquent
 {
-    use SoftDeletingTrait;
+    use SoftDeletes;
 
     /**
      * The database table used by the model.

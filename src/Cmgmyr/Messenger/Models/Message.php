@@ -52,7 +52,7 @@ class Message extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo(Config::get('messenger::user_model'));
+        return $this->belongsTo(Config::get('messenger.user_model'));
     }
 
     /**

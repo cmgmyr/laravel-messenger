@@ -5,39 +5,27 @@ use Illuminate\Support\ServiceProvider;
 class MessengerServiceProvider extends ServiceProvider
 {
     /**
-     * Indicates if loading of the provider is deferred.
-     *
-     * @var bool
-     */
-    protected $defer = false;
-
-    /**
-     * Bootstrap the application events.
+     * Bootstrap the application services.
      *
      * @return void
      */
     public function boot()
     {
-        $this->package('cmgmyr/messenger');
+        $this->publishes([
+            base_path('vendor/cmgmyr/messenger/src/config/config.php') => config_path('messenger.php'),
+            base_path('vendor/cmgmyr/messenger/src/migrations') => base_path('database/migrations'),
+        ]);
     }
 
     /**
-     * Register the service provider.
+     * Register the application services.
      *
      * @return void
      */
     public function register()
     {
-        //
-    }
-
-    /**
-     * Get the services provided by the provider.
-     *
-     * @return array
-     */
-    public function provides()
-    {
-        return ['messenger'];
+        $this->mergeConfigFrom(
+            base_path('vendor/cmgmyr/messenger/src/config/config.php'), 'messenger'
+        );
     }
 }
