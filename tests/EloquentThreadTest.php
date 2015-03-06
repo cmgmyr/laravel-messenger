@@ -21,7 +21,7 @@ class EloquentThreadTest extends TestCase
      */
     protected static function getMethod($name)
     {
-        $class = new ReflectionClass(Thread::class);
+        $class = new ReflectionClass('Cmgmyr\Messenger\Models\Thread');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
