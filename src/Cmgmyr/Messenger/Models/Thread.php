@@ -201,4 +201,57 @@ class Thread extends Eloquent
             $participant->restore();
         }
     }
+
+    /**
+     * Generates a string of participant information
+     *
+     * @param null $userId
+     * @param array $columns
+     * @return string
+     */
+    public function participantsString($userId=null, $columns=['first_name', 'last_name'])
+    {
+        $selectString = $this->createSelectString($columns);
+
+        $participantNames = $this->getConnection()->table('users')
+            ->join('participants', 'users.id', '=', 'participants.user_id')
+            ->where('participants.thread_id', $this->id)
+            ->select($this->getConnection()->raw($selectString));
+
+        if ($userId !== null) {
+            $participantNames->where('users.id', '!=', $userId);
+        }
+
+        $userNames = $participantNames->lists('users.name');
+
+        return implode(', ', $userNames);
+    }
+
+    /**
+     * Generates a select string used in participantsString()
+     *
+     * @param $columns
+     * @return string
+     */
+    private function createSelectString($columns)
+    {
+        $dbDriver = $this->getConnection()->getDriverName();
+
+        switch ($dbDriver) {
+            case 'pgsql':
+            case 'sqlite':
+                $columnString = implode(" || ' ' || users.", $columns);
+                $selectString = "(users." . $columnString . ") as name";
+                break;
+            case 'sqlsrv':
+                $columnString = implode(" + ' ' + users.", $columns);
+                $selectString = "(users." . $columnString . ") as name";
+                break;
+            default:
+                $columnString = implode(", ' ', users.", $columns);
+                $selectString = "concat(users." . $columnString . ") as name";
+        }
+
+        return $selectString;
+    }
 }
