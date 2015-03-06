@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use ReflectionClass;
 
 class EloquentThreadTest extends TestCase
 {
@@ -10,6 +11,20 @@ class EloquentThreadTest extends TestCase
     {
         parent::setUp();
         Eloquent::unguard();
+    }
+
+    /**
+     * Activate private/protected methods for testing
+     *
+     * @param $name
+     * @return \ReflectionMethod
+     */
+    protected static function getMethod($name)
+    {
+        $class = new ReflectionClass('Cmgmyr\Messenger\Models\Thread');
+        $method = $class->getMethod($name);
+        $method->setAccessible(true);
+        return $method;
     }
 
     /** @test */
@@ -195,5 +210,45 @@ class EloquentThreadTest extends TestCase
 
         $participants = $thread->participants();
         $this->assertEquals(3, $participants->count());
+    }
+
+    /** @test */
+    public function it_should_generate_participant_select_string()
+    {
+        $method = self::getMethod('createSelectString');
+        $thread = new Thread();
+
+        $columns = ['name'];
+        $select = $method->invokeArgs($thread, [$columns]);
+        $this->assertEquals("(users.name) as name", $select);
+
+        $columns = ['first_name', 'last_name'];
+        $select = $method->invokeArgs($thread, [$columns]);
+        $this->assertEquals("(users.first_name || ' ' || users.last_name) as name", $select);
+
+        $columns = ['first_name', 'last_name', 'email'];
+        $select = $method->invokeArgs($thread, [$columns]);
+        $this->assertEquals("(users.first_name || ' ' || users.last_name || ' ' || users.email) as name", $select);
+    }
+
+    /** @test */
+    public function it_should_get_participants_string()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $participant_1 = $this->faktory->build('participant');
+        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $participant_3 = $this->faktory->build('participant', ['user_id' => 3]);
+
+        $thread->participants()->saveMany([$participant_1, $participant_2, $participant_3]);
+
+        $string = $thread->participantsString();
+        $this->assertEquals("Chris Gmyr, Adam Wathan, Taylor Otwell", $string);
+
+        $string = $thread->participantsString(1);
+        $this->assertEquals("Adam Wathan, Taylor Otwell", $string);
+
+        $string = $thread->participantsString(1, ['first_name']);
+        $this->assertEquals("Adam, Taylor", $string);
     }
 }
