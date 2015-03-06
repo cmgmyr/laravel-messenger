@@ -55,6 +55,8 @@ class TestCase extends \PHPUnit_Framework_TestCase
         $this->createThreadsTable();
         $this->createMessagesTable();
         $this->createParticipantsTable();
+
+        $this->seedUsersTable();
     }
 
     /**
@@ -73,6 +75,16 @@ class TestCase extends \PHPUnit_Framework_TestCase
                 $table->timestamps();
             }
         );
+    }
+
+    /**
+     * Create some users for the tests to use
+     */
+    private function seedUsersTable()
+    {
+        DB::insert('INSERT INTO users (id, first_name, last_name, email, created_at, updated_at) VALUES (?, ?, ?, ?, datetime(), datetime())', [1, 'Chris', 'Gmyr', 'chris@test.com']);
+        DB::insert('INSERT INTO users (id, first_name, last_name, email, created_at, updated_at) VALUES (?, ?, ?, ?, datetime(), datetime())', [2, 'Adam', 'Wathan', 'adam@test.com']);
+        DB::insert('INSERT INTO users (id, first_name, last_name, email, created_at, updated_at) VALUES (?, ?, ?, ?, datetime(), datetime())', [3, 'Taylor', 'Otwell', 'taylor@test.com']);
     }
 
     /**

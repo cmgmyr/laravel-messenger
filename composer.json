@@ -11,6 +11,7 @@
     ],
     "require": {
         "php": ">=5.4.0",
+        "illuminate/config": "~4.0",
         "illuminate/support": "~4.0",
         "illuminate/database": "~4.0",
         "nesbot/carbon": "~1.0"
