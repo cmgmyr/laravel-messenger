@@ -69,6 +69,20 @@ class Thread extends Eloquent
     {
         return self::latest('updated_at')->get();
     }
+    
+    
+    /**
+     * Returns all of the data for this user as JSON for use with AngularJS or other SPA frameworks
+     *
+     * @return mixed
+     */
+    public static function getAll()
+    {
+        $item = self::with('Messages', 'Participants');
+        $item->with('Messages.User');
+        $item->with('Participants.User');
+        return $item->get();
+    }
 
     /**
      * Returns an array of user ids that are associated with the thread
