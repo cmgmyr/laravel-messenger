@@ -45,7 +45,7 @@ class Thread extends Eloquent
      *
      * @return \Cmgmyr\Messenger\Models\Message
      */
-    public function latestMessage()
+    public function getLatestMessageAttribute()
     {
         return $this->messages()->latest()->first();
     }
