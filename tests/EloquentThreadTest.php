@@ -51,7 +51,7 @@ class EloquentThreadTest extends TestCase
 
         $thread = $this->faktory->create('thread');
         $thread->messages()->saveMany([$oldMessage, $newMessage]);
-        $this->assertEquals($newMessage->body, $thread->latestMessage()->body);
+        $this->assertEquals($newMessage->body, $thread->latestMessage->body);
     }
 
     /** @test */
