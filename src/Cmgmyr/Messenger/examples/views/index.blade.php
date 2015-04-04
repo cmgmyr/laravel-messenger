@@ -11,7 +11,7 @@
         <?php $class = $thread->isUnread($currentUserId) ? 'alert-info' : ''; ?>
         <div class="media alert {{$class}}">
             <h4 class="media-heading">{{link_to('messages/' . $thread->id, $thread->subject)}}</h4>
-            <p>{{$thread->latestMessage()->body}}</p>
+            <p>{{$thread->latestMessage->body}}</p>
             <p><small><strong>Participants:</strong> {{ $thread->participantsString(Auth::id()) }}</small></p>
         </div>
         @endforeach
