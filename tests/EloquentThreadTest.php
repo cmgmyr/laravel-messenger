@@ -220,15 +220,15 @@ class EloquentThreadTest extends TestCase
 
         $columns = ['name'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals("(users.name) as name", $select);
+        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . "users.name) as name", $select);
 
         $columns = ['first_name', 'last_name'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals("(users.first_name || ' ' || users.last_name) as name", $select);
+        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . "users.first_name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . "users.last_name) as name", $select);
 
         $columns = ['first_name', 'last_name', 'email'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals("(users.first_name || ' ' || users.last_name || ' ' || users.email) as name", $select);
+        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . "users.first_name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . "users.last_name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . "users.email) as name", $select);
     }
 
     /** @test */
