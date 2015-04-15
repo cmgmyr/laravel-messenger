@@ -117,7 +117,7 @@ class Thread extends Eloquent
             ->where('participants.user_id', $userId)
             ->whereNull('participants.deleted_at')
             ->where(function ($query) {
-                $query->where('threads.updated_at', '>', $this->getConnection()->raw('participants.last_read'))
+                $query->where('threads.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . 'participants.last_read'))
                     ->orWhereNull('participants.last_read');
             })
             ->select('threads.*')
@@ -240,16 +240,16 @@ class Thread extends Eloquent
         switch ($dbDriver) {
             case 'pgsql':
             case 'sqlite':
-                $columnString = implode(" || ' ' || users.", $columns);
-                $selectString = "(users." . $columnString . ") as name";
+                $columnString = implode(" || ' ' || " . $this->getConnection()->getTablePrefix() . "users.", $columns);
+                $selectString = "(" . $this->getConnection()->getTablePrefix() . "users." . $columnString . ") as name";
                 break;
             case 'sqlsrv':
-                $columnString = implode(" + ' ' + users.", $columns);
-                $selectString = "(users." . $columnString . ") as name";
+                $columnString = implode(" + ' ' + " . $this->getConnection()->getTablePrefix() . "users.", $columns);
+                $selectString = "(" . $this->getConnection()->getTablePrefix() . "users." . $columnString . ") as name";
                 break;
             default:
-                $columnString = implode(", ' ', users.", $columns);
-                $selectString = "concat(users." . $columnString . ") as name";
+                $columnString = implode(", ' ', " . $this->getConnection()->getTablePrefix() . "users.", $columns);
+                $selectString = "concat(" . $this->getConnection()->getTablePrefix() . "users." . $columnString . ") as name";
         }
 
         return $selectString;
