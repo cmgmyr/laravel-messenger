@@ -63,7 +63,7 @@ class EloquentThreadTest extends TestCase
             $this->faktory->create('thread', ['id' => ($index + 1)]);
         }
 
-        $threads = Thread::getAllLatest();
+        $threads = Thread::getAllLatest()->get();
 
         $this->assertCount($threadCount, $threads);
     }
@@ -100,7 +100,7 @@ class EloquentThreadTest extends TestCase
         $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id]);
         $thread2->participants()->saveMany([$participant_2]);
 
-        $threads = Thread::forUser($userId);
+        $threads = Thread::forUser($userId)->get();
         $this->assertCount(2, $threads);
     }
 
@@ -117,7 +117,7 @@ class EloquentThreadTest extends TestCase
         $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id, 'last_read' => Carbon::yesterday()]);
         $thread2->participants()->saveMany([$participant_2]);
 
-        $threads = Thread::forUserWithNewMessages($userId);
+        $threads = Thread::forUserWithNewMessages($userId)->get();
         $this->assertCount(1, $threads);
     }
 
