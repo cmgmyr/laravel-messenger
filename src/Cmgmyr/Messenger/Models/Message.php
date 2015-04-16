@@ -72,6 +72,6 @@ class Message extends Eloquent
      */
     public function recipients()
     {
-        return $this->participants()->where('user_id', '!=', $this->user_id)->get();
+        return $this->participants()->where('user_id', '!=', $this->user_id);
     }
 }
