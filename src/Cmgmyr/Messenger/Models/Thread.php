@@ -205,7 +205,7 @@ class Thread extends Eloquent
      * @param array $columns
      * @return string
      */
-    public function participantsString($userId=null, $columns=['first_name', 'last_name'])
+    public function participantsString($userId=null, $columns=['name'])
     {
         $selectString = $this->createSelectString($columns);
 

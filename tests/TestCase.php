@@ -68,8 +68,7 @@ class TestCase extends \PHPUnit_Framework_TestCase
             'users',
             function ($table) {
                 $table->increments('id');
-                $table->string('first_name');
-                $table->string('last_name');
+                $table->string('name');
                 $table->string('email')->unique();
                 $table->enum('notify', ['y', 'n'])->default('y');
                 $table->timestamps();
@@ -82,9 +81,9 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     private function seedUsersTable()
     {
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, first_name, last_name, email, created_at, updated_at) VALUES (?, ?, ?, ?, datetime(), datetime())', [1, 'Chris', 'Gmyr', 'chris@test.com']);
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, first_name, last_name, email, created_at, updated_at) VALUES (?, ?, ?, ?, datetime(), datetime())', [2, 'Adam', 'Wathan', 'adam@test.com']);
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, first_name, last_name, email, created_at, updated_at) VALUES (?, ?, ?, ?, datetime(), datetime())', [3, 'Taylor', 'Otwell', 'taylor@test.com']);
+        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [1, 'Chris Gmyr', 'chris@test.com']);
+        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [2, 'Adam Wathan', 'adam@test.com']);
+        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [3, 'Taylor Otwell', 'taylor@test.com']);
     }
 
     /**

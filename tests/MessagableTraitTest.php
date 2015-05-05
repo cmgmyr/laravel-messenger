@@ -17,8 +17,7 @@ class MessagableTraitTest extends TestCase
     {
         $user = User::create(
             [
-                'first_name' => 'John',
-                'last_name' => 'Doe',
+                'name' => 'John Doe',
                 'email' => 'john@example.com',
                 'notify' => 'y'
             ]
@@ -53,5 +52,5 @@ class User extends Eloquent
 
     protected $table = 'users';
 
-    protected $fillable = ['first_name', 'last_name', 'email', 'notify'];
+    protected $fillable = ['name', 'email', 'notify'];
 }
