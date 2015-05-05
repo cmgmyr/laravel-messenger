@@ -6,7 +6,9 @@
     "authors": [
         {
             "name": "Chris Gmyr",
-            "email": "cmgmyr@gmail.com"
+            "email": "cmgmyr@gmail.com",
+            "homepage": "https://github.com/cmgmyr",
+            "role": "Developer"
         }
     ],
     "require": {
