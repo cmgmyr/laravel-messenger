@@ -78,5 +78,14 @@ Please format your code before creating a pull-request:
 
     vendor/bin/php-cs-fixer fix --level psr2 .
 
+## Security
+
+If you discover any security related issues, please email [Chris Gmyr](mailto:cmgmyr@gmail.com) instead of using the issue tracker.
+
+## Credits
+
+- [Chris Gmyr](https://github.com/cmgmyr)
+- [All Contributors](../../contributors)
+
 ### Special Thanks
 This package used [AndreasHeiberg/laravel-messenger](https://github.com/AndreasHeiberg/laravel-messenger) as a starting point.
