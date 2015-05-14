@@ -72,6 +72,10 @@ Add the trait to your user model:
 
 __Note:__ These examples use the [illuminate/html](https://packagist.org/packages/illuminate/html) package that is no longer included in Laravel 5 out of the box. Make sure you require this dependency in your `composer.json` file if you intend to use the example files.
 
+## Example Projects
+* [WIP] [Pusher](https://github.com/cmgmyr/laravel-messenger-pusher-demo)
+* [WIP] [Lumen API](https://github.com/cmgmyr/lumen-messenger-api)
+
 
 ## Contributing? 
 Please format your code before creating a pull-request:
