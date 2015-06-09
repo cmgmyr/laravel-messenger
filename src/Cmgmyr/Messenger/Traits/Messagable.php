@@ -45,6 +45,18 @@ trait Messagable
         $threadsWithNewMessages = [];
         $participants = Participant::where('user_id', $this->id)->lists('last_read', 'thread_id');
 
+        /**
+         * @todo: see if we can fix this more in the future.
+         * Illuminate\Foundation is not available through composer, only in laravel/framework which
+         * I don't want to include as a dependency for this package...it's overkill. So let's
+         * exclude this check in the testing environment.
+         */
+        if (getenv('APP_ENV') != 'testing') {
+            if (!str_contains(\Illuminate\Foundation\Application::VERSION, '5.0')) {
+                $participants = $participants->all();
+            }
+        }
+
         if ($participants) {
             $threads = Thread::whereIn('id', array_keys($participants))->get();
 
