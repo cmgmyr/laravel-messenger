@@ -247,4 +247,19 @@ class EloquentThreadTest extends TestCase
         $string = $thread->participantsString(1, ['email']);
         $this->assertEquals("adam@test.com, taylor@test.com", $string);
     }
+
+    /** @test */
+    public function it_should_check_users_and_participants()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $participant_1 = $this->faktory->build('participant');
+        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+
+        $thread->participants()->saveMany([$participant_1, $participant_2]);
+
+        $this->assertTrue($thread->hasParticipant(1));
+        $this->assertTrue($thread->hasParticipant(2));
+        $this->assertFalse($thread->hasParticipant(3));
+    }
 }

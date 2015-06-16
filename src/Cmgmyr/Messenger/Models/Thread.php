@@ -234,6 +234,22 @@ class Thread extends Eloquent
     }
 
     /**
+     * Checks to see if a user is a current participant of the thread
+     *
+     * @param $userId
+     * @return bool
+     */
+    public function hasParticipant($userId)
+    {
+        $participants = $this->participants()->where('user_id', '=', $userId);
+        if ($participants->count() > 0) {
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Generates a select string used in participantsString()
      *
      * @param $columns
