@@ -84,7 +84,7 @@ class EloquentThreadTest extends TestCase
         $participants = $thread->participantsUserIds();
         $this->assertCount(3, $participants);
 
-        $this->assertInternalType('array', $participants);
+        $this->assertInternalType('object', $participants);
     }
 
     /** @test */
