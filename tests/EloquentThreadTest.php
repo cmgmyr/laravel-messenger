@@ -122,6 +122,23 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
+    public function it_should_get_all_threads_shared_by_specified_users()
+    {
+        $userId = 1;
+        $userId2 = 2;
+
+        $thread = $this->faktory->create('thread');
+        $thread2 = $this->faktory->create('thread');
+
+        $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread->id]);
+        $this->faktory->create('participant', ['user_id' => $userId2, 'thread_id' => $thread->id]);
+        $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id]);
+
+        $threads = Thread::between([$userId, $userId2])->get();
+        $this->assertCount(1, $threads);
+    }
+
+    /** @test */
     public function it_should_add_participants_to_a_thread()
     {
         $participants = [1, 2, 3];

@@ -132,6 +132,22 @@ class Thread extends Eloquent
     }
 
     /**
+     * Returns threads between given user ids
+     *
+     * @param $query
+     * @param $participants
+     * @return mixed
+     */
+    public function scopeBetween($query, array $participants)
+    {
+        $query->whereHas('participants', function ($query) use ($participants) {
+            $query->whereIn('user_id', $participants)
+                    ->groupBy('thread_id')
+                    ->havingRaw('COUNT(thread_id)='.count($participants));
+        });
+    }
+
+    /**
      * Adds users to this thread
      *
      * @param array $participants list of all participants
