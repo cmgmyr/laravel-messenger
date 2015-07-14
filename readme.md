@@ -1,4 +1,4 @@
-[![Build Status](https://img.shields.io/travis/cmgmyr/laravel-messenger.svg?style=flat-square)](https://travis-ci.org/cmgmyr/laravel-messenger)
+[![Build Status](https://img.shields.io/travis/cmgmyr/laravel-messenger/develop.svg?style=flat-square)](https://travis-ci.org/cmgmyr/laravel-messenger)
 [![Code Climate](https://img.shields.io/codeclimate/github/cmgmyr/laravel-messenger.svg?style=flat-square)](https://codeclimate.com/github/cmgmyr/laravel-messenger)
 [![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg?style=flat-square)](https://github.com/cmgmyr/laravel-messenger/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg?style=flat-square)](https://packagist.org/packages/cmgmyr/messenger)
@@ -20,19 +20,26 @@ This package will allow you to add a full user messaging system into your Larave
 * Group messaging (only participants can see their threads)
 * One to one messaging (private or direct thread)
 
-## Installation (Laravel 4.x)
+## Laravel 4.x Installation (V1)
 Installation instructions for Laravel 4 can be [found here](https://github.com/cmgmyr/laravel-messenger/tree/v1).
 
-## Installation (Laravel 5.x)
+## Laravel 5.x Installation (V2 & stable)
+Installation instructions for Laravel 5 can be [found here](https://github.com/cmgmyr/laravel-messenger/tree/v2).
+
+## Laravel 5.x Installation (V3 & develop)
+
 In composer.json:
 
     "require": {
-        "cmgmyr/messenger": "~2.0"
+        "cmgmyr/messenger": "dev-develop"
     }
 
 Run:
 
     composer update
+
+### ==== To Do ====
+(update below as needed)
 
 Add the service provider to `config/app.php` under `providers`:
 
@@ -48,7 +55,7 @@ Update config file to reference your User Model:
 
 	config/messenger.php
 	
-Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
+Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/blob/develop/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
 
 __Note:__ if you already have a `users` table and run into any issues with foreign keys, you may have to make the `id` unsigned.
 
@@ -62,23 +69,12 @@ Add the trait to your user model:
     
     class User extends Model {
     	use Messagable;
-    }
+    }    
 
-
-## Examples
-* [Controller](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/MessagesController.php)
-* [Routes](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/routes.php)
-* [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/views)
-
-__Note:__ These examples use the [laravelcollective/html](http://laravelcollective.com/docs/5.0/html) package that is no longer included in Laravel 5 out of the box. Make sure you require this dependency in your `composer.json` file if you intend to use the example files.
-
-## Example Projects
-* [WIP] [Pusher](https://github.com/cmgmyr/laravel-messenger-pusher-demo)
-* [WIP] [Lumen API](https://github.com/cmgmyr/lumen-messenger-api)
 
 
 ## Contributing? 
-Please format your code before creating a pull-request:
+Please format your code before creating a pull-request to the `develop` branch:
 
     vendor/bin/php-cs-fixer fix --level psr2 .
 
@@ -90,6 +86,3 @@ If you discover any security related issues, please email [Chris Gmyr](mailto:cm
 
 - [Chris Gmyr](https://github.com/cmgmyr)
 - [All Contributors](../../contributors)
-
-### Special Thanks
-This package used [AndreasHeiberg/laravel-messenger](https://github.com/AndreasHeiberg/laravel-messenger) as a starting point.
