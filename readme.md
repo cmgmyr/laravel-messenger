@@ -7,6 +7,9 @@
 # Laravel Messenger
 This package will allow you to add a full user messaging system into your Laravel application.
 
+## Leave some feedback
+[How are you using laravel-messenger?](https://github.com/cmgmyr/laravel-messenger/issues/55)
+
 ## Features
 * Multiple conversations per user
 * Optionally loop in additional users with each new message
