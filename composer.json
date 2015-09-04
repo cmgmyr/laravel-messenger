@@ -24,9 +24,6 @@
         "fabpot/php-cs-fixer": "1.0.*@dev"
     },
     "autoload": {
-        "classmap": [
-            "src/migrations"
-        ],
         "psr-0": {
             "Cmgmyr\\Messenger\\": "src/"
         }
