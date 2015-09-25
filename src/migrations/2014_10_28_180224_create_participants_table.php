@@ -18,9 +18,6 @@ class CreateParticipantsTable extends Migration
             $table->integer('user_id')->unsigned();
             $table->timestamp('last_read');
             $table->timestamps();
-
-            $table->foreign('thread_id')->references('id')->on('threads');
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
