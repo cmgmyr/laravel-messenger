@@ -3,6 +3,7 @@
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Support\Facades\Config;
 use ReflectionClass;
 
 class EloquentThreadTest extends TestCase
@@ -234,20 +235,23 @@ class EloquentThreadTest extends TestCase
     {
         $method = self::getMethod('createSelectString');
         $thread = new Thread();
+        $tableName = 'users';
+        $thread->setUsersTable($tableName);
 
         $columns = ['name'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . "users.name) as name", $select);
+        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name) as name", $select);
 
         $columns = ['name', 'email'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . "users.name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . "users.email) as name", $select);
+        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".email) as name", $select);
     }
 
     /** @test */
     public function it_should_get_participants_string()
     {
         $thread = $this->faktory->create('thread');
+        $thread->setUsersTable('users');
 
         $participant_1 = $this->faktory->build('participant');
         $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);

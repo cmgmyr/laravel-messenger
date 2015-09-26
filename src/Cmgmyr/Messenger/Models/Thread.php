@@ -4,6 +4,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletingTrait;
+use Illuminate\Support\Facades\Config;
 
 class Thread extends Eloquent
 {
@@ -29,6 +30,13 @@ class Thread extends Eloquent
      * @var array
      */
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
+
+    /**
+     * "Users" table name to use for manual queries
+     *
+     * @var string|null
+     */
+    private $usersTable = null;
 
     /**
      * Messages relationship
@@ -235,16 +243,16 @@ class Thread extends Eloquent
     {
         $selectString = $this->createSelectString($columns);
 
-        $participantNames = $this->getConnection()->table('users')
-            ->join('participants', 'users.id', '=', 'participants.user_id')
+        $participantNames = $this->getConnection()->table($this->getUsersTable())
+            ->join('participants', $this->getUsersTable() . '.id', '=', 'participants.user_id')
             ->where('participants.thread_id', $this->id)
             ->select($this->getConnection()->raw($selectString));
 
         if ($userId !== null) {
-            $participantNames->where('users.id', '!=', $userId);
+            $participantNames->where($this->getUsersTable() . '.id', '!=', $userId);
         }
 
-        $userNames = $participantNames->lists('users.name');
+        $userNames = $participantNames->lists($this->getUsersTable() . '.name');
 
         return implode(', ', $userNames);
     }
@@ -271,25 +279,50 @@ class Thread extends Eloquent
      * @param $columns
      * @return string
      */
-    private function createSelectString($columns)
+    protected function createSelectString($columns)
     {
         $dbDriver = $this->getConnection()->getDriverName();
 
         switch ($dbDriver) {
             case 'pgsql':
             case 'sqlite':
-                $columnString = implode(" || ' ' || " . $this->getConnection()->getTablePrefix() . "users.", $columns);
-                $selectString = "(" . $this->getConnection()->getTablePrefix() . "users." . $columnString . ") as name";
+                $columnString = implode(" || ' ' || " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".", $columns);
+                $selectString = "(" . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . "." . $columnString . ") as name";
                 break;
             case 'sqlsrv':
-                $columnString = implode(" + ' ' + " . $this->getConnection()->getTablePrefix() . "users.", $columns);
-                $selectString = "(" . $this->getConnection()->getTablePrefix() . "users." . $columnString . ") as name";
+                $columnString = implode(" + ' ' + " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".", $columns);
+                $selectString = "(" . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . "." . $columnString . ") as name";
                 break;
             default:
-                $columnString = implode(", ' ', " . $this->getConnection()->getTablePrefix() . "users.", $columns);
-                $selectString = "concat(" . $this->getConnection()->getTablePrefix() . "users." . $columnString . ") as name";
+                $columnString = implode(", ' ', " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".", $columns);
+                $selectString = "concat(" . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . "." . $columnString . ") as name";
         }
 
         return $selectString;
+    }
+
+    /**
+     * Sets the "users" table name
+     *
+     * @param $tableName
+     */
+    public function setUsersTable($tableName)
+    {
+        $this->usersTable = $tableName;
+    }
+
+    /**
+     * Returns the "users" table name to use in manual queries
+     *
+     * @return string
+     */
+    private function getUsersTable()
+    {
+        if ($this->usersTable !== null) {
+            return $this->usersTable;
+        }
+
+        $userModel = Config::get('messenger.user_model');
+        return $this->usersTable = (new $userModel)->getTable();
     }
 }
