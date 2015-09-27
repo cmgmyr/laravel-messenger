@@ -51,7 +51,7 @@ trait Messagable
          * I don't want to include as a dependency for this package...it's overkill. So let's
          * exclude this check in the testing environment.
          */
-        if (getenv('APP_ENV') == 'testing' || !str_contains(\Illuminate\Foundation\Application::VERSION, '5.0')) {
+        if ($_ENV['APP_ENV'] == 'testing' || !str_contains(\Illuminate\Foundation\Application::VERSION, '5.0')) {
             $participants = $participants->all();
         }
 

@@ -7,6 +7,9 @@
 # Laravel Messenger
 This package will allow you to add a full user messaging system into your Laravel application.
 
+## Leave some feedback
+[How are you using laravel-messenger?](https://github.com/cmgmyr/laravel-messenger/issues/55)
+
 ## Features
 * Multiple conversations per user
 * Optionally loop in additional users with each new message
@@ -56,8 +59,6 @@ Update config file to reference your User Model:
 	config/messenger.php
 	
 Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/blob/develop/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
-
-__Note:__ if you already have a `users` table and run into any issues with foreign keys, you may have to make the `id` unsigned.
 
 Migrate your database:
 
