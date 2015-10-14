@@ -1,5 +1,5 @@
 {
-    "name": "doorofclubs/messenger",
+    "name": "doorofclubs/laravel-messenger",
     "description": "Simple user messaging tool for Laravel",
     "keywords": ["laravel", "messenger", "messaging", "user messaging"],
     "license": "MIT",
