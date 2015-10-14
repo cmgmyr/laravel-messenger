@@ -1,16 +1,8 @@
 {
-    "name": "cmgmyr/messenger",
+    "name": "doorofclubs/messenger",
     "description": "Simple user messaging tool for Laravel",
     "keywords": ["laravel", "messenger", "messaging", "user messaging"],
     "license": "MIT",
-    "authors": [
-        {
-            "name": "Chris Gmyr",
-            "email": "cmgmyr@gmail.com",
-            "homepage": "https://github.com/cmgmyr",
-            "role": "Developer"
-        }
-    ],
     "require": {
         "php": ">=5.4.0",
         "illuminate/config": "~5.0",
