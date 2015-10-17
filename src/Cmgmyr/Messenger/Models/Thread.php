@@ -59,7 +59,7 @@ class Thread extends Eloquent
      */
     public function messages()
     {
-        return $this->hasMany(Config::get('messenger.message_model'));
+        return $this->hasMany(Config::get('messenger.message_model'), 'thread_id', 'id');
     }
 
     /**
@@ -79,7 +79,7 @@ class Thread extends Eloquent
      */
     public function participants()
     {
-        return $this->hasMany(Config::get('messenger.participant_model'));
+        return $this->hasMany(Config::get('messenger.participant_model'), 'thread_id', 'id');
     }
 
     /**
@@ -112,7 +112,8 @@ class Thread extends Eloquent
     {
         $users = $this->participants()->withTrashed()->lists('user_id');
 
-        if ($userId) {
+        if ($userId)
+        {
             $users[] = $userId;
         }
 
@@ -150,7 +151,8 @@ class Thread extends Eloquent
         return $query->join($participantTable, 'threads.id', '=', $participantTable . '.thread_id')
             ->where($participantTable . '.user_id', $userId)
             ->whereNull($participantTable . '.deleted_at')
-            ->where(function ($query) use ($participantTable) {
+            ->where(function ($query) use ($participantTable)
+        {
                 $query->where($this->getTable() . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . $participantTable . '.last_read'))
                     ->orWhereNull($participantTable . '.last_read');
             })
@@ -166,7 +168,8 @@ class Thread extends Eloquent
      */
     public function scopeBetween($query, array $participants)
     {
-        $query->whereHas($this->getParticipantTable(), function ($query) use ($participants) {
+        $query->whereHas($this->getParticipantTable(), function ($query) use ($participants)
+        {
             $query->whereIn('user_id', $participants)
                 ->groupBy('thread_id')
                 ->havingRaw('COUNT(thread_id)=' . count($participants));
@@ -181,10 +184,12 @@ class Thread extends Eloquent
      */
     public function addParticipants(array $participants)
     {
-        if (count($participants)) {
+        if (count($participants))
+        {
             $participantModelClass = config('messenger.participant_model');
 
-            foreach ($participants as $user_id) {
+            foreach ($participants as $user_id)
+            {
                 $participantModel = new $participantModelClass;
                 $participantModel::firstOrCreate([
                     'user_id'   => $user_id,
@@ -205,7 +210,9 @@ class Thread extends Eloquent
             $participant            = $this->getParticipantFromUser($userId);
             $participant->last_read = new Carbon;
             $participant->save();
-        } catch (ModelNotFoundException $e) {
+        }
+        catch (ModelNotFoundException $e)
+        {
             // do nothing
         }
     }
@@ -220,10 +227,13 @@ class Thread extends Eloquent
     {
         try {
             $participant = $this->getParticipantFromUser($userId);
-            if ($this->updated_at > $participant->last_read) {
+            if ($this->updated_at > $participant->last_read)
+            {
                 return true;
             }
-        } catch (ModelNotFoundException $e) {
+        }
+        catch (ModelNotFoundException $e)
+        {
             // do nothing
         }
 
@@ -248,7 +258,8 @@ class Thread extends Eloquent
     public function activateAllParticipants()
     {
         $participants = $this->participants()->withTrashed()->get();
-        foreach ($participants as $participant) {
+        foreach ($participants as $participant)
+        {
             $participant->restore();
         }
     }
@@ -272,7 +283,8 @@ class Thread extends Eloquent
             ->where($participantTable . '.thread_id', $this->id)
             ->select($this->getConnection()->raw($selectString));
 
-        if ($userId !== null) {
+        if ($userId !== null)
+        {
             $participantNames->where($usersTable . '.id', '!=', $userId);
         }
 
@@ -290,7 +302,8 @@ class Thread extends Eloquent
     public function hasParticipant($userId)
     {
         $participants = $this->participants()->where('user_id', '=', $userId);
-        if ($participants->count() > 0) {
+        if ($participants->count() > 0)
+        {
             return true;
         }
 
@@ -309,7 +322,8 @@ class Thread extends Eloquent
         $tablePrefix = $this->getConnection()->getTablePrefix();
         $usersTable  = $this->getUsersTable();
 
-        switch ($dbDriver) {
+        switch ($dbDriver)
+        {
         case 'pgsql':
         case 'sqlite':
             $columnString = implode(" || ' ' || " . $tablePrefix . $usersTable . ".", $columns);
@@ -344,7 +358,8 @@ class Thread extends Eloquent
      */
     private function getParticipantTable()
     {
-        if ($this->participantTable !== null) {
+        if ($this->participantTable !== null)
+        {
             return $this->participantTable;
         }
 
@@ -360,7 +375,8 @@ class Thread extends Eloquent
      */
     private function getThreadTable()
     {
-        if ($this->threadTable !== null) {
+        if ($this->threadTable !== null)
+        {
             return $this->threadTable;
         }
 
@@ -376,7 +392,8 @@ class Thread extends Eloquent
      */
     private function getUsersTable()
     {
-        if ($this->usersTable !== null) {
+        if ($this->usersTable !== null)
+        {
             return $this->usersTable;
         }
 
