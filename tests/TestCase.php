@@ -2,10 +2,11 @@
 
 date_default_timezone_set('America/New_York');
 
-use Illuminate\Database\Capsule\Manager as DB;
 use AdamWathan\Faktory\Faktory;
+use Illuminate\Database\Capsule\Manager as DB;
+use Orchestra\Testbench\TestCase as Orchestra;
 
-class TestCase extends \PHPUnit_Framework_TestCase
+class TestCase extends Orchestra
 {
     /**
      * @var \AdamWathan\Faktory\Faktory
@@ -17,13 +18,29 @@ class TestCase extends \PHPUnit_Framework_TestCase
      */
     public function setUp()
     {
+        parent::setUp();
+
         $this->configureDatabase();
         $this->migrateTables();
-        $this->faktory = new Faktory;
+        $this->faktory  = new Faktory;
         $load_factories = function ($faktory) {
-            require(__DIR__ . '/factories.php');
+            require __DIR__ . '/factories.php';
         };
         $load_factories($this->faktory);
+    }
+
+    /**
+     * Define environment setup.
+     *
+     * @param  \Illuminate\Foundation\Application  $app
+     *
+     * @return void
+     */
+    protected function getEnvironmentSetUp($app)
+    {
+        $app['config']->set('messenger.message_model', 'Cmgmyr\Messenger\Models\Message');
+        $app['config']->set('messenger.participant_model', 'Cmgmyr\Messenger\Models\Participant');
+        $app['config']->set('messenger.thread_model', 'Cmgmyr\Messenger\Models\Thread');
     }
 
     /**
