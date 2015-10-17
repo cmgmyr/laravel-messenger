@@ -1,7 +1,6 @@
 <?php namespace Cmgmyr\Messenger\Traits;
 
 use Cmgmyr\Messenger\Models\Thread;
-use Cmgmyr\Messenger\Models\Participant;
 
 trait Messagable
 {
@@ -12,7 +11,7 @@ trait Messagable
      */
     public function messages()
     {
-        return $this->hasMany('Cmgmyr\Messenger\Models\Message');
+        return $this->hasMany(Config::get('messenger.message_model'));
     }
 
     /**
@@ -22,7 +21,7 @@ trait Messagable
      */
     public function threads()
     {
-        return $this->belongsToMany('Cmgmyr\Messenger\Models\Thread', 'participants');
+        return $this->belongsToMany(Config::get('messenger.thread_model'), 'participants');
     }
 
     /**
@@ -43,7 +42,11 @@ trait Messagable
     public function threadsWithNewMessages()
     {
         $threadsWithNewMessages = [];
-        $participants = Participant::where('user_id', $this->id)->lists('last_read', 'thread_id');
+
+        $participantModelClass = config('messenger.participant_model');
+        $participantModel      = new $participantModelClass;
+
+        $participants = $participantModel->where('user_id', $this->id)->lists('last_read', 'thread_id');
 
         /**
          * @todo: see if we can fix this more in the future.
@@ -56,7 +59,10 @@ trait Messagable
         }
 
         if ($participants) {
-            $threads = Thread::whereIn('id', array_keys($participants))->get();
+            $threadModelClass = config('messenger.thread_model');
+            $threadModel      = new $threadModelClass;
+
+            $threads = $threadModel->whereIn('id', array_keys($participants))->get();
 
             foreach ($threads as $thread) {
                 if ($thread->updated_at > $participants[$thread->id]) {
