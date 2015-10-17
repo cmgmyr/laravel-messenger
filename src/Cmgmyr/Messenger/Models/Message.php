@@ -42,7 +42,7 @@ class Message extends Eloquent
      */
     public function thread()
     {
-        return $this->belongsTo(Config::get('messenger.thread_model'));
+        return $this->belongsTo(Config::get('messenger.thread_model'), 'thread_id', 'id');
     }
 
     /**
@@ -52,7 +52,7 @@ class Message extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo(Config::get('messenger.user_model'));
+        return $this->belongsTo(Config::get('messenger.user_model'), 'user_id');
     }
 
     /**
