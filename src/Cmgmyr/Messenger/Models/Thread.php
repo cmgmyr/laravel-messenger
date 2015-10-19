@@ -49,6 +49,16 @@ class Thread extends Eloquent
     }
 
     /**
+     * Returns the latest message object from a thread (improved from below)
+     *
+     * @return \Cmgmyr\Messenger\Models\Message
+     */
+    public function latestMessage()
+    {
+        return $this->hasOne('Cmgmyr\Messenger\Models\Message', 'id', 'last_message_id');
+    }
+
+    /**
      * Returns the latest message from a thread
      *
      * @return \Cmgmyr\Messenger\Models\Message
