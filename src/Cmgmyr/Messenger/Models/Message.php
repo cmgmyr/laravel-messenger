@@ -55,6 +55,20 @@ class Message extends Eloquent
         return $this->belongsTo(Config::get('messenger.user_model'));
     }
 
+
+
+
+
+    /**
+     * User relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user_organization()
+    {
+        return $this->belongsTo(Config::get('messenger.user_model'))->join('organizations', 'users.organization_id', '=', 'organizations.id')->get();
+    }
+
     /**
      * Participants relationship
      *

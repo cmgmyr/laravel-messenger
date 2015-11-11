@@ -48,15 +48,8 @@ class Thread extends Eloquent
         return $this->hasMany('Cmgmyr\Messenger\Models\Message');
     }
 
-    /**
-     * Returns the latest message object from a thread (improved from below)
-     *
-     * @return \Cmgmyr\Messenger\Models\Message
-     */
-    public function latestMessage()
-    {
-        return $this->hasOne('Cmgmyr\Messenger\Models\Message', 'id', 'last_message_id');
-    }
+
+
 
     /**
      * Returns the latest message from a thread
@@ -77,6 +70,20 @@ class Thread extends Eloquent
     {
         return $this->hasMany('Cmgmyr\Messenger\Models\Participant');
     }
+
+    /**
+     * Participants relationship
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function participant_users()
+    {
+        //return $this->participants()->join('users', 'participants.user_id', '=', 'users.id');
+
+        return $this->hasManyThrough('Cmgmyr\Messenger\Models\Participant','App\User', 'id', 'user_id');
+    }
+
+
 
     /**
      * Returns the user object that created the thread
