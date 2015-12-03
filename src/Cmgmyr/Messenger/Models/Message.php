@@ -1,7 +1,7 @@
 <?php namespace Cmgmyr\Messenger\Models;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Support\Facades\Config;
 
 class Message extends Eloquent
 {
@@ -42,7 +42,7 @@ class Message extends Eloquent
      */
     public function thread()
     {
-        return $this->belongsTo('Cmgmyr\Messenger\Models\Thread');
+        return $this->belongsTo(Config::get('messenger.thread_model'), 'thread_id', 'id');
     }
 
     /**
@@ -52,7 +52,7 @@ class Message extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo(Config::get('messenger.user_model'));
+        return $this->belongsTo(Config::get('messenger.user_model'), 'user_id');
     }
 
     /**
@@ -62,7 +62,7 @@ class Message extends Eloquent
      */
     public function participants()
     {
-        return $this->hasMany('Cmgmyr\Messenger\Models\Participant', 'thread_id', 'thread_id');
+        return $this->hasMany(Config::get('messenger.participant_model'), 'thread_id', 'thread_id');
     }
 
     /**

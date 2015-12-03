@@ -1,7 +1,6 @@
 <?php namespace Cmgmyr\Messenger\Traits;
 
 use Cmgmyr\Messenger\Models\Thread;
-use Cmgmyr\Messenger\Models\Participant;
 
 trait Messagable
 {
@@ -12,7 +11,7 @@ trait Messagable
      */
     public function messages()
     {
-        return $this->hasMany('Cmgmyr\Messenger\Models\Message');
+        return $this->hasMany(config('messenger.message_model'));
     }
 
     /**
@@ -22,7 +21,7 @@ trait Messagable
      */
     public function threads()
     {
-        return $this->belongsToMany('Cmgmyr\Messenger\Models\Thread', 'participants');
+        return $this->belongsToMany(config('messenger.thread_model'), $this->getParticipantTable(), 'user_id', 'thread_id');
     }
 
     /**
@@ -43,7 +42,11 @@ trait Messagable
     public function threadsWithNewMessages()
     {
         $threadsWithNewMessages = [];
-        $participants = Participant::where('user_id', $this->id)->lists('last_read', 'thread_id');
+
+        $participantModelClass = config('messenger.participant_model');
+        $participantModel      = new $participantModelClass;
+
+        $participants = $participantModel->where('user_id', $this->id)->lists('last_read', 'thread_id');
 
         /**
          * @todo: see if we can fix this more in the future.
@@ -51,20 +54,33 @@ trait Messagable
          * I don't want to include as a dependency for this package...it's overkill. So let's
          * exclude this check in the testing environment.
          */
-        if (getenv('APP_ENV') == 'testing' || !str_contains(\Illuminate\Foundation\Application::VERSION, '5.0')) {
+        if (getenv('APP_ENV') == 'testing' || !str_contains(\Illuminate\Foundation\Application::VERSION, '5.0'))
+        {
             $participants = $participants->all();
         }
 
-        if ($participants) {
-            $threads = Thread::whereIn('id', array_keys($participants))->get();
+        if ($participants)
+        {
+            $threadModelClass = config('messenger.thread_model');
+            $threadModel      = new $threadModelClass;
 
-            foreach ($threads as $thread) {
-                if ($thread->updated_at > $participants[$thread->id]) {
+            $threads = $threadModel->whereIn('id', array_keys($participants))->get();
+
+            foreach ($threads as $thread)
+            {
+                if ($thread->updated_at > $participants[$thread->id])
+                {
                     $threadsWithNewMessages[] = $thread->id;
                 }
             }
         }
 
         return $threadsWithNewMessages;
+    }
+
+    private function getParticipantTable()
+    {
+        $participantModel = config('messenger.participant_model');
+        return (new $participantModel)->getTable();
     }
 }

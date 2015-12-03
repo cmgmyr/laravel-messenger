@@ -32,6 +32,20 @@ class Thread extends Eloquent
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
+     * "Participant" table name to use for manual queries
+     *
+     * @var string|null
+     */
+    private $participantTable = null;
+
+    /**
+     * "Thread" table name to use for manual queries
+     *
+     * @var string|null
+     */
+    private $threadTable = null;
+
+    /**
      * "Users" table name to use for manual queries
      *
      * @var string|null
@@ -45,7 +59,7 @@ class Thread extends Eloquent
      */
     public function messages()
     {
-        return $this->hasMany('Cmgmyr\Messenger\Models\Message');
+        return $this->hasMany(Config::get('messenger.message_model'), 'thread_id', 'id');
     }
 
     /**
@@ -65,7 +79,7 @@ class Thread extends Eloquent
      */
     public function participants()
     {
-        return $this->hasMany('Cmgmyr\Messenger\Models\Participant');
+        return $this->hasMany(Config::get('messenger.participant_model'), 'thread_id', 'id');
     }
 
     /**
@@ -98,7 +112,8 @@ class Thread extends Eloquent
     {
         $users = $this->participants()->withTrashed()->lists('user_id');
 
-        if ($userId) {
+        if ($userId)
+        {
             $users[] = $userId;
         }
 
@@ -114,10 +129,12 @@ class Thread extends Eloquent
      */
     public function scopeForUser($query, $userId)
     {
-        return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
-            ->where('participants.user_id', $userId)
-            ->where('participants.deleted_at', null)
-            ->select('threads.*');
+        $participantTable = $this->getParticipantTable();
+
+        return $query->join($participantTable, 'threads.id', '=', $participantTable . '.thread_id')
+            ->where($participantTable . '.user_id', $userId)
+            ->where($participantTable . '.deleted_at', null)
+            ->select($this->getTable() . '.*');
     }
 
     /**
@@ -129,14 +146,17 @@ class Thread extends Eloquent
      */
     public function scopeForUserWithNewMessages($query, $userId)
     {
-        return $query->join('participants', 'threads.id', '=', 'participants.thread_id')
-            ->where('participants.user_id', $userId)
-            ->whereNull('participants.deleted_at')
-            ->where(function ($query) {
-                $query->where('threads.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . 'participants.last_read'))
-                    ->orWhereNull('participants.last_read');
+        $participantTable = $this->getParticipantTable();
+
+        return $query->join($participantTable, 'threads.id', '=', $participantTable . '.thread_id')
+            ->where($participantTable . '.user_id', $userId)
+            ->whereNull($participantTable . '.deleted_at')
+            ->where(function ($query) use ($participantTable)
+        {
+                $query->where($this->getTable() . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . $participantTable . '.last_read'))
+                    ->orWhereNull($participantTable . '.last_read');
             })
-            ->select('threads.*');
+            ->select($this->getTable() . '.*');
     }
 
     /**
@@ -148,10 +168,11 @@ class Thread extends Eloquent
      */
     public function scopeBetween($query, array $participants)
     {
-        $query->whereHas('participants', function ($query) use ($participants) {
+        $query->whereHas($this->getParticipantTable(), function ($query) use ($participants)
+        {
             $query->whereIn('user_id', $participants)
-                    ->groupBy('thread_id')
-                    ->havingRaw('COUNT(thread_id)='.count($participants));
+                ->groupBy('thread_id')
+                ->havingRaw('COUNT(thread_id)=' . count($participants));
         });
     }
 
@@ -163,10 +184,15 @@ class Thread extends Eloquent
      */
     public function addParticipants(array $participants)
     {
-        if (count($participants)) {
-            foreach ($participants as $user_id) {
-                Participant::firstOrCreate([
-                    'user_id' => $user_id,
+        if (count($participants))
+        {
+            $participantModelClass = config('messenger.participant_model');
+
+            foreach ($participants as $user_id)
+            {
+                $participantModel = new $participantModelClass;
+                $participantModel::firstOrCreate([
+                    'user_id'   => $user_id,
                     'thread_id' => $this->id,
                 ]);
             }
@@ -181,10 +207,12 @@ class Thread extends Eloquent
     public function markAsRead($userId)
     {
         try {
-            $participant = $this->getParticipantFromUser($userId);
+            $participant            = $this->getParticipantFromUser($userId);
             $participant->last_read = new Carbon;
             $participant->save();
-        } catch (ModelNotFoundException $e) {
+        }
+        catch (ModelNotFoundException $e)
+        {
             // do nothing
         }
     }
@@ -199,10 +227,13 @@ class Thread extends Eloquent
     {
         try {
             $participant = $this->getParticipantFromUser($userId);
-            if ($this->updated_at > $participant->last_read) {
+            if ($this->updated_at > $participant->last_read)
+            {
                 return true;
             }
-        } catch (ModelNotFoundException $e) {
+        }
+        catch (ModelNotFoundException $e)
+        {
             // do nothing
         }
 
@@ -227,7 +258,8 @@ class Thread extends Eloquent
     public function activateAllParticipants()
     {
         $participants = $this->participants()->withTrashed()->get();
-        foreach ($participants as $participant) {
+        foreach ($participants as $participant)
+        {
             $participant->restore();
         }
     }
@@ -239,20 +271,24 @@ class Thread extends Eloquent
      * @param array $columns
      * @return string
      */
-    public function participantsString($userId=null, $columns=['name'])
+    public function participantsString($userId = null, $columns = ['name'])
     {
+        $participantTable = $this->getParticipantTable();
+        $usersTable       = $this->getUsersTable();
+
         $selectString = $this->createSelectString($columns);
 
-        $participantNames = $this->getConnection()->table($this->getUsersTable())
-            ->join('participants', $this->getUsersTable() . '.id', '=', 'participants.user_id')
-            ->where('participants.thread_id', $this->id)
+        $participantNames = $this->getConnection()->table($usersTable)
+            ->join($participantTable, $usersTable . '.id', '=', $participantTable . '.user_id')
+            ->where($participantTable . '.thread_id', $this->id)
             ->select($this->getConnection()->raw($selectString));
 
-        if ($userId !== null) {
-            $participantNames->where($this->getUsersTable() . '.id', '!=', $userId);
+        if ($userId !== null)
+        {
+            $participantNames->where($usersTable . '.id', '!=', $userId);
         }
 
-        $userNames = $participantNames->lists($this->getUsersTable() . '.name');
+        $userNames = $participantNames->lists($usersTable . '.name');
 
         return implode(', ', $userNames);
     }
@@ -266,7 +302,8 @@ class Thread extends Eloquent
     public function hasParticipant($userId)
     {
         $participants = $this->participants()->where('user_id', '=', $userId);
-        if ($participants->count() > 0) {
+        if ($participants->count() > 0)
+        {
             return true;
         }
 
@@ -281,21 +318,24 @@ class Thread extends Eloquent
      */
     protected function createSelectString($columns)
     {
-        $dbDriver = $this->getConnection()->getDriverName();
+        $dbDriver    = $this->getConnection()->getDriverName();
+        $tablePrefix = $this->getConnection()->getTablePrefix();
+        $usersTable  = $this->getUsersTable();
 
-        switch ($dbDriver) {
-            case 'pgsql':
-            case 'sqlite':
-                $columnString = implode(" || ' ' || " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".", $columns);
-                $selectString = "(" . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . "." . $columnString . ") as name";
-                break;
-            case 'sqlsrv':
-                $columnString = implode(" + ' ' + " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".", $columns);
-                $selectString = "(" . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . "." . $columnString . ") as name";
-                break;
-            default:
-                $columnString = implode(", ' ', " . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . ".", $columns);
-                $selectString = "concat(" . $this->getConnection()->getTablePrefix() . $this->getUsersTable() . "." . $columnString . ") as name";
+        switch ($dbDriver)
+        {
+        case 'pgsql':
+        case 'sqlite':
+            $columnString = implode(" || ' ' || " . $tablePrefix . $usersTable . ".", $columns);
+            $selectString = "(" . $tablePrefix . $usersTable . "." . $columnString . ") as name";
+            break;
+        case 'sqlsrv':
+            $columnString = implode(" + ' ' + " . $tablePrefix . $usersTable . ".", $columns);
+            $selectString = "(" . $tablePrefix . $usersTable . "." . $columnString . ") as name";
+            break;
+        default:
+            $columnString = implode(", ' ', " . $tablePrefix . $usersTable . ".", $columns);
+            $selectString = "concat(" . $tablePrefix . $usersTable . "." . $columnString . ") as name";
         }
 
         return $selectString;
@@ -312,17 +352,53 @@ class Thread extends Eloquent
     }
 
     /**
+     * Returns the "participant" table name to use in manual queries
+     *
+     * @return string
+     */
+    private function getParticipantTable()
+    {
+        if ($this->participantTable !== null)
+        {
+            return $this->participantTable;
+        }
+
+        $participantModel = Config::get('messenger.participant_model');
+
+        return $this->participantTable = (new $participantModel)->getTable();
+    }
+
+    /**
+     * Returns the "thread" table name to use in manual queries
+     *
+     * @return string
+     */
+    private function getThreadTable()
+    {
+        if ($this->threadTable !== null)
+        {
+            return $this->threadTable;
+        }
+
+        $threadModel = Config::get('messenger.thread_model');
+
+        return $this->threadTable = (new $threadModel)->getTable();
+    }
+
+    /**
      * Returns the "users" table name to use in manual queries
      *
      * @return string
      */
     private function getUsersTable()
     {
-        if ($this->usersTable !== null) {
+        if ($this->usersTable !== null)
+        {
             return $this->usersTable;
         }
 
         $userModel = Config::get('messenger.user_model');
+
         return $this->usersTable = (new $userModel)->getTable();
     }
 }

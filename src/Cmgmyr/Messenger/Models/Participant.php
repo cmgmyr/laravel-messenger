@@ -1,8 +1,8 @@
 <?php namespace Cmgmyr\Messenger\Models;
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Config;
 
 class Participant extends Eloquent
 {
@@ -36,7 +36,7 @@ class Participant extends Eloquent
      */
     public function thread()
     {
-        return $this->belongsTo('Cmgmyr\Messenger\Models\Thread');
+        return $this->belongsTo(Config::get('messenger.thread_model'), 'thread_id', 'id');
     }
 
     /**
@@ -46,6 +46,6 @@ class Participant extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo(Config::get('messenger.user_model'));
+        return $this->belongsTo(Config::get('messenger.user_model'), 'user_id');
     }
 }
