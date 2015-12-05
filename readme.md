@@ -79,9 +79,9 @@ __Note:__ These examples use the [laravelcollective/html](http://laravelcollecti
 
 
 ## Contributing? 
-Please format your code before creating a pull-request:
+Please format your code before creating a pull-request. This will format all files as specified in `.php_cs`:
 
-    vendor/bin/php-cs-fixer fix --level psr2 .
+    vendor/bin/php-cs-fixer fix .
 
 ## Security
 
