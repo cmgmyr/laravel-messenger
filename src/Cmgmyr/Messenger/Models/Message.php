@@ -1,4 +1,6 @@
-<?php namespace Cmgmyr\Messenger\Models;
+<?php
+
+namespace Cmgmyr\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Support\Facades\Config;
@@ -36,7 +38,7 @@ class Message extends Eloquent
     ];
 
     /**
-     * Thread relationship
+     * Thread relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -46,7 +48,7 @@ class Message extends Eloquent
     }
 
     /**
-     * User relationship
+     * User relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -56,7 +58,7 @@ class Message extends Eloquent
     }
 
     /**
-     * Participants relationship
+     * Participants relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -66,7 +68,7 @@ class Message extends Eloquent
     }
 
     /**
-     * Recipients of this message
+     * Recipients of this message.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */

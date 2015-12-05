@@ -21,7 +21,6 @@ class CreateMessagesTable extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *

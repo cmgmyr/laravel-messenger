@@ -17,7 +17,6 @@ class AddSoftdeletesToThreadsTable extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *

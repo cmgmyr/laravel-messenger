@@ -1,4 +1,6 @@
-<?php namespace Cmgmyr\Messenger\tests;
+<?php
+
+namespace Cmgmyr\Messenger\tests;
 
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Traits\Messagable;
@@ -19,7 +21,7 @@ class MessagableTraitTest extends TestCase
             [
                 'name' => 'John Doe',
                 'email' => 'john@example.com',
-                'notify' => 'y'
+                'notify' => 'y',
             ]
         );
 

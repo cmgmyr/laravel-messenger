@@ -1,5 +1,5 @@
 .php_cs.cache
 build
 composer.lock
-docs
+files
 vendor

@@ -19,7 +19,6 @@ class CreateThreadsTable extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *

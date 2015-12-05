@@ -1,4 +1,6 @@
-<?php namespace Cmgmyr\Messenger\tests;
+<?php
+
+namespace Cmgmyr\Messenger\tests;
 
 date_default_timezone_set('America/New_York');
 
@@ -14,7 +16,7 @@ class TestCase extends Orchestra
     protected $faktory;
 
     /**
-     * Set up the database, migrations, and initial data
+     * Set up the database, migrations, and initial data.
      */
     public function setUp()
     {
@@ -44,7 +46,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Configure the database
+     * Configure the database.
      */
     private function configureDatabase()
     {
@@ -64,7 +66,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Run the migrations for the database
+     * Run the migrations for the database.
      */
     private function migrateTables()
     {
@@ -77,7 +79,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Create the users table in the database
+     * Create the users table in the database.
      */
     private function createUsersTable()
     {
@@ -94,7 +96,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Create some users for the tests to use
+     * Create some users for the tests to use.
      */
     private function seedUsersTable()
     {
@@ -104,7 +106,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Create the threads table in the database
+     * Create the threads table in the database.
      */
     private function createThreadsTable()
     {
@@ -120,7 +122,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Create the messages table in the database
+     * Create the messages table in the database.
      */
     private function createMessagesTable()
     {
@@ -137,7 +139,7 @@ class TestCase extends Orchestra
     }
 
     /**
-     * Create the participants table in the database
+     * Create the participants table in the database.
      */
     private function createParticipantsTable()
     {

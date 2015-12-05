@@ -17,7 +17,6 @@ class AddSoftDeletesToParticipantsTable extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *
