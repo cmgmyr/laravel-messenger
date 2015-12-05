@@ -1,11 +1,13 @@
-<?php namespace Cmgmyr\Messenger\Traits;
+<?php
+
+namespace Cmgmyr\Messenger\Traits;
 
 use Cmgmyr\Messenger\Models\Thread;
 
 trait Messagable
 {
     /**
-     * Message relationship
+     * Message relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
@@ -15,7 +17,7 @@ trait Messagable
     }
 
     /**
-     * Thread relationship
+     * Thread relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
      */
@@ -25,7 +27,7 @@ trait Messagable
     }
 
     /**
-     * Returns the new messages count for user
+     * Returns the new messages count for user.
      *
      * @return int
      */
@@ -35,7 +37,7 @@ trait Messagable
     }
 
     /**
-     * Returns all threads with new messages
+     * Returns all threads with new messages.
      *
      * @return array
      */
@@ -54,22 +56,18 @@ trait Messagable
          * I don't want to include as a dependency for this package...it's overkill. So let's
          * exclude this check in the testing environment.
          */
-        if (getenv('APP_ENV') == 'testing' || !str_contains(\Illuminate\Foundation\Application::VERSION, '5.0'))
-        {
+        if (getenv('APP_ENV') == 'testing' || !str_contains(\Illuminate\Foundation\Application::VERSION, '5.0')) {
             $participants = $participants->all();
         }
 
-        if ($participants)
-        {
+        if ($participants) {
             $threadModelClass = config('messenger.thread_model');
             $threadModel      = new $threadModelClass;
 
             $threads = $threadModel->whereIn('id', array_keys($participants))->get();
 
-            foreach ($threads as $thread)
-            {
-                if ($thread->updated_at > $participants[$thread->id])
-                {
+            foreach ($threads as $thread) {
+                if ($thread->updated_at > $participants[$thread->id]) {
                     $threadsWithNewMessages[] = $thread->id;
                 }
             }
@@ -81,6 +79,7 @@ trait Messagable
     private function getParticipantTable()
     {
         $participantModel = config('messenger.participant_model');
+
         return (new $participantModel)->getTable();
     }
 }

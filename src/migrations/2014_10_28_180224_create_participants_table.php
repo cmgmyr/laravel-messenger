@@ -21,7 +21,6 @@ class CreateParticipantsTable extends Migration
         });
     }
 
-
     /**
      * Reverse the migrations.
      *

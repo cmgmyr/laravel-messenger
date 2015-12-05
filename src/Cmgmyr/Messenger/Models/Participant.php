@@ -1,4 +1,6 @@
-<?php namespace Cmgmyr\Messenger\Models;
+<?php
+
+namespace Cmgmyr\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -30,7 +32,7 @@ class Participant extends Eloquent
     protected $dates = ['created_at', 'updated_at', 'deleted_at', 'last_read'];
 
     /**
-     * Thread relationship
+     * Thread relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
@@ -40,7 +42,7 @@ class Participant extends Eloquent
     }
 
     /**
-     * User relationship
+     * User relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */

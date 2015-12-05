@@ -1,9 +1,10 @@
-<?php namespace Cmgmyr\Messenger\tests;
+<?php
+
+namespace Cmgmyr\Messenger\tests;
 
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Support\Facades\Config;
 use ReflectionClass;
 
 class EloquentThreadTest extends TestCase
@@ -15,7 +16,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /**
-     * Activate private/protected methods for testing
+     * Activate private/protected methods for testing.
      *
      * @param $name
      * @return \ReflectionMethod
@@ -25,6 +26,7 @@ class EloquentThreadTest extends TestCase
         $class = new ReflectionClass('Cmgmyr\Messenger\Models\Thread');
         $method = $class->getMethod($name);
         $method->setAccessible(true);
+
         return $method;
     }
 
@@ -42,12 +44,12 @@ class EloquentThreadTest extends TestCase
     public function it_should_return_the_latest_message()
     {
         $oldMessage = $this->faktory->build('message', [
-            'created_at' => Carbon::yesterday()
+            'created_at' => Carbon::yesterday(),
         ]);
 
         $newMessage = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
-            'body' => 'This is the most recent message'
+            'body' => 'This is the most recent message',
         ]);
 
         $thread = $this->faktory->create('thread');
@@ -240,11 +242,11 @@ class EloquentThreadTest extends TestCase
 
         $columns = ['name'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name) as name", $select);
+        $this->assertEquals('(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.name) as name', $select);
 
         $columns = ['name', 'email'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals("(" . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".email) as name", $select);
+        $this->assertEquals('(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
     }
 
     /** @test */
@@ -260,13 +262,13 @@ class EloquentThreadTest extends TestCase
         $thread->participants()->saveMany([$participant_1, $participant_2, $participant_3]);
 
         $string = $thread->participantsString();
-        $this->assertEquals("Chris Gmyr, Adam Wathan, Taylor Otwell", $string);
+        $this->assertEquals('Chris Gmyr, Adam Wathan, Taylor Otwell', $string);
 
         $string = $thread->participantsString(1);
-        $this->assertEquals("Adam Wathan, Taylor Otwell", $string);
+        $this->assertEquals('Adam Wathan, Taylor Otwell', $string);
 
         $string = $thread->participantsString(1, ['email']);
-        $this->assertEquals("adam@test.com, taylor@test.com", $string);
+        $this->assertEquals('adam@test.com, taylor@test.com', $string);
     }
 
     /** @test */
