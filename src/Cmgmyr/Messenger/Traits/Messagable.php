@@ -2,8 +2,6 @@
 
 namespace Cmgmyr\Messenger\Traits;
 
-use Cmgmyr\Messenger\Models\Thread;
-
 trait Messagable
 {
     /**
@@ -14,6 +12,16 @@ trait Messagable
     public function messages()
     {
         return $this->hasMany(config('messenger.message_model'));
+    }
+
+    /**
+     * Participants relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function participants()
+    {
+        return $this->hasMany(config('messenger.participant_model'));
     }
 
     /**
@@ -46,7 +54,7 @@ trait Messagable
         $threadsWithNewMessages = [];
 
         $participantModelClass = config('messenger.participant_model');
-        $participantModel      = new $participantModelClass;
+        $participantModel = new $participantModelClass;
 
         $participants = $participantModel->where('user_id', $this->id)->lists('last_read', 'thread_id');
 
@@ -62,7 +70,7 @@ trait Messagable
 
         if ($participants) {
             $threadModelClass = config('messenger.thread_model');
-            $threadModel      = new $threadModelClass;
+            $threadModel = new $threadModelClass;
 
             $threads = $threadModel->whereIn('id', array_keys($participants))->get();
 
@@ -76,6 +84,11 @@ trait Messagable
         return $threadsWithNewMessages;
     }
 
+    /**
+     * Returns the "participants" table name to use in manual queries.
+     *
+     * @return string
+     */
     private function getParticipantTable()
     {
         $participantModel = config('messenger.participant_model');
