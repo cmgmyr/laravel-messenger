@@ -125,7 +125,7 @@ class Thread extends Eloquent
     {
         $participantTable = $this->getParticipantTable();
 
-        return $query->join($participantTable, 'threads.id', '=', $participantTable . '.thread_id')
+        return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable . '.thread_id')
             ->where($participantTable . '.user_id', $userId)
             ->where($participantTable . '.deleted_at', null)
             ->select($this->getTable() . '.*');
@@ -142,7 +142,7 @@ class Thread extends Eloquent
     {
         $participantTable = $this->getParticipantTable();
 
-        return $query->join($participantTable, 'threads.id', '=', $participantTable . '.thread_id')
+        return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable . '.thread_id')
             ->where($participantTable . '.user_id', $userId)
             ->whereNull($participantTable . '.deleted_at')
             ->where(function ($query) use ($participantTable) {
