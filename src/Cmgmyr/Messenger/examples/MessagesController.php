@@ -15,16 +15,6 @@ use Illuminate\Support\Facades\Session;
 class MessagesController extends Controller
 {
     /**
-     * Just for testing - the user should be logged in. In a real
-     * app, please use standard authentication practices.
-     */
-    public function __construct()
-    {
-        $user = User::find(1);
-        Auth::login($user);
-    }
-
-    /**
      * Show all of the message threads to the user.
      *
      * @return mixed
