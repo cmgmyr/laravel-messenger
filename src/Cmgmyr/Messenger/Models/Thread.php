@@ -322,7 +322,7 @@ class Thread extends Eloquent
             return $this->usersTable;
         }
 
-        $userModel = Config::get('messenger.user_model');
+        $userModel = Config::get('messenger::user_model');
         return $this->usersTable = (new $userModel)->getTable();
     }
 }
