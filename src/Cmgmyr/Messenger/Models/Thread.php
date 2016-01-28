@@ -161,7 +161,7 @@ class Thread extends Eloquent
      */
     public function scopeBetween($query, array $participants)
     {
-        $query->whereHas($this->getParticipantTable(), function ($query) use ($participants) {
+        $query->whereHas('participants', function ($query) use ($participants) {
             $query->whereIn('user_id', $participants)
                 ->groupBy('thread_id')
                 ->havingRaw('COUNT(thread_id)=' . count($participants));
