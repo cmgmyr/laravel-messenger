@@ -1,5 +1,6 @@
 <?php
 
+use Cmgmyr\Messenger\Models\Models;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -12,7 +13,7 @@ class CreateThreadsTable extends Migration
      */
     public function up()
     {
-        Schema::create('threads', function (Blueprint $table) {
+        Schema::create(Models::table('threads'), function (Blueprint $table) {
             $table->increments('id');
             $table->string('subject');
             $table->timestamps();
@@ -26,6 +27,6 @@ class CreateThreadsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('threads');
+        Schema::drop(Models::table('threads'));
     }
 }
