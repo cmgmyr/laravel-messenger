@@ -1,5 +1,6 @@
 <?php
 
+use Cmgmyr\Messenger\Models\Models;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 
@@ -12,7 +13,7 @@ class CreateMessagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('messages', function (Blueprint $table) {
+        Schema::create(Models::table('messages'), function (Blueprint $table) {
             $table->increments('id');
             $table->integer('thread_id')->unsigned();
             $table->integer('user_id')->unsigned();
@@ -28,6 +29,6 @@ class CreateMessagesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('messages');
+        Schema::drop(Models::table('messages'));
     }
 }

@@ -6,7 +6,6 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use Illuminate\Support\Facades\Config;
 
 class Thread extends Eloquent
 {
@@ -34,18 +33,14 @@ class Thread extends Eloquent
     protected $dates = ['created_at', 'updated_at', 'deleted_at'];
 
     /**
-     * "Participant" table name to use for manual queries.
-     *
-     * @var string|null
+     * {@inheritDoc}
      */
-    protected $participantTable = null;
+    public function __construct(array $attributes = [])
+    {
+        $this->table = Models::table('threads');
 
-    /**
-     * "Users" table name to use for manual queries.
-     *
-     * @var string|null
-     */
-    private $usersTable = null;
+        parent::__construct($attributes);
+    }
 
     /**
      * Messages relationship.
@@ -54,7 +49,7 @@ class Thread extends Eloquent
      */
     public function messages()
     {
-        return $this->hasMany(Config::get('messenger.message_model'), 'thread_id', 'id');
+        return $this->hasMany(Models::classname(Message::class), 'thread_id', 'id');
     }
 
     /**
@@ -74,7 +69,7 @@ class Thread extends Eloquent
      */
     public function participants()
     {
-        return $this->hasMany(Config::get('messenger.participant_model'), 'thread_id', 'id');
+        return $this->hasMany(Models::classname(Participant::class), 'thread_id', 'id');
     }
 
     /**
@@ -123,12 +118,13 @@ class Thread extends Eloquent
      */
     public function scopeForUser($query, $userId)
     {
-        $participantTable = $this->getParticipantTable();
+        $participantsTable = Models::table('participants');
+        $threadsTable = Models::table('threads');
 
-        return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable . '.thread_id')
-            ->where($participantTable . '.user_id', $userId)
-            ->where($participantTable . '.deleted_at', null)
-            ->select($this->getTable() . '.*');
+        return $query->join($participantsTable, $this->getQualifiedKeyName(), '=', $participantsTable . '.thread_id')
+            ->where($participantsTable . '.user_id', $userId)
+            ->where($participantsTable . '.deleted_at', null)
+            ->select($threadsTable . '.*');
     }
 
     /**
@@ -140,16 +136,17 @@ class Thread extends Eloquent
      */
     public function scopeForUserWithNewMessages($query, $userId)
     {
-        $participantTable = $this->getParticipantTable();
+        $participantTable = Models::table('participants');
+        $threadsTable = Models::table('threads');
 
         return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable . '.thread_id')
             ->where($participantTable . '.user_id', $userId)
             ->whereNull($participantTable . '.deleted_at')
-            ->where(function ($query) use ($participantTable) {
-                $query->where($this->getTable() . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . $participantTable . '.last_read'))
+            ->where(function ($query) use ($participantTable, $threadsTable) {
+                $query->where($threadsTable . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . $participantTable . '.last_read'))
                     ->orWhereNull($participantTable . '.last_read');
             })
-            ->select($this->getTable() . '.*');
+            ->select($threadsTable . '.*');
     }
 
     /**
@@ -177,11 +174,8 @@ class Thread extends Eloquent
     public function addParticipants(array $participants)
     {
         if (count($participants)) {
-            $participantModelClass = Config::get('messenger.participant_model');
-
             foreach ($participants as $user_id) {
-                $participantModel = new $participantModelClass;
-                $participantModel::firstOrCreate([
+                Models::participant()->firstOrCreate([
                     'user_id' => $user_id,
                     'thread_id' => $this->id,
                 ]);
@@ -257,14 +251,14 @@ class Thread extends Eloquent
      */
     public function participantsString($userId = null, $columns = ['name'])
     {
-        $participantTable = $this->getParticipantTable();
-        $usersTable = $this->getUsersTable();
+        $participantsTable = Models::table('participants');
+        $usersTable = Models::table('users');
 
         $selectString = $this->createSelectString($columns);
 
         $participantNames = $this->getConnection()->table($usersTable)
-            ->join($participantTable, $usersTable . '.id', '=', $participantTable . '.user_id')
-            ->where($participantTable . '.thread_id', $this->id)
+            ->join($participantsTable, $usersTable . '.id', '=', $participantsTable . '.user_id')
+            ->where($participantsTable . '.thread_id', $this->id)
             ->select($this->getConnection()->raw($selectString));
 
         if ($userId !== null) {
@@ -302,7 +296,7 @@ class Thread extends Eloquent
     {
         $dbDriver = $this->getConnection()->getDriverName();
         $tablePrefix = $this->getConnection()->getTablePrefix();
-        $usersTable = $this->getUsersTable();
+        $usersTable = Models::table('users');
 
         switch ($dbDriver) {
         case 'pgsql':
@@ -320,47 +314,5 @@ class Thread extends Eloquent
         }
 
         return $selectString;
-    }
-
-    /**
-     * Sets the "users" table name.
-     *
-     * @param $tableName
-     */
-    public function setUsersTable($tableName)
-    {
-        $this->usersTable = $tableName;
-    }
-
-    /**
-     * Returns the "participant" table name to use in manual queries.
-     *
-     * @return string
-     */
-    private function getParticipantTable()
-    {
-        if ($this->participantTable !== null) {
-            return $this->participantTable;
-        }
-
-        $participantModel = Config::get('messenger.participant_model');
-
-        return $this->participantTable = (new $participantModel)->getTable();
-    }
-
-    /**
-     * Returns the "users" table name to use in manual queries.
-     *
-     * @return string
-     */
-    private function getUsersTable()
-    {
-        if ($this->usersTable !== null) {
-            return $this->usersTable;
-        }
-
-        $userModel = Config::get('messenger.user_model');
-
-        return $this->usersTable = (new $userModel)->getTable();
     }
 }

@@ -2,8 +2,8 @@
 
 namespace Cmgmyr\Messenger\Models;
 
+use App\User;
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Support\Facades\Config;
 
 class Message extends Eloquent
 {
@@ -38,13 +38,23 @@ class Message extends Eloquent
     ];
 
     /**
+     * {@inheritDoc}
+     */
+    public function __construct(array $attributes = [])
+    {
+        $this->table = Models::table('messages');
+
+        parent::__construct($attributes);
+    }
+
+    /**
      * Thread relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     public function thread()
     {
-        return $this->belongsTo(Config::get('messenger.thread_model'), 'thread_id', 'id');
+        return $this->belongsTo(Models::classname(Thread::class), 'thread_id', 'id');
     }
 
     /**
@@ -54,7 +64,7 @@ class Message extends Eloquent
      */
     public function user()
     {
-        return $this->belongsTo(Config::get('messenger.user_model'), 'user_id');
+        return $this->belongsTo(Models::classname(User::class), 'user_id');
     }
 
     /**
@@ -64,7 +74,7 @@ class Message extends Eloquent
      */
     public function participants()
     {
-        return $this->hasMany(Config::get('messenger.participant_model'), 'thread_id', 'thread_id');
+        return $this->hasMany(Models::classname(Participant::class), 'thread_id', 'thread_id');
     }
 
     /**
