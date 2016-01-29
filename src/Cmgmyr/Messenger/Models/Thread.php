@@ -333,6 +333,52 @@ class Thread extends Eloquent
     }
 
     /**
+     * Returns array of unread messages in thread for given user.
+     *
+     * @param $user_id
+     * @return array
+     */
+    public function userUnreadMessages($user_id)
+    {
+        $messages = $this->messages()->get();
+        $participant = $this->getParticipantFromUser($user_id);
+        if(!$participant)
+            return [];
+        $unread = array();
+        $i = count($messages)-1;
+        while($i) {
+            if($messages[$i]->updated_at->gt($participant->last_read))
+                array_push($unread, $messages[$i]);
+            else break;
+            --$i;
+        }
+        return $unread;
+    }
+
+    /**
+     * Returns count of unread messages in thread for given user.
+     *
+     * @param $user_id
+     * @return integer
+     */
+    public function userUnreadMessagesCount($user_id)
+    {
+        $messages = $this->messages()->get();
+        $participant = $this->getParticipantFromUser($user_id);
+        if(!$participant)
+            return 0;
+        $count = 0;
+        $i = count($messages)-1;
+        while($i) {
+            if($messages[$i]->updated_at->gt($participant->last_read))
+                ++$count;
+            else break;
+            --$i;
+        }
+        return $count;
+    }
+
+    /**
      * Returns the "participant" table name to use in manual queries.
      *
      * @return string
