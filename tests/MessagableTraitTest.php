@@ -1,6 +1,6 @@
 <?php
 
-namespace Cmgmyr\Messenger\tests;
+namespace Cmgmyr\Messenger\Test;
 
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Traits\Messagable;

@@ -29,5 +29,10 @@
             "Cmgmyr\\Messenger\\": "src/"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Cmgmyr\\Messenger\\Test\\": "tests/"
+        }
+    },
     "minimum-stability": "stable"
 }

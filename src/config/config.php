@@ -1,11 +1,22 @@
 <?php
 
 return [
-    'user_model' => 'App\User',
 
-    'message_model' => 'Cmgmyr\Messenger\Models\Message',
+    'user_model' => App\User::class,
 
-    'participant_model' => 'Cmgmyr\Messenger\Models\Participant',
+    'message_model' => Cmgmyr\Messenger\Models\Message::class,
 
-    'thread_model' => 'Cmgmyr\Messenger\Models\Thread',
+    'participant_model' => Cmgmyr\Messenger\Models\Participant::class,
+
+    'thread_model' => Cmgmyr\Messenger\Models\Thread::class,
+
+    /**
+     * Define custom database table names.
+     */
+
+    'messages_table' => null,
+
+    'participants_table' => null,
+
+    'threads_table' => null,
 ];

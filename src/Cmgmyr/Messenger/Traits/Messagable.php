@@ -2,6 +2,11 @@
 
 namespace Cmgmyr\Messenger\Traits;
 
+use Cmgmyr\Messenger\Models\Message;
+use Cmgmyr\Messenger\Models\Models;
+use Cmgmyr\Messenger\Models\Participant;
+use Cmgmyr\Messenger\Models\Thread;
+
 trait Messagable
 {
     /**
@@ -11,7 +16,7 @@ trait Messagable
      */
     public function messages()
     {
-        return $this->hasMany(config('messenger.message_model'));
+        return $this->hasMany(Models::classname(Message::class));
     }
 
     /**
@@ -21,7 +26,7 @@ trait Messagable
      */
     public function participants()
     {
-        return $this->hasMany(config('messenger.participant_model'));
+        return $this->hasMany(Models::classname(Participant::class));
     }
 
     /**
@@ -31,7 +36,12 @@ trait Messagable
      */
     public function threads()
     {
-        return $this->belongsToMany(config('messenger.thread_model'), $this->getParticipantTable(), 'user_id', 'thread_id');
+        return $this->belongsToMany(
+            Models::classname(Thread::class),
+            Models::classname(Participant::class),
+            'user_id',
+            'thread_id'
+        );
     }
 
     /**
@@ -53,10 +63,7 @@ trait Messagable
     {
         $threadsWithNewMessages = [];
 
-        $participantModelClass = config('messenger.participant_model');
-        $participantModel = new $participantModelClass;
-
-        $participants = $participantModel->where('user_id', $this->id)->lists('last_read', 'thread_id');
+        $participants = Models::participant()->where('user_id', $this->id)->lists('last_read', 'thread_id');
 
         /**
          * @todo: see if we can fix this more in the future.
@@ -69,10 +76,7 @@ trait Messagable
         }
 
         if ($participants) {
-            $threadModelClass = config('messenger.thread_model');
-            $threadModel = new $threadModelClass;
-
-            $threads = $threadModel->whereIn('id', array_keys($participants))->get();
+            $threads = Models::thread()->whereIn('id', array_keys($participants))->get();
 
             foreach ($threads as $thread) {
                 if ($thread->updated_at > $participants[$thread->id]) {
@@ -82,17 +86,5 @@ trait Messagable
         }
 
         return $threadsWithNewMessages;
-    }
-
-    /**
-     * Returns the "participants" table name to use in manual queries.
-     *
-     * @return string
-     */
-    private function getParticipantTable()
-    {
-        $participantModel = config('messenger.participant_model');
-
-        return (new $participantModel)->getTable();
     }
 }
