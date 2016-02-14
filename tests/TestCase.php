@@ -1,6 +1,6 @@
 <?php
 
-namespace Cmgmyr\Messenger\tests;
+namespace Cmgmyr\Messenger\Test;
 
 date_default_timezone_set('America/New_York');
 

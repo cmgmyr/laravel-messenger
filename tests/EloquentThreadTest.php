@@ -1,8 +1,10 @@
 <?php
 
-namespace Cmgmyr\Messenger\tests;
+namespace Cmgmyr\Messenger\Test;
 
 use Carbon\Carbon;
+use Cmgmyr\Messenger\Models\Models;
+use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use ReflectionClass;
@@ -23,7 +25,7 @@ class EloquentThreadTest extends TestCase
      */
     protected static function getMethod($name)
     {
-        $class = new ReflectionClass('Cmgmyr\Messenger\Models\Thread');
+        $class = new ReflectionClass(Thread::class);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
 
@@ -197,7 +199,7 @@ class EloquentThreadTest extends TestCase
 
         $newParticipant = $thread->getParticipantFromUser($userId);
 
-        $this->assertInstanceOf('\Cmgmyr\Messenger\Models\Participant', $newParticipant);
+        $this->assertInstanceOf(Participant::class, $newParticipant);
     }
 
     /**
@@ -237,8 +239,7 @@ class EloquentThreadTest extends TestCase
     {
         $method = self::getMethod('createSelectString');
         $thread = new Thread();
-        $tableName = 'users';
-        $thread->setUsersTable($tableName);
+        $tableName = Models::table('users');
 
         $columns = ['name'];
         $select = $method->invokeArgs($thread, [$columns]);
@@ -253,7 +254,6 @@ class EloquentThreadTest extends TestCase
     public function it_should_get_participants_string()
     {
         $thread = $this->faktory->create('thread');
-        $thread->setUsersTable('users');
 
         $participant_1 = $this->faktory->build('participant');
         $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
