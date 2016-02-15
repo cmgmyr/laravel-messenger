@@ -123,17 +123,11 @@ class Thread extends Eloquent
         $participantsTable = Models::table('participants');
         $threadsTable = Models::table('threads');
 
-<<<<<<< HEAD
-        return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable.'.thread_id')
-            ->where($participantTable.'.user_id', $userId)
-            ->where($participantTable.'.deleted_at', null)
-            ->select($this->getTable().'.*');
-=======
+
         return $query->join($participantsTable, $this->getQualifiedKeyName(), '=', $participantsTable . '.thread_id')
             ->where($participantsTable . '.user_id', $userId)
             ->where($participantsTable . '.deleted_at', null)
             ->select($threadsTable . '.*');
->>>>>>> upstream/master
     }
 
     /**
@@ -149,16 +143,6 @@ class Thread extends Eloquent
         $participantTable = Models::table('participants');
         $threadsTable = Models::table('threads');
 
-<<<<<<< HEAD
-        return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable.'.thread_id')
-            ->where($participantTable.'.user_id', $userId)
-            ->whereNull($participantTable.'.deleted_at')
-            ->where(function ($query) use ($participantTable) {
-                $query->where($this->getTable().'.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix().$participantTable.'.last_read'))
-                    ->orWhereNull($participantTable.'.last_read');
-            })
-            ->select($this->getTable().'.*');
-=======
         return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable . '.thread_id')
             ->where($participantTable . '.user_id', $userId)
             ->whereNull($participantTable . '.deleted_at')
@@ -167,7 +151,6 @@ class Thread extends Eloquent
                     ->orWhereNull($participantTable . '.last_read');
             })
             ->select($threadsTable . '.*');
->>>>>>> upstream/master
     }
 
     /**
@@ -196,12 +179,7 @@ class Thread extends Eloquent
     {
         if (count($participants)) {
             foreach ($participants as $user_id) {
-<<<<<<< HEAD
-                $participantModel = new $participantModelClass();
-                $participantModel::firstOrCreate([
-=======
                 Models::participant()->firstOrCreate([
->>>>>>> upstream/master
                     'user_id' => $user_id,
                     'thread_id' => $this->id,
                 ]);
@@ -287,13 +265,8 @@ class Thread extends Eloquent
         $selectString = $this->createSelectString($columns);
 
         $participantNames = $this->getConnection()->table($usersTable)
-<<<<<<< HEAD
-            ->join($participantTable, $usersTable.'.id', '=', $participantTable.'.user_id')
-            ->where($participantTable.'.thread_id', $this->id)
-=======
             ->join($participantsTable, $usersTable . '.id', '=', $participantsTable . '.user_id')
             ->where($participantsTable . '.thread_id', $this->id)
->>>>>>> upstream/master
             ->select($this->getConnection()->raw($selectString));
 
         if ($userId !== null) {
@@ -352,18 +325,6 @@ class Thread extends Eloquent
 
         return $selectString;
     }
-<<<<<<< HEAD
-
-    /**
-     * Sets the "users" table name.
-     *
-     * @param $tableName
-     */
-    public function setUsersTable($tableName)
-    {
-        $this->usersTable = $tableName;
-    }
-
     /**
      * Returns array of unread messages in thread for given user.
      *
@@ -451,6 +412,4 @@ class Thread extends Eloquent
 
         return $this->usersTable = (new $userModel())->getTable();
     }
-=======
->>>>>>> upstream/master
 }
