@@ -38,7 +38,7 @@ trait Messagable
     {
         return $this->belongsToMany(
             Models::classname(Thread::class),
-            Models::classname(Participant::class),
+            Models::table('participants'),
             'user_id',
             'thread_id'
         );
