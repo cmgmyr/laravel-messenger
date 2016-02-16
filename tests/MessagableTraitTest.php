@@ -3,6 +3,7 @@
 namespace Cmgmyr\Messenger\Test;
 
 use Carbon\Carbon;
+use Cmgmyr\Messenger\Models\Thread;
 use Cmgmyr\Messenger\Traits\Messagable;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 
@@ -61,8 +62,8 @@ class MessagableTraitTest extends TestCase
         $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
         $thread->participants()->saveMany([$user_1, $user_2]);
 
-        $threadsCount = $user->threads->count();
-        $this->assertEquals(1, $threadsCount);
+        $firstThread = $user->threads->first();
+        $this->assertInstanceOf(Thread::class, $firstThread);
     }
 }
 
