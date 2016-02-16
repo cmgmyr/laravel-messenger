@@ -46,6 +46,24 @@ class MessagableTraitTest extends TestCase
 
         $this->assertEquals(1, $user->newMessagesCount());
     }
+
+    /** @test */
+    public function it_should_get_participant_threads()
+    {
+        $user = User::create(
+            [
+                'name' => 'Jane Doe',
+                'email' => 'jane@example.com',
+            ]
+        );
+        $thread = $this->faktory->create('thread');
+        $user_1 = $this->faktory->build('participant', ['user_id' => $user->id]);
+        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $thread->participants()->saveMany([$user_1, $user_2]);
+
+        $threadsCount = $user->threads->count();
+        $this->assertEquals(1, $threadsCount);
+    }
 }
 
 class User extends Eloquent
