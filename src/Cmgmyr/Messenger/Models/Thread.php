@@ -96,6 +96,7 @@ class Thread extends Eloquent
      * Returns an array of user ids that are associated with the thread.
      *
      * @param null $userId
+     *
      * @return array
      */
     public function participantsUserIds($userId = null)
@@ -114,12 +115,14 @@ class Thread extends Eloquent
      *
      * @param $query
      * @param $userId
+     *
      * @return mixed
      */
     public function scopeForUser($query, $userId)
     {
         $participantsTable = Models::table('participants');
         $threadsTable = Models::table('threads');
+
 
         return $query->join($participantsTable, $this->getQualifiedKeyName(), '=', $participantsTable . '.thread_id')
             ->where($participantsTable . '.user_id', $userId)
@@ -132,6 +135,7 @@ class Thread extends Eloquent
      *
      * @param $query
      * @param $userId
+     *
      * @return mixed
      */
     public function scopeForUserWithNewMessages($query, $userId)
@@ -154,6 +158,7 @@ class Thread extends Eloquent
      *
      * @param $query
      * @param $participants
+     *
      * @return mixed
      */
     public function scopeBetween($query, array $participants)
@@ -161,7 +166,7 @@ class Thread extends Eloquent
         $query->whereHas('participants', function ($query) use ($participants) {
             $query->whereIn('user_id', $participants)
                 ->groupBy('thread_id')
-                ->havingRaw('COUNT(thread_id)=' . count($participants));
+                ->havingRaw('COUNT(thread_id)='.count($participants));
         });
     }
 
@@ -169,7 +174,6 @@ class Thread extends Eloquent
      * Adds users to this thread.
      *
      * @param array $participants list of all participants
-     * @return void
      */
     public function addParticipants(array $participants)
     {
@@ -186,13 +190,13 @@ class Thread extends Eloquent
     /**
      * Mark a thread as read for a user.
      *
-     * @param integer $userId
+     * @param int $userId
      */
     public function markAsRead($userId)
     {
         try {
             $participant = $this->getParticipantFromUser($userId);
-            $participant->last_read = new Carbon;
+            $participant->last_read = new Carbon();
             $participant->save();
         } catch (ModelNotFoundException $e) {
             // do nothing
@@ -202,7 +206,8 @@ class Thread extends Eloquent
     /**
      * See if the current thread is unread by the user.
      *
-     * @param integer $userId
+     * @param int $userId
+     *
      * @return bool
      */
     public function isUnread($userId)
@@ -223,7 +228,9 @@ class Thread extends Eloquent
      * Finds the participant record from a user id.
      *
      * @param $userId
+     *
      * @return mixed
+     *
      * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
      */
     public function getParticipantFromUser($userId)
@@ -245,8 +252,9 @@ class Thread extends Eloquent
     /**
      * Generates a string of participant information.
      *
-     * @param null $userId
+     * @param null  $userId
      * @param array $columns
+     *
      * @return string
      */
     public function participantsString($userId = null, $columns = ['name'])
@@ -262,10 +270,10 @@ class Thread extends Eloquent
             ->select($this->getConnection()->raw($selectString));
 
         if ($userId !== null) {
-            $participantNames->where($usersTable . '.id', '!=', $userId);
+            $participantNames->where($usersTable.'.id', '!=', $userId);
         }
 
-        $userNames = $participantNames->lists($usersTable . '.name');
+        $userNames = $participantNames->lists($usersTable.'.name');
 
         return implode(', ', $userNames);
     }
@@ -274,6 +282,7 @@ class Thread extends Eloquent
      * Checks to see if a user is a current participant of the thread.
      *
      * @param $userId
+     *
      * @return bool
      */
     public function hasParticipant($userId)
@@ -290,6 +299,7 @@ class Thread extends Eloquent
      * Generates a select string used in participantsString().
      *
      * @param $columns
+     *
      * @return string
      */
     protected function createSelectString($columns)
@@ -301,18 +311,105 @@ class Thread extends Eloquent
         switch ($dbDriver) {
         case 'pgsql':
         case 'sqlite':
-            $columnString = implode(" || ' ' || " . $tablePrefix . $usersTable . '.', $columns);
-            $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+            $columnString = implode(" || ' ' || ".$tablePrefix.$usersTable.'.', $columns);
+            $selectString = '('.$tablePrefix.$usersTable.'.'.$columnString.') as name';
             break;
         case 'sqlsrv':
-            $columnString = implode(" + ' ' + " . $tablePrefix . $usersTable . '.', $columns);
-            $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+            $columnString = implode(" + ' ' + ".$tablePrefix.$usersTable.'.', $columns);
+            $selectString = '('.$tablePrefix.$usersTable.'.'.$columnString.') as name';
             break;
         default:
-            $columnString = implode(", ' ', " . $tablePrefix . $usersTable . '.', $columns);
-            $selectString = 'concat(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+            $columnString = implode(", ' ', ".$tablePrefix.$usersTable.'.', $columns);
+            $selectString = 'concat('.$tablePrefix.$usersTable.'.'.$columnString.') as name';
         }
 
         return $selectString;
+    }
+    /**
+     * Returns array of unread messages in thread for given user.
+     *
+     * @param $user_id
+     *
+     * @return array
+     */
+    public function userUnreadMessages($user_id)
+    {
+        $messages = $this->messages()->get();
+        $participant = $this->getParticipantFromUser($user_id);
+        if (!$participant) {
+            return [];
+        }
+        $unread = array();
+        $i = count($messages) - 1;
+        while ($i) {
+            if ($messages[$i]->updated_at->gt($participant->last_read)) {
+                array_push($unread, $messages[$i]);
+            } else {
+                break;
+            }
+            --$i;
+        }
+
+        return $unread;
+    }
+
+    /**
+     * Returns count of unread messages in thread for given user.
+     *
+     * @param $user_id
+     *
+     * @return int
+     */
+    public function userUnreadMessagesCount($user_id)
+    {
+        $messages = $this->messages()->get();
+        $participant = $this->getParticipantFromUser($user_id);
+        if (!$participant) {
+            return 0;
+        }
+        $count = 0;
+        $i = count($messages) - 1;
+        while ($i) {
+            if ($messages[$i]->updated_at->gt($participant->last_read)) {
+                ++$count;
+            } else {
+                break;
+            }
+            --$i;
+        }
+
+        return $count;
+    }
+
+    /**
+     * Returns the "participant" table name to use in manual queries.
+     *
+     * @return string
+     */
+    private function getParticipantTable()
+    {
+        if ($this->participantTable !== null) {
+            return $this->participantTable;
+        }
+
+        $participantModel = Config::get('messenger.participant_model');
+
+        return $this->participantTable = (new $participantModel())->getTable();
+    }
+
+    /**
+     * Returns the "users" table name to use in manual queries.
+     *
+     * @return string
+     */
+    private function getUsersTable()
+    {
+        if ($this->usersTable !== null) {
+            return $this->usersTable;
+        }
+
+        $userModel = Config::get('messenger.user_model');
+
+        return $this->usersTable = (new $userModel())->getTable();
     }
 }
