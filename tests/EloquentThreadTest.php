@@ -33,6 +33,36 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
+    public function search_specific_thread_by_subject()
+    {
+        $this->faktory->create('thread', ['id' => 1, 'subject' => 'first subject']);
+        $this->faktory->create('thread', ['id' => 2, 'subject' => 'second subject']);
+
+        $threads = Thread::getBySubject('first subject');
+
+        $this->assertEquals(1, $threads->count());
+        $this->assertEquals(1, $threads->first()->id);
+        $this->assertEquals('first subject', $threads->first()->subject);
+    }
+
+    /** @test */
+    public function search_threads_by_subject()
+    {
+        $this->faktory->create('thread', ['id' => 1, 'subject' => 'first subject']);
+        $this->faktory->create('thread', ['id' => 2, 'subject' => 'second subject']);
+
+        $threads = Thread::getBySubject('%subject');
+
+        $this->assertEquals(2, $threads->count());
+
+        $this->assertEquals(1, $threads->first()->id);
+        $this->assertEquals('first subject', $threads->first()->subject);
+
+        $this->assertEquals(2, $threads->last()->id);
+        $this->assertEquals('second subject', $threads->last()->subject);
+    }
+
+    /** @test */
     public function it_should_create_a_new_thread()
     {
         $thread = $this->faktory->build('thread');
