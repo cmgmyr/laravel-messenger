@@ -342,4 +342,36 @@ class Thread extends Eloquent
         $userModel = Config::get('messenger.user_model');
         return $this->usersTable = (new $userModel)->getTable();
     }
+
+
+    //http://stackoverflow.com/questions/27866020/laravel-returning-the-namespaced-owner-of-a-polymorphic-relation/27909753#27909753
+    /**
+     * Get all of the owning threadable models.
+     */
+    public function threadable()
+    {
+        return $this->morphTo();
+    }
+
+
+
+    protected $types = [
+        'newsfeed_thread' => 'App\NewsfeedThread',
+        'thread' => 'App\Thread',
+        'opp_push' => 'App\OppPush',
+        'organization' => 'App\Organization'
+    ];
+
+    public function getThreadableTypeAttribute($type) {
+        // transform to lower case
+        $type = strtolower($type);
+
+        // to make sure this returns value from the array
+        return array_get($this->types, $type, $type);
+
+        // which is always safe, because new 'class'
+        // will work just the same as new 'Class'
+    }
+
+
 }
