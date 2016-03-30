@@ -286,6 +286,7 @@ class EloquentThreadTest extends TestCase
         $this->assertFalse($thread->hasParticipant(3));
     }
 
+    /** @test */
     public function it_should_get_all_unread_messages_for_user()
     {
         $thread = $this->faktory->create('thread');
@@ -298,11 +299,13 @@ class EloquentThreadTest extends TestCase
             'body'       => "Message 1",
         ]);
 
-
         $thread->participants()->saveMany([$participant_1, $participant_2]);
         $thread->messages()->saveMany([$message_1]);
 
         $thread->markAsRead($participant_2->user_id);
+
+        // Simulate delay after last read
+        sleep(1);
 
         $message_2 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
@@ -311,10 +314,14 @@ class EloquentThreadTest extends TestCase
 
         $thread->messages()->saveMany([$message_2]);
 
+        $this->assertEquals("Message 1", $thread->userUnreadMessages(1)->first()->body);
+        $this->assertCount(2, $thread->userUnreadMessages(1));
+
         $this->assertEquals("Message 2", $thread->userUnreadMessages(2)->first()->body);
-        $this->assertCount(1, $thread->userUnreadMessages(2)->count());
+        $this->assertCount(1, $thread->userUnreadMessages(2));
     }
 
+    /** @test */
     public function it_should_get_count_of_all_unread_messages_for_user()
     {
         $thread = $this->faktory->create('thread');
@@ -327,11 +334,13 @@ class EloquentThreadTest extends TestCase
             'body'       => "Message 1",
         ]);
 
-
         $thread->participants()->saveMany([$participant_1, $participant_2]);
         $thread->messages()->saveMany([$message_1]);
 
         $thread->markAsRead($participant_2->user_id);
+
+        // Simulate delay after last read
+        sleep(1);
 
         $message_2 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
@@ -339,6 +348,8 @@ class EloquentThreadTest extends TestCase
         ]);
 
         $thread->messages()->saveMany([$message_2]);
+
+        $this->assertEquals(2, $thread->userUnreadMessagesCount(1));
 
         $this->assertEquals(1, $thread->userUnreadMessagesCount(2));
     }
