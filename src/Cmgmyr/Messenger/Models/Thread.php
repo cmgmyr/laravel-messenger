@@ -328,18 +328,21 @@ class Thread extends Eloquent
     /**
      * Returns array of unread messages in thread for given user.
      *
-     * @param $user_id
+     * @param $userId
      *
-     * @return array
+     * @return \Illuminate\Support\Collection
      */
-    public function userUnreadMessages($user_id)
+    public function userUnreadMessages($userId)
     {
         $messages = $this->messages()->get();
-        $participant = $this->getParticipantFromUser($user_id);
+        $participant = $this->getParticipantFromUser($userId);
         if (!$participant) {
-            return [];
+            return collect();
         }
-        $unread = array();
+        if (!$participant->last_read) {
+            return collect($messages);
+        }
+        $unread = [];
         $i = count($messages) - 1;
         while ($i) {
             if ($messages[$i]->updated_at->gt($participant->last_read)) {
@@ -350,22 +353,25 @@ class Thread extends Eloquent
             --$i;
         }
 
-        return $unread;
+        return collect($unread);
     }
 
     /**
      * Returns count of unread messages in thread for given user.
      *
-     * @param $user_id
+     * @param $userId
      *
      * @return int
      */
-    public function userUnreadMessagesCount($user_id)
+    public function userUnreadMessagesCount($userId)
     {
         $messages = $this->messages()->get();
-        $participant = $this->getParticipantFromUser($user_id);
+        $participant = $this->getParticipantFromUser($userId);
         if (!$participant) {
             return 0;
+        }
+        if (!$participant->last_read) {
+            return count($messages);
         }
         $count = 0;
         $i = count($messages) - 1;
