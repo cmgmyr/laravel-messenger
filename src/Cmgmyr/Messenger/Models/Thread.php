@@ -92,6 +92,18 @@ class Thread extends Eloquent
         return self::latest('updated_at');
     }
 
+
+    /**
+     * Returns all threads by subject
+     *
+     * @return mixed
+     */
+    public static function getBySubject($subjectQuery)
+    {
+        return self::where('subject', 'like', $subjectQuery)->get();
+    }
+
+
     /**
      * Returns an array of user ids that are associated with the thread.
      *
