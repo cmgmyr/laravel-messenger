@@ -326,7 +326,7 @@ class EloquentThreadTest extends TestCase
 
         $message_1 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
-            'body'       => "Message 1",
+            'body'       => 'Message 1',
         ]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
@@ -339,15 +339,15 @@ class EloquentThreadTest extends TestCase
 
         $message_2 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
-            'body'       => "Message 2",
+            'body'       => 'Message 2',
         ]);
 
         $thread->messages()->saveMany([$message_2]);
 
-        $this->assertEquals("Message 1", $thread->userUnreadMessages(1)->first()->body);
+        $this->assertEquals('Message 1', $thread->userUnreadMessages(1)->first()->body);
         $this->assertCount(2, $thread->userUnreadMessages(1));
 
-        $this->assertEquals("Message 2", $thread->userUnreadMessages(2)->first()->body);
+        $this->assertEquals('Message 2', $thread->userUnreadMessages(2)->first()->body);
         $this->assertCount(1, $thread->userUnreadMessages(2));
     }
 
@@ -361,7 +361,7 @@ class EloquentThreadTest extends TestCase
 
         $message_1 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
-            'body'       => "Message 1",
+            'body'       => 'Message 1',
         ]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
@@ -374,7 +374,7 @@ class EloquentThreadTest extends TestCase
 
         $message_2 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
-            'body'       => "Message 2",
+            'body'       => 'Message 2',
         ]);
 
         $thread->messages()->saveMany([$message_2]);
