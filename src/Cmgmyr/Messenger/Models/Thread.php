@@ -92,9 +92,8 @@ class Thread extends Eloquent
         return self::latest('updated_at');
     }
 
-
     /**
-     * Returns all threads by subject
+     * Returns all threads by subject.
      *
      * @return mixed
      */
@@ -102,7 +101,6 @@ class Thread extends Eloquent
     {
         return self::where('subject', 'like', $subjectQuery)->get();
     }
-
 
     /**
      * Returns an array of user ids that are associated with the thread.
@@ -134,7 +132,6 @@ class Thread extends Eloquent
     {
         $participantsTable = Models::table('participants');
         $threadsTable = Models::table('threads');
-
 
         return $query->join($participantsTable, $this->getQualifiedKeyName(), '=', $participantsTable . '.thread_id')
             ->where($participantsTable . '.user_id', $userId)
@@ -178,7 +175,7 @@ class Thread extends Eloquent
         $query->whereHas('participants', function ($query) use ($participants) {
             $query->whereIn('user_id', $participants)
                 ->groupBy('thread_id')
-                ->havingRaw('COUNT(thread_id)='.count($participants));
+                ->havingRaw('COUNT(thread_id)=' . count($participants));
         });
     }
 
@@ -282,10 +279,10 @@ class Thread extends Eloquent
             ->select($this->getConnection()->raw($selectString));
 
         if ($userId !== null) {
-            $participantNames->where($usersTable.'.id', '!=', $userId);
+            $participantNames->where($usersTable . '.id', '!=', $userId);
         }
 
-        $userNames = $participantNames->lists($usersTable.'.name');
+        $userNames = $participantNames->lists($usersTable . '.name');
 
         return implode(', ', $userNames);
     }
@@ -323,16 +320,16 @@ class Thread extends Eloquent
         switch ($dbDriver) {
         case 'pgsql':
         case 'sqlite':
-            $columnString = implode(" || ' ' || ".$tablePrefix.$usersTable.'.', $columns);
-            $selectString = '('.$tablePrefix.$usersTable.'.'.$columnString.') as name';
+            $columnString = implode(" || ' ' || " . $tablePrefix . $usersTable . '.', $columns);
+            $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
             break;
         case 'sqlsrv':
-            $columnString = implode(" + ' ' + ".$tablePrefix.$usersTable.'.', $columns);
-            $selectString = '('.$tablePrefix.$usersTable.'.'.$columnString.') as name';
+            $columnString = implode(" + ' ' + " . $tablePrefix . $usersTable . '.', $columns);
+            $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
             break;
         default:
-            $columnString = implode(", ' ', ".$tablePrefix.$usersTable.'.', $columns);
-            $selectString = 'concat('.$tablePrefix.$usersTable.'.'.$columnString.') as name';
+            $columnString = implode(", ' ', " . $tablePrefix . $usersTable . '.', $columns);
+            $selectString = 'concat(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
         }
 
         return $selectString;

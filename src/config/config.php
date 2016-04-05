@@ -13,7 +13,6 @@ return [
     /**
      * Define custom database table names.
      */
-
     'messages_table' => null,
 
     'participants_table' => null,
