@@ -395,36 +395,4 @@ class Thread extends Eloquent
 
         return $count;
     }
-
-    /**
-     * Returns the "participant" table name to use in manual queries.
-     *
-     * @return string
-     */
-    private function getParticipantTable()
-    {
-        if ($this->participantTable !== null) {
-            return $this->participantTable;
-        }
-
-        $participantModel = Config::get('messenger.participant_model');
-
-        return $this->participantTable = (new $participantModel())->getTable();
-    }
-
-    /**
-     * Returns the "users" table name to use in manual queries.
-     *
-     * @return string
-     */
-    private function getUsersTable()
-    {
-        if ($this->usersTable !== null) {
-            return $this->usersTable;
-        }
-
-        $userModel = Config::get('messenger.user_model');
-
-        return $this->usersTable = (new $userModel())->getTable();
-    }
 }
