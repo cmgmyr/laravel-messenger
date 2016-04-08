@@ -49,7 +49,7 @@ trait Messagable
      *
      * @return int
      */
-    public function newMessagesCount()
+    public function newThreadsCount()
     {
         return count($this->threadsWithNewMessages());
     }
