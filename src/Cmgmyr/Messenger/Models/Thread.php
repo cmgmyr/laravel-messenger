@@ -374,25 +374,6 @@ class Thread extends Eloquent
      */
     public function userUnreadMessagesCount($userId)
     {
-        $messages = $this->messages()->get();
-        $participant = $this->getParticipantFromUser($userId);
-        if (!$participant) {
-            return 0;
-        }
-        if (!$participant->last_read) {
-            return count($messages);
-        }
-        $count = 0;
-        $i = count($messages) - 1;
-        while ($i) {
-            if ($messages[$i]->updated_at->gt($participant->last_read)) {
-                ++$count;
-            } else {
-                break;
-            }
-            --$i;
-        }
-
-        return $count;
+        return $this->userUnreadMessages($userId)->count();
     }
 }
