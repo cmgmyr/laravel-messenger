@@ -20,6 +20,10 @@ class CreateParticipantsTable extends Migration
             $table->timestamp('last_read');
             $table->timestamps();
         });
+        Schema::table('participants', function(Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('thread_id')->references('id')->on('threads');
+        });
     }
 
     /**
