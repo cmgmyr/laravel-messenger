@@ -20,10 +20,6 @@ class CreateMessagesTable extends Migration
             $table->text('body');
             $table->timestamps();
         });
-        Schema::table('messages', function(Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('thread_id')->references('id')->on('threads');
-        });
     }
 
     /**
