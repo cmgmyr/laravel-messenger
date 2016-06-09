@@ -52,8 +52,9 @@ trait Messagable
     public function unreadThreads()
     {
         return $this->threads()
-            ->whereRaw(Models::table('threads') . '.updated_at > '
-                    . Models::table('participants') . '.last_read');
+            ->whereRaw('(' . Models::table('threads') . '.updated_at > '
+                    . Models::table('participants') . '.last_read'
+                    . ' OR ' . Models::table('participants') . '.last_read IS NULL)');
     }
 
     /**
@@ -73,6 +74,9 @@ trait Messagable
      */
     public function threadsWithNewMessages()
     {
-        return $this->unreadThreads()->lists(Models::table('threads') . '.id');
+        $threads = $this->unreadThreads()->lists(Models::table('threads') . '.id');
+
+        //Always return array (L5.0 vs L5.1 lists behaviour change)
+        return is_array($threads) ? $threads : $threads->all();
     }
 }
