@@ -195,6 +195,20 @@ class Thread extends Eloquent
             }
         }
     }
+    
+    /**
+     * Remove a participant from a thread
+     *
+     * @param $userId
+     *
+     * @return mixed
+     */
+    public function removeParticipant($userId)
+    {
+        $participant = Models::participant()->where('thread_id',$this->id)
+		->where('user_id',$userId)->first();
+		$participant->delete();
+    }
 
     /**
      * Mark a thread as read for a user.
