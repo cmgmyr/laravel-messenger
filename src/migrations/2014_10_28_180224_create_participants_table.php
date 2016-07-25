@@ -17,7 +17,7 @@ class CreateParticipantsTable extends Migration
             $table->increments('id');
             $table->integer('thread_id')->unsigned();
             $table->integer('user_id')->unsigned();
-            $table->timestamp('last_read');
+            $table->timestamp('last_read')->nullable();
             $table->timestamps();
         });
     }
