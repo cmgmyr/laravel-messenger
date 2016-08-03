@@ -187,27 +187,23 @@ class Thread extends Eloquent
     public function addParticipants(array $participants)
     {
         if (count($participants)) {
-            foreach ($participants as $user_id) {
+            foreach ($participants as $userId) {
                 Models::participant()->firstOrCreate([
-                    'user_id' => $user_id,
+                    'user_id' => $userId,
                     'thread_id' => $this->id,
                 ]);
             }
         }
     }
-    
+
     /**
-     * Remove a participant from a thread
+     * Remove a participant from a thread.
      *
      * @param $userId
-     *
-     * @return mixed
      */
     public function removeParticipant($userId)
     {
-        $participant = Models::participant()->where('thread_id',$this->id)
-		->where('user_id',$userId)->first();
-		$participant->delete();
+        Models::participant()->where('thread_id', $this->id)->where('user_id', $userId)->first()->delete();
     }
 
     /**
