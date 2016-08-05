@@ -317,6 +317,37 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
+    public function it_should_remove_a_single_participant()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $participant_1 = $this->faktory->build('participant');
+        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+
+        $thread->participants()->saveMany([$participant_1, $participant_2]);
+
+        $thread->removeParticipant(2);
+        $thread->removeParticipant(2);
+
+        $this->assertEquals(1, $thread->participants()->count());
+    }
+
+    /** @test */
+    public function it_should_remove_a_group_of_participants()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $participant_1 = $this->faktory->build('participant');
+        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+
+        $thread->participants()->saveMany([$participant_1, $participant_2]);
+
+        $thread->removeParticipant([1, 2]);
+
+        $this->assertEquals(0, $thread->participants()->count());
+    }
+
+    /** @test */
     public function it_should_get_all_unread_messages_for_user()
     {
         $thread = $this->faktory->create('thread');

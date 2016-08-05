@@ -197,13 +197,15 @@ class Thread extends Eloquent
     }
 
     /**
-     * Remove a participant from a thread.
+     * Remove participants from a thread.
      *
-     * @param $userId
+     * @param array|mixed $userId
      */
     public function removeParticipant($userId)
     {
-        Models::participant()->where('thread_id', $this->id)->where('user_id', $userId)->first()->delete();
+        $userIds = is_array($userId) ? $userId : (array) func_get_args();
+
+        Models::participant()->where('thread_id', $this->id)->whereIn('user_id', $userIds)->delete();
     }
 
     /**
