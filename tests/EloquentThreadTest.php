@@ -327,7 +327,6 @@ class EloquentThreadTest extends TestCase
         $thread->participants()->saveMany([$participant_1, $participant_2]);
 
         $thread->removeParticipant(2);
-        $thread->removeParticipant(2);
 
         $this->assertEquals(1, $thread->participants()->count());
     }
