@@ -174,13 +174,25 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
+    public function it_should_add_a_participant_to_a_thread()
+    {
+        $participant = 1;
+
+        $thread = $this->faktory->create('thread');
+
+        $thread->addParticipant($participant);
+
+        $this->assertEquals(1, $thread->participants()->count());
+    }
+
+    /** @test */
     public function it_should_add_participants_to_a_thread()
     {
         $participants = [1, 2, 3];
 
         $thread = $this->faktory->create('thread');
 
-        $thread->addParticipants($participants);
+        $thread->addParticipant($participants);
 
         $this->assertEquals(3, $thread->participants()->count());
     }
