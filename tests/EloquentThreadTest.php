@@ -186,7 +186,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_add_participants_to_a_thread()
+    public function it_should_add_participants_to_a_thread_with_array()
     {
         $participants = [1, 2, 3];
 
@@ -195,6 +195,16 @@ class EloquentThreadTest extends TestCase
         $thread->addParticipant($participants);
 
         $this->assertEquals(3, $thread->participants()->count());
+    }
+
+    /** @test */
+    public function it_should_add_participants_to_a_thread_with_arguments()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $thread->addParticipant(1, 2);
+
+        $this->assertEquals(2, $thread->participants()->count());
     }
 
     /** @test */
@@ -344,7 +354,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_remove_a_group_of_participants()
+    public function it_should_remove_a_group_of_participants_with_array()
     {
         $thread = $this->faktory->create('thread');
 
@@ -354,6 +364,21 @@ class EloquentThreadTest extends TestCase
         $thread->participants()->saveMany([$participant_1, $participant_2]);
 
         $thread->removeParticipant([1, 2]);
+
+        $this->assertEquals(0, $thread->participants()->count());
+    }
+
+    /** @test */
+    public function it_should_remove_a_group_of_participants_with_arguments()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $participant_1 = $this->faktory->build('participant');
+        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+
+        $thread->participants()->saveMany([$participant_1, $participant_2]);
+
+        $thread->removeParticipant(1, 2);
 
         $this->assertEquals(0, $thread->participants()->count());
     }
