@@ -180,30 +180,32 @@ class Thread extends Eloquent
     }
 
     /**
-     * Adds users to this thread.
+     * Add users to thread as participants.
      *
-     * @param array $participants list of all participants
+     * @param array|mixed $userId
      */
-    public function addParticipants(array $participants)
+    public function addParticipant($userId)
     {
-        if (count($participants)) {
-            foreach ($participants as $userId) {
-                Models::participant()->firstOrCreate([
-                    'user_id' => $userId,
-                    'thread_id' => $this->id,
-                ]);
-            }
-        }
+        $userIds = is_array($userId) ? $userId : (array) func_get_args();
+
+        collect($userIds)->each(function ($userId) {
+            Models::participant()->firstOrCreate([
+                'user_id' => $userId,
+                'thread_id' => $this->id,
+            ]);
+        });
     }
 
     /**
-     * Remove a participant from a thread.
+     * Remove participants from thread.
      *
-     * @param $userId
+     * @param array|mixed $userId
      */
     public function removeParticipant($userId)
     {
-        Models::participant()->where('thread_id', $this->id)->where('user_id', $userId)->first()->delete();
+        $userIds = is_array($userId) ? $userId : (array) func_get_args();
+
+        Models::participant()->where('thread_id', $this->id)->whereIn('user_id', $userIds)->delete();
     }
 
     /**
