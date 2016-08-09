@@ -180,7 +180,7 @@ class Thread extends Eloquent
     }
 
     /**
-     * Add users to thread, either singly or as an array.
+     * Add users to thread as participants.
      *
      * @param array|mixed $userId
      */
@@ -197,7 +197,7 @@ class Thread extends Eloquent
     }
 
     /**
-     * Remove participants from a thread, either singly or as an array.
+     * Remove participants from thread.
      *
      * @param array|mixed $userId
      */
