@@ -63,7 +63,7 @@ trait Messagable
     {
         $threadsWithNewMessages = [];
 
-        $participants = Models::participant()->where('user_id', $this->id)->lists('last_read', 'thread_id');
+        $participants = Models::participant()->where('user_id', $this->id)->pluck('last_read', 'thread_id');
 
         /**
          * @todo: see if we can fix this more in the future.
