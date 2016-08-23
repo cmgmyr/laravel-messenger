@@ -43,7 +43,7 @@ class MessagableTraitTest extends TestCase
         $thread2->messages()->saveMany([$message_1b]);
 
         $threads = $user->threadsWithNewMessages();
-        $this->assertEquals(1, $threads[0]);
+        $this->assertEquals(1, $threads->first()->id);
 
         $this->assertEquals(1, $user->newThreadsCount());
     }
