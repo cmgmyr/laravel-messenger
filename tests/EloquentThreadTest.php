@@ -120,6 +120,10 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(3, $participantIds);
         $this->assertEquals(2, $participantIds[1]);
 
+        $participantIds = $thread->participantsUserIds(999);
+        $this->assertCount(4, $participantIds);
+        $this->assertEquals(999, end($participantIds));
+
         $this->assertInternalType('array', $participantIds);
     }
 
