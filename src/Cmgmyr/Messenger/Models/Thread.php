@@ -111,13 +111,15 @@ class Thread extends Eloquent
      */
     public function participantsUserIds($userId = null)
     {
-        $users = $this->participants()->withTrashed()->pluck('user_id');
+        $users = $this->participants()->withTrashed()->select('user_id')->get()->map(function ($participant) {
+            return $participant->user_id;
+        });
 
         if ($userId) {
-            $users[] = $userId;
+            $users->push($userId);
         }
 
-        return $users;
+        return $users->toArray();
     }
 
     /**
@@ -294,9 +296,7 @@ class Thread extends Eloquent
             $participantNames->where($usersTable . '.id', '!=', $userId);
         }
 
-        $userNames = $participantNames->pluck($usersTable . '.name');
-
-        return implode(', ', $userNames);
+        return $participantNames->implode('name', ', ');
     }
 
     /**
