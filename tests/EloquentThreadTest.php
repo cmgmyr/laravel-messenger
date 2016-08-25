@@ -107,8 +107,8 @@ class EloquentThreadTest extends TestCase
     public function it_should_get_all_thread_participants()
     {
         $thread = $this->faktory->create('thread');
-        $participants = $thread->participantsUserIds();
-        $this->assertCount(0, $participants);
+        $participantIds = $thread->participantsUserIds();
+        $this->assertCount(0, $participantIds);
 
         $user_1 = $this->faktory->build('participant');
         $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
@@ -116,10 +116,15 @@ class EloquentThreadTest extends TestCase
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 
-        $participants = $thread->participantsUserIds();
-        $this->assertCount(3, $participants);
+        $participantIds = $thread->participantsUserIds();
+        $this->assertCount(3, $participantIds);
+        $this->assertEquals(2, $participantIds[1]);
 
-        $this->assertInternalType('object', $participants);
+        $participantIds = $thread->participantsUserIds(999);
+        $this->assertCount(4, $participantIds);
+        $this->assertEquals(999, end($participantIds));
+
+        $this->assertInternalType('array', $participantIds);
     }
 
     /** @test */
