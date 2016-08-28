@@ -20,6 +20,7 @@
     },
     "require-dev": {
         "phpunit/phpunit": "4.*",
+        "scrutinizer/ocular": "~1.1",
         "adamwathan/faktory": "0.3.*",
         "friendsofphp/php-cs-fixer": "^1.11",
         "orchestra/testbench": "~3.0"
