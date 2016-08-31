@@ -368,7 +368,7 @@ class Thread extends Eloquent
             return $messages;
         }
 
-        return $messages->filter(function($message) use ($participant) {
+        return $messages->filter(function ($message) use ($participant) {
             return $message->updated_at->gt($participant->last_read);
         });
     }
