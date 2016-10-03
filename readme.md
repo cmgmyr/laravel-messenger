@@ -46,9 +46,9 @@ Add the service provider to `config/app.php` under `providers`:
         Cmgmyr\Messenger\MessengerServiceProvider::class,
     ]
 
-Publish Assets
+Publish config:
 
-    php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider"
+    php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="config"
 	
 Update config file to reference your User Model:
 
@@ -61,6 +61,10 @@ Create a `users` table if you do not have one already. If you need one, simply u
     'messages_table' => 'messenger_messages',
     'participants_table' => 'messenger_participants',
     'threads_table' => 'messenger_threads',
+    
+Publish migrations:
+
+    php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="migrations"
 
 Migrate your database:
 
