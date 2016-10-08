@@ -17,10 +17,15 @@ class MessengerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->publishes([
-            base_path('vendor/cmgmyr/messenger/src/config/config.php') => config_path('messenger.php'),
-            base_path('vendor/cmgmyr/messenger/src/migrations') => base_path('database/migrations'),
-        ]);
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                base_path('vendor/cmgmyr/messenger/src/config/config.php') => config_path('messenger.php'),
+            ], 'config');
+
+            $this->publishes([
+                base_path('vendor/cmgmyr/messenger/src/migrations') => base_path('database/migrations'),
+            ], 'migrations');
+        }
 
         $this->setMessengerModels();
         $this->setUserModel();
