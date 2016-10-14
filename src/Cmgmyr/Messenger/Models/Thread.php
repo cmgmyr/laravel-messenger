@@ -273,12 +273,12 @@ class Thread extends Eloquent
         }
     }
 
-	/**
+    /**
 	 * Generates a string of participant information.
 	 *
-	 * @param null 		$userId
-	 * @param string 	$userPrimaryKey
-	 * @param array 	$columns
+	 * @param null   $userId
+	 * @param string $userPrimaryKey
+	 * @param array  $columns
 	 *
 	 * @return string
 	 */
@@ -301,7 +301,7 @@ class Thread extends Eloquent
 		return $participantNames->implode('name', ', ');
 	}
 
-    /**
+	/**
      * Checks to see if a user is a current participant of the thread.
      *
      * @param $userId
