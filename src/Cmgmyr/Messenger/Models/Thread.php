@@ -274,33 +274,34 @@ class Thread extends Eloquent
     }
 
     /**
-     * Generates a string of participant information.
-     *
-     * @param null  $userId
-     * @param array $columns
-     *
-     * @return string
-     */
-    public function participantsString($userId = null, $columns = ['name'])
-    {
-        $participantsTable = Models::table('participants');
-        $usersTable = Models::table('users');
+	 * Generates a string of participant information.
+	 *
+	 * @param null   $userId
+	 * @param string $userPrimaryKey
+	 * @param array  $columns
+	 *
+	 * @return string
+	 */
+	public function participantsString($userId = null, $userPrimaryKey = 'id', $columns = ['name'])
+	{
+		$participantsTable = Models::table('participants');
+		$usersTable = Models::table('users');
 
-        $selectString = $this->createSelectString($columns);
+		$selectString = $this->createSelectString($columns);
 
-        $participantNames = $this->getConnection()->table($usersTable)
-            ->join($participantsTable, $usersTable . '.id', '=', $participantsTable . '.user_id')
-            ->where($participantsTable . '.thread_id', $this->id)
-            ->select($this->getConnection()->raw($selectString));
+		$participantNames = $this->getConnection()->table($usersTable)
+			->join($participantsTable, $usersTable . '.' . $userPrimaryKey, '=', $participantsTable . '.user_id')
+			->where($participantsTable . '.thread_id', $this->id)
+			->select($this->getConnection()->raw($selectString));
 
-        if ($userId !== null) {
-            $participantNames->where($usersTable . '.id', '!=', $userId);
-        }
+		if ($userId !== null) {
+			$participantNames->where($usersTable . '.' . $userPrimaryKey, '!=', $userId);
+		}
 
-        return $participantNames->implode('name', ', ');
-    }
+		return $participantNames->implode('name', ', ');
+	}
 
-    /**
+	/**
      * Checks to see if a user is a current participant of the thread.
      *
      * @param $userId
