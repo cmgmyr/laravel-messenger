@@ -2,7 +2,7 @@
 
 namespace Cmgmyr\Messenger\Models;
 
-use App\User;
+use Illuminate\Database\Eloquent\Model;
 
 class Models
 {
@@ -60,7 +60,7 @@ class Models
      */
     public static function setUserModel($model)
     {
-        static::$models[User::class] = $model;
+        static::$models[Model::class] = $model;
     }
 
     /**
@@ -145,7 +145,7 @@ class Models
      */
     public static function user(array $attributes = [])
     {
-        return static::make(User::class, $attributes);
+        return static::make(Model::class, $attributes);
     }
 
     /**
