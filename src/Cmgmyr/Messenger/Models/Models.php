@@ -65,7 +65,7 @@ class Models
      */
     public static function setUserModel($model)
     {
-        static::$models[static::$userModelLookupKey] = $model;
+        static::$models[self::$userModelLookupKey] = $model;
     }
 
     /**
@@ -150,7 +150,7 @@ class Models
      */
     public static function user(array $attributes = [])
     {
-        return static::make(static::$userModelLookupKey, $attributes);
+        return static::make(self::$userModelLookupKey, $attributes);
     }
 
     /**
