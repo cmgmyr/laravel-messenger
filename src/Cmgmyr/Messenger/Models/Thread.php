@@ -79,7 +79,7 @@ class Thread extends Eloquent
      */
     public function creator()
     {
-        return $this->messages()->oldest()->first()->user;
+        return $this->messages()->oldest()->first()->user();
     }
 
     /**
