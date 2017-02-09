@@ -74,7 +74,7 @@ Add the trait to your user model:
 
     use Cmgmyr\Messenger\Traits\Messagable;
     
-    class User extends Model {
+    class User extends Authenticatable {
         use Messagable;
     }
 
