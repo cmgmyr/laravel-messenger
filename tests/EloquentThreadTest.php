@@ -145,6 +145,18 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
+    public function it_should_get_all_user_entities_for_a_thread()
+    {
+        $thread = $this->faktory->create('thread');
+        $user_1 = $this->faktory->build('participant');
+        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $thread->participants()->saveMany([$user_1, $user_2]);
+
+        $threadUserIds = $thread->users()->get()->pluck('id')->toArray();
+        $this->assertArraySubset([1, 2], $threadUserIds);
+    }
+
+    /** @test */
     public function it_should_get_all_threads_for_a_user_with_new_messages()
     {
         $userId = 1;
