@@ -84,8 +84,6 @@ Add the trait to your user model:
 * [Routes](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/routes.php)
 * [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/views)
 
-__Note:__ These examples use the [laravelcollective/html](http://laravelcollective.com/docs/5.0/html) package that is no longer included in Laravel 5 out of the box. Make sure you require this dependency in your `composer.json` file if you intend to use the example files.
-
 ## Example Projects
 * [WIP] [Pusher](https://github.com/cmgmyr/laravel-messenger-pusher-demo)
 * [WIP] [Lumen API](https://github.com/cmgmyr/lumen-messenger-api)
