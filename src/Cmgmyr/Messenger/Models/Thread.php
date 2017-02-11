@@ -79,7 +79,7 @@ class Thread extends Eloquent
      */
     public function users()
     {
-        return $this->belongsToMany(Models::user(), 'participants', 'thread_id', 'user_id');
+        return $this->belongsToMany(Models::classname('User'), Models::table('participants'), 'thread_id', 'user_id');
     }
 
     /**
