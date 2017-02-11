@@ -73,6 +73,16 @@ class Thread extends Eloquent
     }
 
     /**
+     * User's relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function users()
+    {
+        return $this->belongsToMany(Models::user(), 'participants', 'thread_id', 'user_id');
+    }
+
+    /**
      * Returns the user object that created the thread.
      *
      * @return mixed
