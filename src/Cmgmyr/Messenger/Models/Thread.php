@@ -181,14 +181,48 @@ class Thread extends Eloquent
      * @param $participants
      *
      * @return mixed
+     * @deprecated
+     * @see scopeBetweenLoose()
      */
     public function scopeBetween($query, array $participants)
+    {
+        return $this->scopeBetweenLoose($query, $participants);
+    }
+
+    /**
+     * Returns threads between given loose user ids.
+     *
+     * @param $query
+     * @param $participants
+     *
+     * @return mixed
+     */
+    public function scopeBetweenLoose($query, array $participants)
     {
         return $query->whereHas('participants', function ($q) use ($participants) {
             $q->whereIn('user_id', $participants)
                 ->select($this->getConnection()->raw('DISTINCT(thread_id)'))
                 ->groupBy('thread_id')
                 ->havingRaw('COUNT(thread_id)=' . count($participants));
+        });
+    }
+
+    /**
+     * Returns threads between given strict user ids.
+     *
+     * @param $query
+     * @param $participants
+     *
+     * @return mixed
+     */
+    public function scopeBetweenStrict($query, array $participants)
+    {
+        $participants = collect($participants)->sort()->implode(',');
+
+        return $query->whereHas('participants', function ($q) use ($participants) {
+            $q->select($this->getConnection()->raw('DISTINCT(thread_id)'))
+                ->groupBy('thread_id')
+                ->havingRaw('GROUP_CONCAT(DISTINCT user_id ORDER BY user_id) = "' . $participants . '"');
         });
     }
 

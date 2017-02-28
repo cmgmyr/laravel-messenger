@@ -174,19 +174,30 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_threads_shared_by_specified_users()
+    public function it_should_get_all_threads_shared_loosely_between_specified_users()
     {
-        $userId = 1;
-        $userId2 = 2;
-
         $thread = $this->faktory->create('thread');
+        $thread->addParticipant([1, 2]);
         $thread2 = $this->faktory->create('thread');
+        $thread2->addParticipant(1);
+        $thread3 = $this->faktory->create('thread');
+        $thread3->addParticipant(1, 2, 3);
 
-        $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread->id]);
-        $this->faktory->create('participant', ['user_id' => $userId2, 'thread_id' => $thread->id]);
-        $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id]);
+        $threads = Thread::betweenLoose([1, 2])->get();
+        $this->assertCount(2, $threads);
+    }
 
-        $threads = Thread::between([$userId, $userId2])->get();
+    /** test */
+    public function it_should_get_all_threads_shared_strictly_between_specified_users()
+    {
+        $thread = $this->faktory->create('thread');
+        $thread->addParticipant([1, 2]);
+        $thread2 = $this->faktory->create('thread');
+        $thread2->addParticipant(1);
+        $thread3 = $this->faktory->create('thread');
+        $thread3->addParticipant(1, 2, 3);
+
+        $threads = Thread::betweenStrict([1, 2])->get();
         $this->assertCount(1, $threads);
     }
 
