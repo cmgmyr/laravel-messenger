@@ -46,6 +46,8 @@ class Thread extends Eloquent
      * Messages relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * @codeCoverageIgnore
      */
     public function messages()
     {
@@ -66,6 +68,8 @@ class Thread extends Eloquent
      * Participants relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * @codeCoverageIgnore
      */
     public function participants()
     {
@@ -76,6 +80,8 @@ class Thread extends Eloquent
      * User's relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     *
+     * @codeCoverageIgnore
      */
     public function users()
     {
@@ -232,7 +238,7 @@ class Thread extends Eloquent
             $participant = $this->getParticipantFromUser($userId);
             $participant->last_read = new Carbon();
             $participant->save();
-        } catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) { // @codeCoverageIgnore
             // do nothing
         }
     }
@@ -252,7 +258,7 @@ class Thread extends Eloquent
             if ($participant->last_read === null || $this->updated_at->gt($participant->last_read)) {
                 return true;
             }
-        } catch (ModelNotFoundException $e) {
+        } catch (ModelNotFoundException $e) { // @codeCoverageIgnore
             // do nothing
         }
 

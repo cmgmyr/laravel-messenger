@@ -50,6 +50,8 @@ class Message extends Eloquent
      * Thread relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     *
+     * @codeCoverageIgnore
      */
     public function thread()
     {
@@ -60,6 +62,8 @@ class Message extends Eloquent
      * User relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     *
+     * @codeCoverageIgnore
      */
     public function user()
     {
@@ -70,6 +74,8 @@ class Message extends Eloquent
      * Participants relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * @codeCoverageIgnore
      */
     public function participants()
     {

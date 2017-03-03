@@ -13,6 +13,8 @@ trait Messagable
      * Message relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * @codeCoverageIgnore
      */
     public function messages()
     {
@@ -23,6 +25,8 @@ trait Messagable
      * Participants relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     *
+     * @codeCoverageIgnore
      */
     public function participants()
     {
@@ -33,6 +37,8 @@ trait Messagable
      * Thread relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     *
+     * @codeCoverageIgnore
      */
     public function threads()
     {
