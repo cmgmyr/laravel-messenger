@@ -467,4 +467,32 @@ class EloquentThreadTest extends TestCase
 
         $this->assertEquals(1, $thread->userUnreadMessagesCount(2));
     }
+
+    /** @test */
+    public function it_should_return_empty_collection_when_user_not_participant()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $this->assertEquals(0, $thread->userUnreadMessagesCount(1));
+    }
+
+    /** @test */
+    public function it_should_get_the_creator_of_a_thread()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $user_1 = $this->faktory->build('participant');
+        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $user_3 = $this->faktory->build('participant', ['user_id' => 3]);
+
+        $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
+
+        $message_1 = $this->faktory->build('message', ['created_at' => Carbon::yesterday()]);
+        $message_2 = $this->faktory->build('message', ['user_id' => 2]);
+        $message_3 = $this->faktory->build('message', ['user_id' => 3]);
+
+        $thread->messages()->saveMany([$message_1, $message_2, $message_3]);
+
+        $this->assertEquals('Chris Gmyr', $thread->creator()->name);
+    }
 }
