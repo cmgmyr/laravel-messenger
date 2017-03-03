@@ -4,7 +4,6 @@
 [![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg?style=flat-square)](https://github.com/cmgmyr/laravel-messenger/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg?style=flat-square)](https://packagist.org/packages/cmgmyr/messenger)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
-[![Stories in Ready](https://badge.waffle.io/cmgmyr/laravel-messenger.svg?label=ready&title=Ready)](http://waffle.io/cmgmyr/laravel-messenger)
 [![Get help on Codementor](https://cdn.codementor.io/badges/get_help_github.svg)](https://www.codementor.io/cmgmyr)
 
 # Laravel Messenger
@@ -19,7 +18,7 @@ This package will allow you to add a full user messaging system into your Larave
 * View the last message for each thread available
 * Returns either all messages in the system, all messages associated to the user, or all message associated to the user with new/unread messages
 * Return the users unread message count easily
-* Very flexible usage so you can implement your own acess control
+* Very flexible usage so you can implement your own access control
 
 ## Common uses
 * Open threads (everyone can see everything)
