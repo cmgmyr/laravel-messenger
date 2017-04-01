@@ -3,9 +3,12 @@
 namespace Cmgmyr\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Message extends Eloquent
 {
+    use SoftDeletes;
+
     /**
      * The database table used by the model.
      *
