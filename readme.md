@@ -31,52 +31,69 @@ Installation instructions for Laravel 4 can be [found here](https://github.com/c
 ## Installation (Laravel 5.x)
 In composer.json:
 
-    "require": {
-        "cmgmyr/messenger": "~2.0"
-    }
+```
+"require": {
+    "cmgmyr/messenger": "~2.0"
+}
+```
 
 Run:
 
-    composer update
+```
+composer update
+```
 
 Add the service provider to `config/app.php` under `providers`:
 
-    'providers' => [
-        Cmgmyr\Messenger\MessengerServiceProvider::class,
-    ]
+```php
+'providers' => [
+    Cmgmyr\Messenger\MessengerServiceProvider::class,
+],
+```
 
 Publish config:
 
-    php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="config"
+```
+php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="config"
+```
 	
 Update config file to reference your User Model:
 
-    config/messenger.php
-	
+```
+config/messenger.php
+```
+
 Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
 
 **(Optional)** Define names of database tables in package config file if you don't want to use default ones:
 
-    'messages_table' => 'messenger_messages',
-    'participants_table' => 'messenger_participants',
-    'threads_table' => 'messenger_threads',
+```php
+'messages_table' => 'messenger_messages',
+'participants_table' => 'messenger_participants',
+'threads_table' => 'messenger_threads',
+```
     
 Publish migrations:
 
-    php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="migrations"
+```
+php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="migrations"
+```
 
 Migrate your database:
 
-    php artisan migrate
+```
+php artisan migrate
+```
 
 Add the trait to your user model:
 
-    use Cmgmyr\Messenger\Traits\Messagable;
-    
-    class User extends Authenticatable {
-        use Messagable;
-    }
+```php
+use Cmgmyr\Messenger\Traits\Messagable;
 
+class User extends Authenticatable {
+    use Messagable;
+}
+```
 
 ## Examples
 * [Controller](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/MessagesController.php)
@@ -91,7 +108,9 @@ Add the trait to your user model:
 ## Contributing? 
 Please format your code before creating a pull-request. This will format all files as specified in `.php_cs`:
 
-    vendor/bin/php-cs-fixer fix .
+```
+vendor/bin/php-cs-fixer fix .
+```
 
 ## Security
 
