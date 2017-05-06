@@ -1,6 +1,6 @@
 <?php
 
-namespace Cmgmyr\Messenger\Test\Models;
+namespace Cmgmyr\Messenger\Test\Stubs\Models;
 
 use Cmgmyr\Messenger\Models\Message;
 
