@@ -495,4 +495,22 @@ class EloquentThreadTest extends TestCase
 
         $this->assertEquals('Chris Gmyr', $thread->creator()->name);
     }
+
+    /**
+     * @test
+     *
+     * TODO: Need to get real creator of the thread without messages in future versions.
+     */
+    public function it_should_get_the_null_creator_of_a_thread_without_messages()
+    {
+        $thread = $this->faktory->create('thread');
+
+        $user_1 = $this->faktory->build('participant');
+        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $user_3 = $this->faktory->build('participant', ['user_id' => 3]);
+
+        $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
+
+        $this->assertNull($thread->creator());
+    }
 }

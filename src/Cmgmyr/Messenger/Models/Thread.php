@@ -95,7 +95,9 @@ class Thread extends Eloquent
      */
     public function creator()
     {
-        return $this->messages()->withTrashed()->oldest()->first()->user;
+        $firstMessage = $this->messages()->withTrashed()->oldest()->first();
+
+        return $firstMessage ? $firstMessage->user : null;
     }
 
     /**
