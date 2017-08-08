@@ -29,7 +29,10 @@ This package will allow you to add a full user messaging system into your Larave
 Installation instructions for Laravel 4 can be [found here](https://github.com/cmgmyr/laravel-messenger/tree/v1).
 
 ## Installation (Laravel 5.x)
-In composer.json:
+```
+composer require cmgmyr/messenger
+```
+Or place mannually in composer.json:
 
 ```
 "require": {
