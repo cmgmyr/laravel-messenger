@@ -34,5 +34,12 @@
             "Cmgmyr\\Messenger\\Test\\": "tests/"
         }
     },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Cmgmyr\\Messenger\\MessengerServiceProvider"
+            ]
+        }
+    },
     "minimum-stability": "stable"
 }
