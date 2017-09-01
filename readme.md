@@ -32,7 +32,8 @@ Installation instructions for Laravel 4 can be [found here](https://github.com/c
 ```
 composer require cmgmyr/messenger
 ```
-Or place mannually in composer.json:
+
+Or place manually in composer.json:
 
 ```
 "require": {
@@ -66,7 +67,7 @@ Update config file to reference your User Model:
 config/messenger.php
 ```
 
-Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
+Create a `users` table if you do not have one already. If you need one, the default Laravel migration will be satisfactory.
 
 **(Optional)** Define names of database tables in package config file if you don't want to use default ones:
 
