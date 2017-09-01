@@ -92,8 +92,8 @@ class MessagesController extends Controller
         Message::create(
             [
                 'thread_id' => $thread->id,
-                'user_id'   => Auth::user()->id,
-                'body'      => $input['message'],
+                'user_id' => Auth::user()->id,
+                'body' => $input['message'],
             ]
         );
 
@@ -101,7 +101,7 @@ class MessagesController extends Controller
         Participant::create(
             [
                 'thread_id' => $thread->id,
-                'user_id'   => Auth::user()->id,
+                'user_id' => Auth::user()->id,
                 'last_read' => new Carbon,
             ]
         );
@@ -136,8 +136,8 @@ class MessagesController extends Controller
         Message::create(
             [
                 'thread_id' => $thread->id,
-                'user_id'   => Auth::id(),
-                'body'      => Input::get('message'),
+                'user_id' => Auth::id(),
+                'body' => Input::get('message'),
             ]
         );
 
@@ -145,7 +145,7 @@ class MessagesController extends Controller
         $participant = Participant::firstOrCreate(
             [
                 'thread_id' => $thread->id,
-                'user_id'   => Auth::user()->id,
+                'user_id' => Auth::user()->id,
             ]
         );
         $participant->last_read = new Carbon;

@@ -367,6 +367,7 @@ class Thread extends Eloquent
 
         return $selectString;
     }
+
     /**
      * Returns array of unread messages in thread for given user.
      *

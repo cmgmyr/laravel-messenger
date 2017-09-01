@@ -39,7 +39,8 @@ class MessengerServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom(
-            base_path('vendor/cmgmyr/messenger/src/config/config.php'), 'messenger'
+            base_path('vendor/cmgmyr/messenger/src/config/config.php'),
+            'messenger'
         );
     }
 

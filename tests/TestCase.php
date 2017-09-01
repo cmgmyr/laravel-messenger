@@ -25,7 +25,7 @@ class TestCase extends Orchestra
 
         $this->configureDatabase();
         $this->migrateTables();
-        $this->faktory  = new Faktory;
+        $this->faktory = new Faktory;
         $load_factories = function ($faktory) {
             require __DIR__ . '/factories.php';
         };
@@ -57,11 +57,11 @@ class TestCase extends Orchestra
         $db = new DB;
         $db->addConnection(
             [
-                'driver'    => 'sqlite',
-                'database'  => ':memory:',
-                'charset'   => 'utf8',
+                'driver' => 'sqlite',
+                'database' => ':memory:',
+                'charset' => 'utf8',
                 'collation' => 'utf8_unicode_ci',
-                'prefix'    => '',
+                'prefix' => '',
             ]
         );
 

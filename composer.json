@@ -19,10 +19,10 @@
         "nesbot/carbon": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "4.*|5.*",
         "adamwathan/faktory": "0.3.*",
-        "friendsofphp/php-cs-fixer": "^1.11",
-        "orchestra/testbench": "~3.0"
+        "friendsofphp/php-cs-fixer": "^2.5",
+        "orchestra/testbench": "~3.0",
+        "phpunit/phpunit": "4.*|5.*"
     },
     "autoload": {
         "psr-4": {
@@ -40,6 +40,9 @@
                 "Cmgmyr\\Messenger\\MessengerServiceProvider"
             ]
         }
+    },
+    "config": {
+        "sort-packages": true
     },
     "minimum-stability": "stable"
 }
