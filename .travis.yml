@@ -1,6 +1,7 @@
 language: php
 
 php:
+  - 5.5
   - 5.6
   - 7.0
   - 7.1
@@ -19,7 +20,10 @@ before_script:
   - composer dumpautoload -o
 
 script:
-  - vendor/bin/php-cs-fixer fix .
+  - |
+    if [[ "$TRAVIS_PHP_VERSION" != '5.5' ]]; then
+      vendor/bin/php-cs-fixer fix .
+    fi
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:
