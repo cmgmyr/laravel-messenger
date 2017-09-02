@@ -21,7 +21,7 @@ before_script:
 
 script:
   - |
-    if [[ "$TRAVIS_PHP_VERSION" != '5.5' ]]; then
+    if [ $(phpenv version-name) != '5.5' ]; then
       vendor/bin/php-cs-fixer fix .
     fi
   - vendor/bin/phpunit --coverage-text --coverage-clover=coverage.clover
