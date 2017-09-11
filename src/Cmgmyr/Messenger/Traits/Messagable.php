@@ -83,5 +83,4 @@ trait Messagable
                 $q->orWhere(Models::table('threads') . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . Models::table('participants') . '.last_read'));
             })->get();
     }
-
 }

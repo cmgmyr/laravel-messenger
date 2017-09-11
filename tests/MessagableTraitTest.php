@@ -49,8 +49,8 @@ class MessagableTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_get_all_incoming_messages_count_for_user() {
-
+    public function it_get_all_incoming_messages_count_for_user()
+    {
         $user = User::create(
             [
                 'name' => 'John Doe',
@@ -59,32 +59,27 @@ class MessagableTraitTest extends TestCase
             ]
         );
 
-        $thread_1       = $this->faktory->create('thread');
+        $thread_1 = $this->faktory->create('thread');
         $participant_11 = $this->faktory->build('participant', ['user_id' => $user->id, 'last_read' => Carbon::now()->subDays(5)]);
         $participant_12 = $this->faktory->build('participant', ['user_id' => 2]);
         $thread_1->participants()->saveMany([$participant_11, $participant_12]);
 
-        $thread_2        = $this->faktory->create('thread');
+        $thread_2 = $this->faktory->create('thread');
         $participant_21 = $this->faktory->build('participant', ['user_id' => 3, 'last_read' => Carbon::now()->subDays(5)]);
         $participant_22 = $this->faktory->build('participant', ['user_id' => 2]);
         $thread_2->participants()->saveMany([$participant_21, $participant_22]);
 
-        for ($i=0; $i<10; $i++) {
-
+        for ($i = 0; $i < 10; $i++) {
             $thread_1->messages()->saveMany([$this->faktory->build('message', ['user_id' => 2, 'created_at' => Carbon::now()->subDays(1)])]);
-
         }
 
-        for ($i=0; $i<5; $i++) {
-
+        for ($i = 0; $i < 5; $i++) {
             $thread_1->messages()->saveMany([$this->faktory->build('message', ['user_id' => 2, 'created_at' => Carbon::now()->subDays(10)])]);
-
         }
 
         $thread_2->messages()->saveMany([$this->faktory->build('message', ['user_id' => 2])]);
 
         $this->assertEquals(10, $user->unreadMessagesCount());
-
     }
 
     /** @test */
