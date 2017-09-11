@@ -4,6 +4,7 @@ namespace Cmgmyr\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use DB;
 
 class Message extends Eloquent
 {
@@ -93,5 +94,26 @@ class Message extends Eloquent
     public function recipients()
     {
         return $this->participants()->where('user_id', '!=', $this->user_id);
+    }
+
+    /**
+     * Prepares Builder for unread user messages
+     *
+     * @param $query
+     * @param $userId
+     * @return mixed
+     */
+    public function scopeUnreadForUser($query, $userId)
+    {
+
+        return $query->has('thread')
+            ->where('user_id', '!=', $userId)
+            ->whereHas('participants', function ($query) use ($userId) {
+
+                $query->where('user_id', $userId)
+                    ->where('last_read', '<', DB::raw($this->getTable() . '.created_at'));
+
+            });
+
     }
 }
