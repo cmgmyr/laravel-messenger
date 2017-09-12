@@ -32,15 +32,6 @@ class Message extends Eloquent
     protected $fillable = ['thread_id', 'user_id', 'body'];
 
     /**
-     * Validation rules.
-     *
-     * @var array
-     */
-    protected $rules = [
-        'body' => 'required',
-    ];
-
-    /**
      * {@inheritDoc}
      */
     public function __construct(array $attributes = [])
