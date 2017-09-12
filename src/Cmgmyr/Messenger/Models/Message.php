@@ -32,6 +32,13 @@ class Message extends Eloquent
     protected $fillable = ['thread_id', 'user_id', 'body'];
 
     /**
+     * The attributes that should be mutated to dates.
+     *
+     * @var array
+     */
+    protected $dates = ['deleted_at'];
+
+    /**
      * {@inheritDoc}
      */
     public function __construct(array $attributes = [])
