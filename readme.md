@@ -55,6 +55,8 @@ Add the service provider to `config/app.php` under `providers`:
 ],
 ```
 
+> **Note**: If you are using Laravel 5.5, this step is unnecessary. Laravel Messenger supports [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
+
 Publish config:
 
 ```
@@ -100,9 +102,9 @@ class User extends Authenticatable {
 ```
 
 ## Examples
-* [Controller](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/MessagesController.php)
-* [Routes](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/routes.php)
-* [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/src/Cmgmyr/Messenger/examples/views)
+* [Controller](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/MessagesController.php)
+* [Routes](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/routes.php)
+* [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/views)
 
 ## Example Projects
 * [WIP] [Pusher](https://github.com/cmgmyr/laravel-messenger-pusher-demo)
