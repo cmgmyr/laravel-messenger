@@ -23,12 +23,9 @@
     </php>
     <filter>
         <whitelist>
-            <directory suffix=".php">src/Cmgmyr</directory>
+            <directory suffix=".php">src</directory>
             <exclude>
-                <directory>src/migrations/</directory>
-                <directory>src/config/</directory>
-                <directory>src/Cmgmyr/Messenger/examples/</directory>
-                <file>src/Cmgmyr/Messenger/MessengerServiceProvider.php</file>
+                <file>src/MessengerServiceProvider.php</file>
             </exclude>
         </whitelist>
     </filter>
