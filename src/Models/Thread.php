@@ -3,6 +3,7 @@
 namespace Cmgmyr\Messenger\Models;
 
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -162,12 +163,12 @@ class Thread extends Eloquent
     /**
      * Returns threads with new messages that the user is associated with.
      *
-     * @param $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
      * @param $userId
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeForUserWithNewMessages($query, $userId)
+    public function scopeForUserWithNewMessages(Builder $query, $userId)
     {
         $participantTable = Models::table('participants');
         $threadsTable = Models::table('threads');
@@ -175,7 +176,7 @@ class Thread extends Eloquent
         return $query->join($participantTable, $this->getQualifiedKeyName(), '=', $participantTable . '.thread_id')
             ->where($participantTable . '.user_id', $userId)
             ->whereNull($participantTable . '.deleted_at')
-            ->where(function ($query) use ($participantTable, $threadsTable) {
+            ->where(function (Builder $query) use ($participantTable, $threadsTable) {
                 $query->where($threadsTable . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . $participantTable . '.last_read'))
                     ->orWhereNull($participantTable . '.last_read');
             })
@@ -185,14 +186,14 @@ class Thread extends Eloquent
     /**
      * Returns threads between given user ids.
      *
-     * @param $query
-     * @param $participants
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param array $participants
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeBetween($query, array $participants)
+    public function scopeBetween(Builder $query, array $participants)
     {
-        return $query->whereHas('participants', function ($q) use ($participants) {
+        return $query->whereHas('participants', function (Builder $q) use ($participants) {
             $q->whereIn('user_id', $participants)
                 ->select($this->getConnection()->raw('DISTINCT(thread_id)'))
                 ->groupBy('thread_id')

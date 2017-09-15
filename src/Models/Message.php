@@ -2,6 +2,7 @@
 
 namespace Cmgmyr\Messenger\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\DB;
@@ -97,17 +98,17 @@ class Message extends Eloquent
     /**
      * Returns unread messages given the userId.
      *
-     * @param $query
+     * @param \Illuminate\Database\Eloquent\Builder $query
      * @param $userId
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeUnreadForUser($query, $userId)
+    public function scopeUnreadForUser(Builder $query, $userId)
     {
         return $query->has('thread')
             ->where('user_id', '!=', $userId)
-            ->whereHas('participants', function ($query) use ($userId) {
+            ->whereHas('participants', function (Builder $query) use ($userId) {
                 $query->where('user_id', $userId)
-                    ->where(function ($q) {
+                    ->where(function (Builder $q) {
                         $q->where('last_read', '<', DB::raw($this->getTable() . '.created_at'))
                             ->orWhereNull('last_read');
                     });
