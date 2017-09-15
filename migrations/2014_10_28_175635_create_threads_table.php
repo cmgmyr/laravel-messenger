@@ -28,6 +28,6 @@ class CreateThreadsTable extends Migration
      */
     public function down()
     {
-        Schema::drop(Models::table('threads'));
+        Schema::dropIfExists(Models::table('threads'));
     }
 }
