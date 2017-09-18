@@ -104,7 +104,7 @@ class Thread extends Eloquent
     /**
      * Returns all of the latest threads by updated_at date.
      *
-     * @return mixed
+     * @return self
      */
     public static function getAllLatest()
     {
@@ -114,11 +114,12 @@ class Thread extends Eloquent
     /**
      * Returns all threads by subject.
      *
-     * @return mixed
+     * @param string $subject
+     * @return self
      */
-    public static function getBySubject($subjectQuery)
+    public static function getBySubject($subject)
     {
-        return self::where('subject', 'like', $subjectQuery)->get();
+        return self::where('subject', 'like', $subject)->get();
     }
 
     /**
@@ -144,12 +145,12 @@ class Thread extends Eloquent
     /**
      * Returns threads that the user is associated with.
      *
-     * @param $query
+     * @param Builder $query
      * @param $userId
      *
-     * @return mixed
+     * @return Builder
      */
-    public function scopeForUser($query, $userId)
+    public function scopeForUser(Builder $query, $userId)
     {
         $participantsTable = Models::table('participants');
         $threadsTable = Models::table('threads');
@@ -163,10 +164,10 @@ class Thread extends Eloquent
     /**
      * Returns threads with new messages that the user is associated with.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param $userId
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeForUserWithNewMessages(Builder $query, $userId)
     {
@@ -186,10 +187,10 @@ class Thread extends Eloquent
     /**
      * Returns threads between given user ids.
      *
-     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param Builder $query
      * @param array $participants
      *
-     * @return \Illuminate\Database\Eloquent\Builder
+     * @return Builder
      */
     public function scopeBetween(Builder $query, array $participants)
     {

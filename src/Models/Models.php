@@ -39,7 +39,6 @@ class Models
      * Set the model to be used for participants.
      *
      * @param  string $model
-     * @return void
      */
     public static function setParticipantModel($model)
     {
@@ -50,7 +49,6 @@ class Models
      * Set the model to be used for threads.
      *
      * @param  string $model
-     * @return void
      */
     public static function setThreadModel($model)
     {
@@ -61,7 +59,6 @@ class Models
      * Set the model to be used for users.
      *
      * @param  string  $model
-     * @return void
      */
     public static function setUserModel($model)
     {
@@ -72,7 +69,6 @@ class Models
      * Set custom table names.
      *
      * @param  array $map
-     * @return void
      */
     public static function setTables(array $map)
     {
@@ -95,7 +91,7 @@ class Models
     }
 
     /**
-     * Get the classname mapping for the given model.
+     * Get the class name mapping for the given model.
      *
      * @param  string $model
      * @return string
