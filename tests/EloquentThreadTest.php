@@ -511,6 +511,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 
-        $this->assertNull($thread->creator());
+        $this->assertFalse($thread->creator()->exists);
+        $this->assertNull($thread->creator()->name);
     }
 }
