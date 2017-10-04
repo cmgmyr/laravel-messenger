@@ -32,7 +32,14 @@ class Thread extends Eloquent
      * @var array
      */
     protected $dates = ['deleted_at'];
-
+    
+     /**
+     * Creator of Thread
+     *
+     * @User null
+     */
+     protected $creator = null;
+    
     /**
      * {@inheritDoc}
      */
@@ -96,9 +103,11 @@ class Thread extends Eloquent
      */
     public function creator()
     {
-        $firstMessage = $this->messages()->withTrashed()->oldest()->first();
-
-        return $firstMessage ? $firstMessage->user : null;
+        if (is_null($this->creator)) {
+            $firstMessage = $this->messages()->withTrashed()->oldest()->first();
+            $this->creator = $firstMessage ? $firstMessage->user : null;
+        }
+        return $this->creator;
     }
 
     /**
