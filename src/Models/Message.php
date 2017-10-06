@@ -2,8 +2,10 @@
 
 namespace Cmgmyr\Messenger\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\DB;
 
 class Message extends Eloquent
 {
@@ -31,13 +33,11 @@ class Message extends Eloquent
     protected $fillable = ['thread_id', 'user_id', 'body'];
 
     /**
-     * Validation rules.
+     * The attributes that should be mutated to dates.
      *
      * @var array
      */
-    protected $rules = [
-        'body' => 'required',
-    ];
+    protected $dates = ['deleted_at'];
 
     /**
      * {@inheritDoc}
@@ -93,5 +93,25 @@ class Message extends Eloquent
     public function recipients()
     {
         return $this->participants()->where('user_id', '!=', $this->user_id);
+    }
+
+    /**
+     * Returns unread messages given the userId.
+     *
+     * @param Builder $query
+     * @param $userId
+     * @return Builder
+     */
+    public function scopeUnreadForUser(Builder $query, $userId)
+    {
+        return $query->has('thread')
+            ->where('user_id', '!=', $userId)
+            ->whereHas('participants', function (Builder $query) use ($userId) {
+                $query->where('user_id', $userId)
+                    ->where(function (Builder $q) {
+                        $q->where('last_read', '<', DB::raw($this->getTable() . '.created_at'))
+                            ->orWhereNull('last_read');
+                    });
+            });
     }
 }

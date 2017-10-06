@@ -1,6 +1,6 @@
-[![Build Status](https://img.shields.io/travis/cmgmyr/laravel-messenger/v2.svg?style=flat-square)](https://travis-ci.org/cmgmyr/laravel-messenger)
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/cmgmyr/laravel-messenger/v2.svg?style=flat-square)](https://scrutinizer-ci.com/g/cmgmyr/laravel-messenger/?branch=v2)
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/cmgmyr/laravel-messenger/v2.svg?style=flat-square)](https://scrutinizer-ci.com/g/cmgmyr/laravel-messenger/?branch=v2)
+[![Build Status](https://img.shields.io/travis/cmgmyr/laravel-messenger.svg?style=flat-square)](https://travis-ci.org/cmgmyr/laravel-messenger)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/cmgmyr/laravel-messenger.svg?style=flat-square)](https://scrutinizer-ci.com/g/cmgmyr/laravel-messenger/)
+[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/cmgmyr/laravel-messenger.svg?style=flat-square)](https://scrutinizer-ci.com/g/cmgmyr/laravel-messenger/)
 [![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg?style=flat-square)](https://github.com/cmgmyr/laravel-messenger/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg?style=flat-square)](https://packagist.org/packages/cmgmyr/messenger)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
@@ -29,7 +29,11 @@ This package will allow you to add a full user messaging system into your Larave
 Installation instructions for Laravel 4 can be [found here](https://github.com/cmgmyr/laravel-messenger/tree/v1).
 
 ## Installation (Laravel 5.x)
-In composer.json:
+```
+composer require cmgmyr/messenger
+```
+
+Or place manually in composer.json:
 
 ```
 "require": {
@@ -51,19 +55,21 @@ Add the service provider to `config/app.php` under `providers`:
 ],
 ```
 
+> **Note**: If you are using Laravel 5.5, this step is unnecessary. Laravel Messenger supports [Package Discovery](https://laravel.com/docs/5.5/packages#package-discovery).
+
 Publish config:
 
 ```
 php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="config"
 ```
-
+	
 Update config file to reference your User Model:
 
 ```
 config/messenger.php
 ```
 
-Create a `users` table if you do not have one already. If you need one, simply use [this example](https://github.com/cmgmyr/laravel-messenger/blob/v2/src/Cmgmyr/Messenger/examples/create_users_table.php) as a starting point, then migrate.
+Create a `users` table if you do not have one already. If you need one, the default Laravel migration will be satisfactory.
 
 **(Optional)** Define names of database tables in package config file if you don't want to use default ones:
 
@@ -96,9 +102,9 @@ class User extends Authenticatable {
 ```
 
 ## Examples
-* [Controller](https://github.com/cmgmyr/laravel-messenger/blob/v2/src/Cmgmyr/Messenger/examples/MessagesController.php)
-* [Routes](https://github.com/cmgmyr/laravel-messenger/blob/v2/src/Cmgmyr/Messenger/examples/routes.php)
-* [Views](https://github.com/cmgmyr/laravel-messenger/tree/v2/src/Cmgmyr/Messenger/examples/views)
+* [Controller](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/MessagesController.php)
+* [Routes](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/routes.php)
+* [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/views)
 
 ## Example Projects
 * [WIP] [Pusher](https://github.com/cmgmyr/laravel-messenger-pusher-demo)

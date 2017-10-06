@@ -6,6 +6,7 @@ use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
+use Illuminate\Database\Eloquent\Builder;
 
 trait Messagable
 {
@@ -36,7 +37,7 @@ trait Messagable
     /**
      * Thread relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
      *
      * @codeCoverageIgnore
      */
@@ -61,14 +62,24 @@ trait Messagable
     }
 
     /**
+     * Returns the new messages count for user.
+     *
+     * @return int
+     */
+    public function unreadMessagesCount()
+    {
+        return Message::unreadForUser($this->getKey())->count();
+    }
+
+    /**
      * Returns all threads with new messages.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\belongsToMany
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function threadsWithNewMessages()
     {
         return $this->threads()
-            ->where(function ($q) {
+            ->where(function (Builder $q) {
                 $q->whereNull(Models::table('participants') . '.last_read');
                 $q->orWhere(Models::table('threads') . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . Models::table('participants') . '.last_read'));
             })->get();

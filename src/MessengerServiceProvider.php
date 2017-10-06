@@ -17,16 +17,7 @@ class MessengerServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        if ($this->app->runningInConsole()) {
-            $this->publishes([
-                base_path('vendor/cmgmyr/messenger/src/config/config.php') => config_path('messenger.php'),
-            ], 'config');
-
-            $this->publishes([
-                base_path('vendor/cmgmyr/messenger/src/migrations') => base_path('database/migrations'),
-            ], 'migrations');
-        }
-
+        $this->offerPublishing();
         $this->setMessengerModels();
         $this->setUserModel();
     }
@@ -38,12 +29,41 @@ class MessengerServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->configure();
+    }
+
+    /**
+     * Setup the configuration for Messenger.
+     *
+     * @return void
+     */
+    protected function configure()
+    {
         $this->mergeConfigFrom(
-            base_path('vendor/cmgmyr/messenger/src/config/config.php'), 'messenger'
+            base_path('vendor/cmgmyr/messenger/config/config.php'),
+            'messenger'
         );
     }
 
-    private function setMessengerModels()
+    /**
+     * Setup the resource publishing groups for Messenger.
+     *
+     * @return void
+     */
+    protected function offerPublishing()
+    {
+        if ($this->app->runningInConsole()) {
+            $this->publishes([
+                base_path('vendor/cmgmyr/messenger/config/config.php') => config_path('messenger.php'),
+            ], 'config');
+
+            $this->publishes([
+                base_path('vendor/cmgmyr/messenger/migrations') => base_path('database/migrations'),
+            ], 'migrations');
+        }
+    }
+
+    protected function setMessengerModels()
     {
         $config = $this->app->make('config');
 
@@ -58,7 +78,7 @@ class MessengerServiceProvider extends ServiceProvider
         ]);
     }
 
-    private function setUserModel()
+    protected function setUserModel()
     {
         $config = $this->app->make('config');
 

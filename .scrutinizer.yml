@@ -1,9 +1,9 @@
 filter:
     excluded_paths:
         - 'tests/*'
-        - 'src/Cmgmyr/Messenger/examples/'
-        - 'src/config/'
-        - 'src/migrations/'
+        - 'examples/*'
+        - 'config/*'
+        - 'migrations/*'
 
 checks:
     php:
@@ -24,4 +24,4 @@ checks:
 tools:
     external_code_coverage:
         timeout: 1800
-        runs: 4
+        runs: 3
