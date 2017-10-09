@@ -33,12 +33,12 @@ class Thread extends Eloquent
      */
     protected $dates = ['deleted_at'];
     
-     /**
-     * Creator of Thread
-     *
-     * @User null
-     */
-     protected $creator = null;
+    /**
+    * Internal cache for creator.
+    *
+    * @var null|Models::user()
+    */
+    protected $creatorCache = null;
     
     /**
      * {@inheritDoc}
@@ -99,15 +99,16 @@ class Thread extends Eloquent
     /**
      * Returns the user object that created the thread.
      *
-     * @return mixed
+     * @return Models::user()
      */
     public function creator()
     {
-        if (is_null($this->creator)) {
+        if (is_null($this->creatorCache)) {
             $firstMessage = $this->messages()->withTrashed()->oldest()->first();
-            $this->creator = $firstMessage ? $firstMessage->user : null;
+            $this->creatorCache = $firstMessage ? $firstMessage->user : Models::user();
         }
-        return $this->creator;
+
+        return $this->creatorCache;
     }
 
     /**
