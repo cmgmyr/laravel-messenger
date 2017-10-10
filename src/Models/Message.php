@@ -109,7 +109,7 @@ class Message extends Eloquent
             ->whereHas('participants', function (Builder $query) use ($userId) {
                 $query->where('user_id', $userId)
                     ->where(function (Builder $q) {
-                        $q->where('last_read', '<', DB::raw(DB::getTablePrefix() . $this->getTable() . '.created_at'))
+                        $q->where('last_read', '<', DB::raw(this->getConnection()->getTablePrefix() . $this->getTable() . '.created_at'))
                             ->orWhereNull('last_read');
                     });
             });
