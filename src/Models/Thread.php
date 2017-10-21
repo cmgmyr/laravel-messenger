@@ -24,7 +24,7 @@ class Thread extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['subject'];
+    protected $fillable = ['subject', 'total_participants'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -48,6 +48,16 @@ class Thread extends Eloquent
         $this->table = Models::table('threads');
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * Saves the total count of participants used for the 'between' scopes.
+     */
+    public function updateParticipantsCount()
+    {
+        $this->update([
+            'total_participants' => $this->participants()->withTrashed()->count(),
+        ]);
     }
 
     /**
@@ -215,16 +225,13 @@ class Thread extends Eloquent
      * @param $query
      * @param $participants
      *
-     * @return mixed
+     * @return Builder
      */
-    public function scopeBetweenLoose($query, array $participants)
+    public function scopeBetweenLoose(Builder $query, array $participants)
     {
         return $query->whereHas('participants', function ($q) use ($participants) {
-            $q->whereIn('user_id', $participants)
-                ->select($this->getConnection()->raw('DISTINCT(thread_id)'))
-                ->groupBy('thread_id')
-                ->havingRaw('COUNT(thread_id)=' . count($participants));
-        });
+            $q->whereIn('user_id', $participants);
+        })->where('total_participants', '>=', count($participants));
     }
 
     /**
@@ -233,17 +240,13 @@ class Thread extends Eloquent
      * @param $query
      * @param $participants
      *
-     * @return mixed
+     * @return Builder
      */
-    public function scopeBetweenStrict($query, array $participants)
+    public function scopeBetweenStrict(Builder $query, array $participants)
     {
-        $participants = collect($participants)->sort()->implode(',');
-
         return $query->whereHas('participants', function ($q) use ($participants) {
-            $q->select($this->getConnection()->raw('DISTINCT(thread_id)'))
-                ->groupBy('thread_id')
-                ->havingRaw('GROUP_CONCAT(DISTINCT user_id ORDER BY user_id) = "' . $participants . '"');
-        });
+            $q->whereIn('user_id', $participants);
+        })->where('total_participants', count($participants));
     }
 
     /**

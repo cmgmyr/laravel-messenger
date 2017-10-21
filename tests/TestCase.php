@@ -119,6 +119,7 @@ class TestCase extends Orchestra
             function ($table) {
                 $table->increments('id');
                 $table->string('subject');
+                $table->integer('total_participants')->default(0);
                 $table->timestamps();
                 $table->softDeletes();
             }

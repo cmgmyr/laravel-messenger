@@ -41,6 +41,20 @@ class Participant extends Eloquent
     }
 
     /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($participant) {
+            $participant->thread->updateParticipantsCount();
+        });
+    }
+
+    /**
      * Thread relationship.
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
