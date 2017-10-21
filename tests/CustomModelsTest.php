@@ -6,9 +6,9 @@ use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
-use Cmgmyr\Messenger\Test\Models\CustomMessage;
-use Cmgmyr\Messenger\Test\Models\CustomParticipant;
-use Cmgmyr\Messenger\Test\Models\CustomThread;
+use Cmgmyr\Messenger\Test\Stubs\Models\CustomMessage;
+use Cmgmyr\Messenger\Test\Stubs\Models\CustomParticipant;
+use Cmgmyr\Messenger\Test\Stubs\Models\CustomThread;
 
 class CustomModelsTest extends TestCase
 {
@@ -46,6 +46,14 @@ class CustomModelsTest extends TestCase
 
         $this->unsetMessageCustomModel();
         $this->unsetMessageCustomTable();
+    }
+
+    /** @test */
+    public function it_should_return_custom_name_when_not_available()
+    {
+        $modelName = 'ModelNotFound';
+
+        $this->assertEquals('ModelNotFound', Models::classname($modelName));
     }
 
     /** :TODO: test */

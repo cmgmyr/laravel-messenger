@@ -5,7 +5,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateThreadsTable extends Migration
+class AddSoftDeletesToMessagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,8 @@ class CreateThreadsTable extends Migration
      */
     public function up()
     {
-        Schema::create(Models::table('threads'), function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('subject');
-            $table->timestamps();
+        Schema::table(Models::table('messages'), function (Blueprint $table) {
+            $table->softDeletes();
         });
     }
 
@@ -28,6 +26,8 @@ class CreateThreadsTable extends Migration
      */
     public function down()
     {
-        Schema::drop(Models::table('threads'));
+        Schema::table(Models::table('messages'), function (Blueprint $table) {
+            $table->dropSoftDeletes();
+        });
     }
 }

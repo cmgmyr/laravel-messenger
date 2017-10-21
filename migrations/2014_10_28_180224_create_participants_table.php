@@ -30,6 +30,6 @@ class CreateParticipantsTable extends Migration
      */
     public function down()
     {
-        Schema::drop(Models::table('participants'));
+        Schema::dropIfExists(Models::table('participants'));
     }
 }

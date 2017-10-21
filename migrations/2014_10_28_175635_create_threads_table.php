@@ -1,9 +1,11 @@
 <?php
 
+use Cmgmyr\Messenger\Models\Models;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
-class CreateUsersTable extends Migration
+class CreateThreadsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +14,9 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->increments('id')->unsigned();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->enum('notify', ['y', 'n'])->default('y');
+        Schema::create(Models::table('threads'), function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('subject');
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('users');
+        Schema::dropIfExists(Models::table('threads'));
     }
 }
