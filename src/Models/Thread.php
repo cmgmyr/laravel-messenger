@@ -24,7 +24,7 @@ class Thread extends Eloquent
      *
      * @var array
      */
-    protected $fillable = ['subject'];
+    protected $fillable = ['subject', 'total_participants'];
 
     /**
      * The attributes that should be mutated to dates.
@@ -48,6 +48,16 @@ class Thread extends Eloquent
         $this->table = Models::table('threads');
 
         parent::__construct($attributes);
+    }
+
+    /**
+     * Saves the total count of participants used for the 'between' scopes.
+     */
+    public function updateParticipantsCount()
+    {
+        $this->update([
+            'total_participants' => $this->participants()->withTrashed()->count(),
+        ]);
     }
 
     /**
@@ -201,15 +211,42 @@ class Thread extends Eloquent
      * @param array $participants
      *
      * @return Builder
+     * @deprecated
+     * @see scopeBetweenLoose()
      */
     public function scopeBetween(Builder $query, array $participants)
     {
-        return $query->whereHas('participants', function (Builder $q) use ($participants) {
-            $q->whereIn('user_id', $participants)
-                ->select($this->getConnection()->raw('DISTINCT(thread_id)'))
-                ->groupBy('thread_id')
-                ->havingRaw('COUNT(thread_id)=' . count($participants));
-        });
+        return $this->scopeBetweenLoose($query, $participants);
+    }
+
+    /**
+     * Returns threads between given loose user ids.
+     *
+     * @param $query
+     * @param $participants
+     *
+     * @return Builder
+     */
+    public function scopeBetweenLoose(Builder $query, array $participants)
+    {
+        return $query->whereHas('participants', function ($q) use ($participants) {
+            $q->whereIn('user_id', $participants);
+        })->where('total_participants', '>=', count($participants));
+    }
+
+    /**
+     * Returns threads between given strict user ids.
+     *
+     * @param $query
+     * @param $participants
+     *
+     * @return Builder
+     */
+    public function scopeBetweenStrict(Builder $query, array $participants)
+    {
+        return $query->whereHas('participants', function ($q) use ($participants) {
+            $q->whereIn('user_id', $participants);
+        })->where('total_participants', count($participants));
     }
 
     /**
