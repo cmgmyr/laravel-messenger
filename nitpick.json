@@ -1,6 +1,7 @@
 {
     "ignore": [
-        "tests/*",
-        "src/migrations/*"
+        "examples/*",
+        "migrations/*",
+        "tests/*"
     ]
 }
