@@ -125,11 +125,11 @@ class Thread extends Eloquent
      * Returns all threads by subject.
      *
      * @param string $subject
-     * @return self
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public static function getBySubject($subject)
     {
-        return self::where('subject', 'like', $subject)->get();
+        return static::where('subject', 'like', $subject)->get();
     }
 
     /**
