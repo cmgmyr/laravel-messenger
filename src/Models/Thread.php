@@ -118,7 +118,7 @@ class Thread extends Eloquent
      */
     public static function getAllLatest()
     {
-        return self::latest('updated_at');
+        return static::latest('updated_at');
     }
 
     /**
@@ -130,7 +130,7 @@ class Thread extends Eloquent
      */
     public static function getBySubject($subject)
     {
-        return self::where('subject', 'like', $subject)->get();
+        return static::where('subject', 'like', $subject)->get();
     }
 
     /**
