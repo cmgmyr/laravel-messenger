@@ -114,11 +114,11 @@ class Thread extends Eloquent
     /**
      * Returns all of the latest threads by updated_at date.
      *
-     * @return self
+     * @return \Illuminate\Database\Query\Builder|static
      */
     public static function getAllLatest()
     {
-        return self::latest('updated_at');
+        return static::latest('updated_at');
     }
 
     /**
