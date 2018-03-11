@@ -97,9 +97,9 @@ class Message extends Eloquent
     /**
      * Returns unread messages given the userId.
      *
-     * @param Builder $query
-     * @param $userId
-     * @return Builder
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param int $userId
+     * @return \Illuminate\Database\Eloquent\Builder
      */
     public function scopeUnreadForUser(Builder $query, $userId)
     {
