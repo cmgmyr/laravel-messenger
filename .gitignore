@@ -3,3 +3,6 @@ build
 composer.lock
 files
 vendor
+/.buildpath
+/.project
+/.settings/

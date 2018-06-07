@@ -122,6 +122,31 @@ class Thread extends Eloquent
     }
 
     /**
+     * Thread relationship.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     *
+     * @codeCoverageIgnore
+     */
+    public function getPublic()
+    {
+
+        return $this->belongsTo(
+            Models::classname(Thread::class)
+        )->where([
+            'object_type'   => Models::classname(self::class),
+            'object_id'     => 1,
+            'is_public'     => true,
+        ]);
+
+        return Thread::where([
+            'object_type'   => Models::classname(self::class),
+            'object_id'     => 1,
+            'is_public'     => true,
+        ]);
+    }
+
+    /**
      * Returns all threads by subject.
      *
      * @param string $subject

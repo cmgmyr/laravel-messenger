@@ -1,7 +1,7 @@
 @extends('layouts.master')
 
 @section('content')
-    @include('messenger.partials.flash')
+    @include($viewSpace.'.partials.flash')
 
-    @each('messenger.partials.thread', $threads, 'thread', 'messenger.partials.no-threads')
+    @each($viewSpace.'.partials.thread', $threads, 'thread', 'messenger.partials.no-threads')
 @stop
