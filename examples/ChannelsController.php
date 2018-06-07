@@ -2,22 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
 use App\Channel;
-use Carbon\Carbon;
+use App\User;
 use Cmgmyr\Messenger\Models\Message;
-use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Input;
-use Illuminate\Support\Facades\Session;
 
 class ChannelsController extends MessagesController
 {
-
-    protected $viewSpace    = 'channels';
-    protected $routeSpace   = 'channels';
+    protected $viewSpace = 'channels';
+    protected $routeSpace = 'channels';
 
     /**
      * Show all of the message threads to the user.
@@ -37,7 +31,6 @@ class ChannelsController extends MessagesController
 
         $threads = Thread::publicThread(Channel::first())->latest('updated_at')->get();
 
-        return view( $this->viewSpace . '.index', compact('threads'));
+        return view($this->viewSpace . '.index', compact('threads'));
     }
-
 }

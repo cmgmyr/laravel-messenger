@@ -30,9 +30,9 @@ class AddPolymorphToThreadsTable extends Migration
     public function down()
     {
         Schema::table(Models::table('threads'), function (Blueprint $table) {
-           $table->dropColumn('object_id');
-           $table->dropColumn('object_type');
-           $table->dropColumn('is_public');
-       });
+            $table->dropColumn('object_id');
+            $table->dropColumn('object_type');
+            $table->dropColumn('is_public');
+        });
     }
 }

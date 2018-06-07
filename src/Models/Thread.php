@@ -130,19 +130,18 @@ class Thread extends Eloquent
      */
     public function getPublic()
     {
-
         return $this->belongsTo(
             Models::classname(Thread::class)
         )->where([
-            'object_type'   => Models::classname(self::class),
-            'object_id'     => 1,
-            'is_public'     => true,
+            'object_type' => Models::classname(self::class),
+            'object_id' => 1,
+            'is_public' => true,
         ]);
 
         return Thread::where([
-            'object_type'   => Models::classname(self::class),
-            'object_id'     => 1,
-            'is_public'     => true,
+            'object_type' => Models::classname(self::class),
+            'object_id' => 1,
+            'is_public' => true,
         ]);
     }
 

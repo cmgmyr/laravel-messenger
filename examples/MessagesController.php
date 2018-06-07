@@ -14,9 +14,8 @@ use Illuminate\Support\Facades\Session;
 
 class MessagesController extends Controller
 {
-
-    protected $viewSpace    = 'messenger';
-    protected $routeSpace   = 'messages';
+    protected $viewSpace = 'messenger';
+    protected $routeSpace = 'messages';
 
     /**
      * Show all of the message threads to the user.
@@ -34,7 +33,7 @@ class MessagesController extends Controller
         // All threads that user is participating in, with new messages
         // $threads = Thread::forUserWithNewMessages(Auth::id())->latest('updated_at')->get();
 
-        return view( $this->viewSpace . '.index', compact('threads'));
+        return view($this->viewSpace . '.index', compact('threads'));
     }
 
     /**
@@ -50,7 +49,7 @@ class MessagesController extends Controller
         } catch (ModelNotFoundException $e) {
             Session::flash('error_message', 'The thread with ID: ' . $id . ' was not found.');
 
-            return redirect()->route( $this->routeSpace );
+            return redirect()->route($this->routeSpace);
         }
 
         // show current user in list if not a current participant
@@ -62,7 +61,7 @@ class MessagesController extends Controller
 
         $thread->markAsRead($userId);
 
-        return view( $this->viewSpace . '.show', compact('thread', 'users'));
+        return view($this->viewSpace . '.show', compact('thread', 'users'));
     }
 
     /**
@@ -74,7 +73,7 @@ class MessagesController extends Controller
     {
         $users = User::where('id', '!=', Auth::id())->get();
 
-        return view( $this->viewSpace . '.create', compact('users'));
+        return view($this->viewSpace . '.create', compact('users'));
     }
 
     /**
@@ -109,7 +108,7 @@ class MessagesController extends Controller
             $thread->addParticipant($input['recipients']);
         }
 
-        return redirect()->route( $this->routeSpace );
+        return redirect()->route($this->routeSpace);
     }
 
     /**
@@ -125,7 +124,7 @@ class MessagesController extends Controller
         } catch (ModelNotFoundException $e) {
             Session::flash('error_message', 'The thread with ID: ' . $id . ' was not found.');
 
-            return redirect()->route( $this->routeSpace );
+            return redirect()->route($this->routeSpace);
         }
 
         $thread->activateAllParticipants();
@@ -150,6 +149,6 @@ class MessagesController extends Controller
             $thread->addParticipant(Input::get('recipients'));
         }
 
-        return redirect()->route( $this->routeSpace .'.show', $id);
+        return redirect()->route($this->routeSpace . '.show', $id);
     }
 }
