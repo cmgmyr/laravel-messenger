@@ -39,7 +39,7 @@ class Thread extends Eloquent
      * @var null|Models::user()
      */
     protected $creatorCache = null;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -119,30 +119,6 @@ class Thread extends Eloquent
     public static function getAllLatest()
     {
         return static::latest('updated_at');
-    }
-
-    /**
-     * Thread relationship.
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     *
-     * @codeCoverageIgnore
-     */
-    public function getPublic()
-    {
-        return $this->belongsTo(
-            Models::classname(Thread::class)
-        )->where([
-            'object_type' => Models::classname(self::class),
-            'object_id' => 1,
-            'is_public' => true,
-        ]);
-
-        return Thread::where([
-            'object_type' => Models::classname(self::class),
-            'object_id' => 1,
-            'is_public' => true,
-        ]);
     }
 
     /**
