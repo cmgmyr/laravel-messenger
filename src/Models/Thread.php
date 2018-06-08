@@ -154,18 +154,18 @@ class Thread extends Eloquent
     }
 
     /**
-     * Thread relationship.
+     * Get public thread for passed object
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param object $object
      *
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopePublicThread(Builder $query, $object)
+    public function scopeObjectPublicThread(Builder $query, $object)
     {
         return $query->where([
             'object_type' => get_class($object),
-            'object_id' => 1,
+            'object_id' => $object->getKey(),
             'is_public' => true,
         ]);
     }
@@ -228,6 +228,19 @@ class Thread extends Eloquent
                 ->groupBy('thread_id')
                 ->havingRaw('COUNT(thread_id)=' . count($participants));
         });
+    }
+
+    /**
+     * Returns threads that match public value.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param bool $isPublic
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopeByIsPublic(Builder $query, $isPublic = true)
+    {
+        return $query->where('is_public', $isPublic);
     }
 
     /**
