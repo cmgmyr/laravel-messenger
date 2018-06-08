@@ -154,6 +154,23 @@ class Thread extends Eloquent
     }
 
     /**
+     * Thread relationship.
+     *
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param object $object
+     *
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    public function scopePublicThread(Builder $query, $object)
+    {
+        return $query->where([
+            'object_type' => get_class($object),
+            'object_id' => 1,
+            'is_public' => true,
+        ]);
+    }
+
+    /**
      * Returns threads that the user is associated with.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
