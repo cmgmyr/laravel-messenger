@@ -29,7 +29,7 @@ class ChannelsController extends MessagesController
         // All threads that user is participating in, with new messages
         // $threads = Thread::forUserWithNewMessages(Auth::id())->latest('updated_at')->get();
 
-        $threads = Thread::publicThread(Channel::first())->latest('updated_at')->get();
+        $threads = Thread::objectPublicThread(Channel::first())->latest('updated_at')->get();
 
         return view($this->viewSpace . '.index', compact('threads'));
     }
