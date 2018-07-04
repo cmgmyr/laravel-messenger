@@ -125,7 +125,7 @@ If you discover any security related issues, please email [Chris Gmyr](mailto:cm
 ## Credits
 
 - [Chris Gmyr](https://github.com/cmgmyr)
-- [Anton Komarev](https://github.com/a-komarev)
+- [Anton Komarev](https://github.com/antonkomarev)
 - [All Contributors](../../contributors)
 
 ### Special Thanks
