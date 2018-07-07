@@ -2,7 +2,7 @@
 
 @section('content')
     <h1>Create a new message</h1>
-    <form action="{{ route('messages.store') }}" method="post">
+    <form action="{{ route($routeSpace.'.store') }}" method="post">
         {{ csrf_field() }}
         <div class="col-md-6">
             <!-- Subject Form Input -->
@@ -26,7 +26,7 @@
                     @endforeach
                 </div>
             @endif
-    
+
             <!-- Submit Form Input -->
             <div class="form-group">
                 <button type="submit" class="btn btn-primary form-control">Submit</button>
