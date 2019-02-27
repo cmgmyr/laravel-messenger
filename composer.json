@@ -20,7 +20,7 @@
     "require-dev": {
         "adamwathan/faktory": "0.3.*",
         "friendsofphp/php-cs-fixer": "^2.5",
-        "orchestra/testbench": "~3.5.0|~3.6.0|~3.7.0|~3.8.0",
+        "orchestra/testbench": "~3.0",
         "phpunit/phpunit": "^7.0|^8.0"
     },
     "autoload": {
