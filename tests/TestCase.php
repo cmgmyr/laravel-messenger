@@ -19,7 +19,7 @@ class TestCase extends Orchestra
     /**
      * Set up the database, migrations, and initial data.
      */
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
 
