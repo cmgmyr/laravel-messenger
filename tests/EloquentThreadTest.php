@@ -2,16 +2,16 @@
 
 namespace Cmgmyr\Messenger\Test;
 
-use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Support\Carbon;
 use ReflectionClass;
 
 class EloquentThreadTest extends TestCase
 {
-    public function setUp()
+    public function setUp(): void
     {
         parent::setUp();
         Eloquent::unguard();
@@ -22,6 +22,8 @@ class EloquentThreadTest extends TestCase
      *
      * @param $name
      * @return \ReflectionMethod
+     *
+     * @throws \ReflectionException
      */
     protected static function getMethod($name)
     {
