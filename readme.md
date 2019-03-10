@@ -25,7 +25,15 @@ This package will allow you to add a full user messaging system into your Larave
 * Group messaging (only participants can see their threads)
 * One to one messaging (private or direct thread)
 
-## Installation (Laravel 4.x)
+## Laravel Versions
+
+Laravel | Messenger
+--- | ---
+4.* | 1.*
+5.0-5.4 | <= 2.16.2
+5.5+ | 2.*
+
+## Installation (Laravel 4.x - no longer actively supported)
 Installation instructions for Laravel 4 can be [found here](https://github.com/cmgmyr/laravel-messenger/tree/v1).
 
 ## Installation (Laravel 5.x)
