@@ -411,7 +411,10 @@ class Thread extends Eloquent
         }
 
         return $messages->filter(function ($message) use ($participant) {
-            return $message->updated_at->gt($participant->last_read);
+            // Only count messages the participant didn't send
+            if ($userId != $message->user_id) {
+                return $message->updated_at->gt($participant->last_read);
+            }
         });
     }
 
