@@ -7,17 +7,18 @@ php:
   - nightly
 
 matrix:
+  include:
+    - php: 7.1
+      env: 'COMPOSER_FLAGS="--prefer-stable --prefer-lowest"'
   allow_failures:
   - php: nightly
 
-## Cache composer
 cache:
   directories:
     - $HOME/.composer/cache
 
 before_script:
   - travis_retry composer update ${COMPOSER_FLAGS} --no-interaction --prefer-dist
-  - composer dumpautoload -o
 
 script:
   - vendor/bin/php-cs-fixer fix .

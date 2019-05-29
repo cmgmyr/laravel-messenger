@@ -6,9 +6,9 @@ use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
-use Cmgmyr\Messenger\Test\Stubs\Models\CustomMessage;
-use Cmgmyr\Messenger\Test\Stubs\Models\CustomParticipant;
-use Cmgmyr\Messenger\Test\Stubs\Models\CustomThread;
+use Cmgmyr\Messenger\Tests\Stubs\Models\CustomMessage;
+use Cmgmyr\Messenger\Tests\Stubs\Models\CustomParticipant;
+use Cmgmyr\Messenger\Tests\Stubs\Models\CustomThread;
 
 class CustomModelsTest extends TestCase
 {
