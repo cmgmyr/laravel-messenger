@@ -168,7 +168,7 @@ class Thread extends Eloquent
 
         return $query->join($participantsTable, $this->getQualifiedKeyName(), '=', $participantsTable . '.thread_id')
             ->where($participantsTable . '.user_id', $userId)
-            ->where($participantsTable . '.deleted_at', null)
+            ->whereNull($participantsTable . '.deleted_at')
             ->select($threadsTable . '.*');
     }
 
