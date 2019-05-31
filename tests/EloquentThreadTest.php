@@ -413,6 +413,7 @@ class EloquentThreadTest extends TestCase
         $message_1 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
             'body' => 'Message 1',
+            'user_id' => $participant_1->user_id,
         ]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
@@ -426,19 +427,20 @@ class EloquentThreadTest extends TestCase
         $message_2 = $this->faktory->build('message', [
             'created_at' => Carbon::now(),
             'body' => 'Message 2',
+            'user_id' => $participant_1->user_id,
         ]);
 
         $thread->messages()->saveMany([$message_2]);
 
-        $this->assertEquals('Message 1', $thread->userUnreadMessages(1)->first()->body);
-        $this->assertCount(2, $thread->userUnreadMessages(1));
+        $this->assertCount(0, $thread->userUnreadMessages($participant_1->user_id));
 
-        $this->assertEquals('Message 2', $thread->userUnreadMessages(2)->first()->body);
-        $this->assertCount(1, $thread->userUnreadMessages(2));
+        $secondParticipantUnreadMessages = $thread->userUnreadMessages($participant_2->user_id);
+        $this->assertCount(1, $secondParticipantUnreadMessages);
+        $this->assertEquals('Message 2', $secondParticipantUnreadMessages->first()->body);
     }
 
     /** @test */
-    public function it_should_get_count_of_all_unread_messages_for_user()
+    public function it_should_get_all_unread_messages_for_user_when_dates_not_set()
     {
         $thread = $this->faktory->create('thread');
 
@@ -446,8 +448,9 @@ class EloquentThreadTest extends TestCase
         $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
 
         $message_1 = $this->faktory->build('message', [
-            'created_at' => Carbon::now(),
+//            'created_at' => Carbon::now(),
             'body' => 'Message 1',
+            'user_id' => $participant_1->user_id,
         ]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
@@ -459,15 +462,18 @@ class EloquentThreadTest extends TestCase
         sleep(1);
 
         $message_2 = $this->faktory->build('message', [
-            'created_at' => Carbon::now(),
+//            'created_at' => Carbon::now(),
             'body' => 'Message 2',
+            'user_id' => $participant_1->user_id,
         ]);
 
         $thread->messages()->saveMany([$message_2]);
 
-        $this->assertEquals(2, $thread->userUnreadMessagesCount(1));
+        $this->assertCount(0, $thread->userUnreadMessages($participant_1->user_id));
 
-        $this->assertEquals(1, $thread->userUnreadMessagesCount(2));
+        $secondParticipantUnreadMessages = $thread->userUnreadMessages($participant_2->user_id);
+        $this->assertCount(1, $secondParticipantUnreadMessages);
+        $this->assertEquals('Message 2', $secondParticipantUnreadMessages->first()->body);
     }
 
     /** @test */

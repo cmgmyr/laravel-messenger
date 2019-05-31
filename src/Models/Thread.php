@@ -398,7 +398,7 @@ class Thread extends Eloquent
      */
     public function userUnreadMessages($userId)
     {
-        $messages = $this->messages()->get();
+        $messages = $this->messages()->where('user_id', '!=', $userId)->get();
 
         try {
             $participant = $this->getParticipantFromUser($userId);
