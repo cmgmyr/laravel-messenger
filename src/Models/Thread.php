@@ -142,12 +142,11 @@ class Thread extends Eloquent
      */
     public function participantsUserIds($userId = null)
     {
-        /** @var \Illuminate\Support\Collection $users */
         $users = $this->participants()->withTrashed()->select('user_id')->get()->map(function ($participant) {
             return $participant->user_id;
         });
 
-        if ($userId) {
+        if ($userId !== null) {
             $users->push($userId);
         }
 
