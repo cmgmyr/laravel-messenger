@@ -36,9 +36,9 @@ class Thread extends Eloquent
     /**
      * Internal cache for creator.
      *
-     * @var null|Models::user()
+     * @var null|Models::user()|\Illuminate\Database\Eloquent\Model
      */
-    protected $creatorCache = null;
+    protected $creatorCache;
     
     /**
      * {@inheritDoc}
@@ -99,11 +99,11 @@ class Thread extends Eloquent
     /**
      * Returns the user object that created the thread.
      *
-     * @return Models::user()
+     * @return null|Models::user()|\Illuminate\Database\Eloquent\Model
      */
     public function creator()
     {
-        if (is_null($this->creatorCache)) {
+        if ($this->creatorCache === null) {
             $firstMessage = $this->messages()->withTrashed()->oldest()->first();
             $this->creatorCache = $firstMessage ? $firstMessage->user : Models::user();
         }
@@ -136,12 +136,13 @@ class Thread extends Eloquent
     /**
      * Returns an array of user ids that are associated with the thread.
      *
-     * @param null $userId
+     * @param null|int $userId
      *
      * @return array
      */
     public function participantsUserIds($userId = null)
     {
+        /** @var \Illuminate\Support\Collection $users */
         $users = $this->participants()->withTrashed()->select('user_id')->get()->map(function ($participant) {
             return $participant->user_id;
         });
@@ -351,11 +352,8 @@ class Thread extends Eloquent
     public function hasParticipant($userId)
     {
         $participants = $this->participants()->where('user_id', '=', $userId);
-        if ($participants->count() > 0) {
-            return true;
-        }
 
-        return false;
+        return $participants->count() > 0;
     }
 
     /**
