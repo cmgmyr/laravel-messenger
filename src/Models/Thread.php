@@ -36,9 +36,9 @@ class Thread extends Eloquent
     /**
      * Internal cache for creator.
      *
-     * @var null|Models::user()
+     * @var null|Models::user()|\Illuminate\Database\Eloquent\Model
      */
-    protected $creatorCache = null;
+    protected $creatorCache;
     
     /**
      * {@inheritDoc}
@@ -99,11 +99,11 @@ class Thread extends Eloquent
     /**
      * Returns the user object that created the thread.
      *
-     * @return Models::user()
+     * @return null|Models::user()|\Illuminate\Database\Eloquent\Model
      */
     public function creator()
     {
-        if (is_null($this->creatorCache)) {
+        if ($this->creatorCache === null) {
             $firstMessage = $this->messages()->withTrashed()->oldest()->first();
             $this->creatorCache = $firstMessage ? $firstMessage->user : Models::user();
         }
@@ -136,7 +136,7 @@ class Thread extends Eloquent
     /**
      * Returns an array of user ids that are associated with the thread.
      *
-     * @param null $userId
+     * @param null|int $userId
      *
      * @return array
      */
@@ -146,7 +146,7 @@ class Thread extends Eloquent
             return $participant->user_id;
         });
 
-        if ($userId) {
+        if ($userId !== null) {
             $users->push($userId);
         }
 
@@ -168,7 +168,7 @@ class Thread extends Eloquent
 
         return $query->join($participantsTable, $this->getQualifiedKeyName(), '=', $participantsTable . '.thread_id')
             ->where($participantsTable . '.user_id', $userId)
-            ->where($participantsTable . '.deleted_at', null)
+            ->whereNull($participantsTable . '.deleted_at')
             ->select($threadsTable . '.*');
     }
 
@@ -351,11 +351,8 @@ class Thread extends Eloquent
     public function hasParticipant($userId)
     {
         $participants = $this->participants()->where('user_id', '=', $userId);
-        if ($participants->count() > 0) {
-            return true;
-        }
 
-        return false;
+        return $participants->count() > 0;
     }
 
     /**
@@ -398,7 +395,7 @@ class Thread extends Eloquent
      */
     public function userUnreadMessages($userId)
     {
-        $messages = $this->messages()->get();
+        $messages = $this->messages()->where('user_id', '!=', $userId)->get();
 
         try {
             $participant = $this->getParticipantFromUser($userId);

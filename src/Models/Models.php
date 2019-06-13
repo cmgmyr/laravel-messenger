@@ -83,11 +83,7 @@ class Models
      */
     public static function table($table)
     {
-        if (isset(static::$tables[$table])) {
-            return static::$tables[$table];
-        }
-
-        return $table;
+        return static::$tables[$table] ?? $table;
     }
 
     /**
@@ -98,11 +94,7 @@ class Models
      */
     public static function classname($model)
     {
-        if (isset(static::$models[$model])) {
-            return static::$models[$model];
-        }
-
-        return $model;
+        return static::$models[$model] ?? $model;
     }
 
     /**

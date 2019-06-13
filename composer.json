@@ -21,7 +21,7 @@
         "adamwathan/faktory": "0.3.*",
         "friendsofphp/php-cs-fixer": "^2.5",
         "orchestra/testbench": "~3.0",
-        "phpunit/phpunit": "^7.0|^8.0"
+        "phpunit/phpunit": "^7.0"
     },
     "autoload": {
         "psr-4": {
@@ -30,8 +30,16 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Cmgmyr\\Messenger\\Test\\": "tests/"
+            "Cmgmyr\\Messenger\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "test": "vendor/bin/phpunit",
+        "test-coverage": "vendor/bin/phpunit --coverage-html build/coverage",
+        "format": "vendor/bin/php-cs-fixer fix"
+    },
+    "config": {
+        "sort-packages": true
     },
     "extra": {
         "laravel": {
@@ -39,9 +47,5 @@
                 "Cmgmyr\\Messenger\\MessengerServiceProvider"
             ]
         }
-    },
-    "config": {
-        "sort-packages": true
-    },
-    "minimum-stability": "stable"
+    }
 }

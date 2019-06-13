@@ -1,6 +1,6 @@
 <?php
 
-namespace Cmgmyr\Messenger\Test\Stubs\Models;
+namespace Cmgmyr\Messenger\Tests\Stubs\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
