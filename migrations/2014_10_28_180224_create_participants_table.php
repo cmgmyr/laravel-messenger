@@ -19,7 +19,13 @@ class CreateParticipantsTable extends Migration
             $table->integer('thread_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->timestamp('last_read')->nullable();
+            $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::table(Models::table('participants'), function (Blueprint $table) {
+            $table->foreign('thread_id')->references('id')->on(Models::table('threads'));
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 

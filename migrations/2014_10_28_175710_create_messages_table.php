@@ -19,7 +19,13 @@ class CreateMessagesTable extends Migration
             $table->integer('thread_id')->unsigned();
             $table->integer('user_id')->unsigned();
             $table->text('body');
+            $table->softDeletes();
             $table->timestamps();
+        });
+
+        Schema::table(Models::table('messages'), function (Blueprint $table) {
+            $table->foreign('thread_id')->references('id')->on(Models::table('threads'));
+            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
