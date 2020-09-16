@@ -6,6 +6,7 @@ use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Carbon;
 use ReflectionClass;
 
@@ -126,7 +127,7 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(4, $participantIds);
         $this->assertEquals(999, end($participantIds));
 
-        $this->assertInternalType('array', $participantIds);
+        $this->assertIsArray($participantIds);
     }
 
     /** @test */
@@ -154,8 +155,9 @@ class EloquentThreadTest extends TestCase
         $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
         $thread->participants()->saveMany([$user_1, $user_2]);
 
-        $threadUserIds = $thread->users()->get()->pluck('id')->toArray();
-        $this->assertArraySubset([1, 2], $threadUserIds);
+        $threadUserIds = $thread->users()->get()->pluck('id')->values()->flip();
+        $this->assertArrayHasKey(1, $threadUserIds);
+        $this->assertArrayHasKey(2, $threadUserIds);
     }
 
     /** @test */
@@ -273,15 +275,19 @@ class EloquentThreadTest extends TestCase
         $this->assertInstanceOf(Participant::class, $newParticipant);
     }
 
-    /**
-     * @test
-     * @expectedException \Illuminate\Database\Eloquent\ModelNotFoundException
-     */
+    /** @test */
     public function it_should_throw_an_exception_when_participant_is_not_found()
     {
-        $thread = $this->faktory->create('thread');
+        try {
+            $thread = $this->faktory->create('thread');
 
-        $thread->getParticipantFromUser(99);
+            $thread->getParticipantFromUser(99);
+        } catch (ModelNotFoundException $e) {
+            $this->assertTrue(true);
+            return;
+        }
+
+        $this->fail('ModelNotFoundException was not called.');
     }
 
     /** @test */
