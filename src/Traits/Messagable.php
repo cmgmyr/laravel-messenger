@@ -84,4 +84,26 @@ trait Messagable
                 $q->orWhere(Models::table('threads') . '.updated_at', '>', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . Models::table('participants') . '.last_read'));
             })->get();
     }
+
+    /**
+     * Returns all threads trashed by this user.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function trashedThreads()
+    {
+        return $this->threads()
+                    ->whereNotNull(Models::table('participants') . '.deleted_at')
+                    ->get();
+    }
+
+    /**
+     * Returns the count of the threads trashed by this user
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
+     */
+    public function trashedThreadsCount()
+    {
+        return $this->trashedThreads()->count();
+    }
 }
