@@ -12,7 +12,7 @@
         }
     ],
     "require": {
-        "php": "^7.2",
+        "php": "^7.2|^8.0",
         "illuminate/config": "^5.5|^6.0|^7.0|^8.0",
         "illuminate/support": "^5.5|^6.0|^7.0|^8.0",
         "illuminate/database": "^5.5|^6.0|^7.0|^8.0"
@@ -21,7 +21,7 @@
         "adamwathan/faktory": "0.3.*",
         "friendsofphp/php-cs-fixer": "^2.5",
         "orchestra/testbench": "^3.0|^4.0|^5.0|^6.0",
-        "phpunit/phpunit": "^8.0"
+        "phpunit/phpunit": "^8.0|^9.3.3"
     },
     "autoload": {
         "psr-4": {
