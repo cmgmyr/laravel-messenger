@@ -19,7 +19,7 @@
     },
     "require-dev": {
         "adamwathan/faktory": "0.3.*",
-        "friendsofphp/php-cs-fixer": "^2.5",
+        "friendsofphp/php-cs-fixer": "^2.17",
         "orchestra/testbench": "^3.0|^4.0|^5.0|^6.0",
         "phpunit/phpunit": "^8.0|^9.3.3"
     },
