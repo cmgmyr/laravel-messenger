@@ -105,7 +105,7 @@ class Message extends Eloquent
     {
         return $query->has('thread')
             ->where('user_id', '!=', $userId)
-            ->whereHas('participants', function (Builder $query) use ($userId) {
+            ->whereHas('thread.participants', function (Builder $query) use ($userId) {
                 $query->where('user_id', $userId)
                     ->where(function (Builder $q) {
                         $q->where('last_read', '<', $this->getConnection()->raw($this->getConnection()->getTablePrefix() . $this->getTable() . '.created_at'))
