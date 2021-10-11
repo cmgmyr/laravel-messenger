@@ -108,7 +108,7 @@ class Message extends Eloquent
      * @param int $userId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeUnreadForUser(Builder $query,int $userId): Builder
+    public function scopeUnreadForUser(Builder $query, int $userId): Builder
     {
         return $query->has('thread')
             ->where('user_id', '!=', $userId)
