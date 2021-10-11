@@ -42,7 +42,7 @@ class TestCase extends Orchestra
      *
      * @return void
      */
-    protected function getEnvironmentSetUp($app)
+    protected function getEnvironmentSetUp($app): void
     {
         $app['config']->set('messenger.message_model', 'Cmgmyr\Messenger\Models\Message');
         $app['config']->set('messenger.participant_model', 'Cmgmyr\Messenger\Models\Participant');
@@ -52,7 +52,7 @@ class TestCase extends Orchestra
     /**
      * Configure the database.
      */
-    private function configureDatabase()
+    private function configureDatabase(): void
     {
         $db = new DB;
         $db->addConnection(
@@ -72,7 +72,7 @@ class TestCase extends Orchestra
     /**
      * Run the migrations for the database.
      */
-    private function migrateTables()
+    private function migrateTables(): void
     {
         $this->createUsersTable();
         $this->createThreadsTable();
@@ -85,7 +85,7 @@ class TestCase extends Orchestra
     /**
      * Create the users table in the database.
      */
-    private function createUsersTable()
+    private function createUsersTable(): void
     {
         DB::schema()->create(
             'users',
@@ -107,12 +107,13 @@ class TestCase extends Orchestra
         DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [1, 'Chris Gmyr', 'chris@test.com']);
         DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [2, 'Adam Wathan', 'adam@test.com']);
         DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [3, 'Taylor Otwell', 'taylor@test.com']);
+        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [4, 'Abdullah Al-Faqeir', 'abdullah@test.com']);
     }
 
     /**
      * Create the threads table in the database.
      */
-    private function createThreadsTable()
+    private function createThreadsTable(): void
     {
         DB::schema()->create(
             'threads',
@@ -128,7 +129,7 @@ class TestCase extends Orchestra
     /**
      * Create the messages table in the database.
      */
-    private function createMessagesTable()
+    private function createMessagesTable(): void
     {
         DB::schema()->create(
             'messages',
@@ -146,7 +147,7 @@ class TestCase extends Orchestra
     /**
      * Create the participants table in the database.
      */
-    private function createParticipantsTable()
+    private function createParticipantsTable(): void
     {
         DB::schema()->create(
             'participants',

@@ -16,7 +16,7 @@ class MessagableTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_threads_with_new_messages()
+    public function it_should_get_all_threads_with_new_messages(): void
     {
         $user = User::create(
             [
@@ -49,7 +49,7 @@ class MessagableTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_get_all_incoming_messages_count_for_user()
+    public function it_get_all_incoming_messages_count_for_user(): void
     {
         $user = User::create(
             [
@@ -83,7 +83,7 @@ class MessagableTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_participant_threads()
+    public function it_should_get_participant_threads(): void
     {
         $user = User::create(
             [
