@@ -374,10 +374,12 @@ class Thread extends Eloquent
         case 'sqlite':
             $columnString = implode(" || ' ' || " . $tablePrefix . $usersTable . '.', $columns);
             $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+
             break;
         case 'sqlsrv':
             $columnString = implode(" + ' ' + " . $tablePrefix . $usersTable . '.', $columns);
             $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+
             break;
         default:
             $columnString = implode(", ' ', " . $tablePrefix . $usersTable . '.', $columns);

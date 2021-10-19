@@ -284,6 +284,7 @@ class EloquentThreadTest extends TestCase
             $thread->getParticipantFromUser(99);
         } catch (ModelNotFoundException $e) {
             $this->assertTrue(true);
+
             return;
         }
 
