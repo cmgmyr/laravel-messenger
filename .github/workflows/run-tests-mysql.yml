@@ -33,6 +33,7 @@ jobs:
           --health-retries=3
 
     strategy:
+      fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
         php-versions: [ '8.0' ]
@@ -74,6 +75,6 @@ jobs:
           DB_CONNECTION: mysql
           DB_DATABASE: db_test_laravel
           DB_PORT: 33306
-          DB_USER: root
+          DB_USERNAME: root
 
         run: vendor/bin/phpunit --testdox
