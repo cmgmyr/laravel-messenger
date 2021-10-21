@@ -2,16 +2,8 @@
 
 namespace Cmgmyr\Messenger\Tests;
 
-use Illuminate\Database\Eloquent\Model as Eloquent;
-
 class EloquentMessageTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        Eloquent::unguard();
-    }
-
     /** @test */
     public function it_should_get_the_recipients_of_a_message()
     {

@@ -18,13 +18,11 @@ class MessagableTraitTest extends TestCase
     /** @test */
     public function it_should_get_all_threads_with_new_messages()
     {
-        $user = User::create(
-            [
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
-                'notify' => 'y',
-            ]
-        );
+        $user = User::create([
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
 
         $thread = $this->faktory->create('thread');
         $user_1 = $this->faktory->build('participant', ['user_id' => $user->id, 'last_read' => Carbon::yesterday()]);
@@ -51,13 +49,11 @@ class MessagableTraitTest extends TestCase
     /** @test */
     public function it_get_all_incoming_messages_count_for_user()
     {
-        $user = User::create(
-            [
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
-                'notify' => 'y',
-            ]
-        );
+        $user = User::create([
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
 
         $thread_1 = $this->faktory->create('thread');
         $participant_11 = $this->faktory->build('participant', ['user_id' => $user->id, 'last_read' => Carbon::now()->subDays(5)]);
@@ -85,12 +81,12 @@ class MessagableTraitTest extends TestCase
     /** @test */
     public function it_should_get_participant_threads()
     {
-        $user = User::create(
-            [
-                'name' => 'Jane Doe',
-                'email' => 'jane@example.com',
-            ]
-        );
+        $user = User::create([
+            'name' => 'Jane Doe',
+            'email' => 'jane@example.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+
         $thread = $this->faktory->create('thread');
         $user_1 = $this->faktory->build('participant', ['user_id' => $user->id]);
         $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
@@ -107,5 +103,5 @@ class User extends Eloquent
 
     protected $table = 'users';
 
-    protected $fillable = ['name', 'email', 'notify'];
+    protected $guarded = [];
 }

@@ -12,12 +12,6 @@ use ReflectionClass;
 
 class EloquentThreadTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        Eloquent::unguard();
-    }
-
     /**
      * Activate private/protected methods for testing.
      *
@@ -321,11 +315,24 @@ class EloquentThreadTest extends TestCase
 
         $columns = ['name'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals('(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.name) as name', $select);
+        $expectedString = '(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.name) as name';
+
+        if (in_array(config('database.connections.testbench.driver'), ['mysql', 'pgsql'])) {
+            $this->assertEquals('concat' . $expectedString, $select);
+        } else {
+            $this->assertEquals($expectedString, $select);
+        }
 
         $columns = ['name', 'email'];
         $select = $method->invokeArgs($thread, [$columns]);
-        $this->assertEquals('(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
+
+        $expectedString = '(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name';
+
+        if (in_array(config('database.connections.testbench.driver'), ['mysql', 'pgsql'])) {
+            $this->assertEquals('concat' . $expectedString, $select);
+        } else {
+            $this->assertEquals($expectedString, $select);
+        }
     }
 
     /** @test */

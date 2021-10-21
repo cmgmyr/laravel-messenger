@@ -2,162 +2,102 @@
 
 namespace Cmgmyr\Messenger\Tests;
 
-date_default_timezone_set('America/New_York');
-
 use AdamWathan\Faktory\Faktory;
+use Cmgmyr\Messenger\MessengerServiceProvider;
+use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Models;
-use Illuminate\Database\Capsule\Manager as DB;
-use Orchestra\Testbench\TestCase as Orchestra;
+use Cmgmyr\Messenger\Models\Participant;
+use Cmgmyr\Messenger\Models\Thread;
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-class TestCase extends Orchestra
+class TestCase extends OrchestraTestCase
 {
+    use RefreshDatabase;
+
     /**
      * @var \AdamWathan\Faktory\Faktory
      */
     protected $faktory;
 
-    /**
-     * Set up the database, migrations, and initial data.
-     */
+    protected $loadEnvironmentVariables = true;
+
     public function setUp(): void
     {
         parent::setUp();
 
-        $this->configureDatabase();
-        $this->migrateTables();
         $this->faktory = new Faktory;
         $load_factories = function ($faktory) {
             require __DIR__ . '/factories.php';
         };
         $load_factories($this->faktory);
 
+        Eloquent::unguard();
         $userModel = User::class;
         Models::setUserModel($userModel);
-    }
-
-    /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     *
-     * @return void
-     */
-    protected function getEnvironmentSetUp($app)
-    {
-        $app['config']->set('messenger.message_model', 'Cmgmyr\Messenger\Models\Message');
-        $app['config']->set('messenger.participant_model', 'Cmgmyr\Messenger\Models\Participant');
-        $app['config']->set('messenger.thread_model', 'Cmgmyr\Messenger\Models\Thread');
-    }
-
-    /**
-     * Configure the database.
-     */
-    private function configureDatabase()
-    {
-        $db = new DB;
-        $db->addConnection(
-            [
-                'driver' => 'sqlite',
-                'database' => ':memory:',
-                'charset' => 'utf8',
-                'collation' => 'utf8_unicode_ci',
-                'prefix' => '',
-            ]
-        );
-
-        $db->bootEloquent();
-        $db->setAsGlobal();
-    }
-
-    /**
-     * Run the migrations for the database.
-     */
-    private function migrateTables()
-    {
-        $this->createUsersTable();
-        $this->createThreadsTable();
-        $this->createMessagesTable();
-        $this->createParticipantsTable();
 
         $this->seedUsersTable();
     }
 
-    /**
-     * Create the users table in the database.
-     */
-    private function createUsersTable()
+    protected function getApplicationTimezone($app): string
     {
-        DB::schema()->create(
-            'users',
-            function ($table) {
-                $table->increments('id');
-                $table->string('name');
-                $table->string('email')->unique();
-                $table->enum('notify', ['y', 'n'])->default('y');
-                $table->timestamps();
-            }
-        );
+        return 'America/New_York';
     }
 
-    /**
-     * Create some users for the tests to use.
-     */
-    private function seedUsersTable()
+    protected function getPackageProviders($app): array
     {
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [1, 'Chris Gmyr', 'chris@test.com']);
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [2, 'Adam Wathan', 'adam@test.com']);
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [3, 'Taylor Otwell', 'taylor@test.com']);
+        return [
+            MessengerServiceProvider::class,
+        ];
     }
 
-    /**
-     * Create the threads table in the database.
-     */
-    private function createThreadsTable()
+    protected function defineDatabaseMigrations(): void
     {
-        DB::schema()->create(
-            'threads',
-            function ($table) {
-                $table->increments('id');
-                $table->string('subject');
-                $table->timestamps();
-                $table->softDeletes();
-            }
-        );
+        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
 
-    /**
-     * Create the messages table in the database.
-     */
-    private function createMessagesTable()
+    protected function getEnvironmentSetUp($app): void
     {
-        DB::schema()->create(
-            'messages',
-            function ($table) {
-                $table->increments('id');
-                $table->integer('thread_id')->unsigned();
-                $table->integer('user_id')->unsigned();
-                $table->text('body');
-                $table->timestamps();
-                $table->softDeletes();
-            }
-        );
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver' => env('DB_CONNECTION', 'sqlite'),
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT'),
+            'database' => env('DB_DATABASE', ':memory:'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+        ]);
+
+        $app['config']->set('messenger.user_model', User::class);
+        $app['config']->set('messenger.message_model', Message::class);
+        $app['config']->set('messenger.participant_model', Participant::class);
+        $app['config']->set('messenger.thread_model', Thread::class);
     }
 
-    /**
-     * Create the participants table in the database.
-     */
-    private function createParticipantsTable()
+    private function seedUsersTable(): void
     {
-        DB::schema()->create(
-            'participants',
-            function ($table) {
-                $table->increments('id');
-                $table->integer('thread_id')->unsigned();
-                $table->integer('user_id')->unsigned();
-                $table->timestamp('last_read')->nullable();
-                $table->timestamps();
-                $table->softDeletes();
-            }
-        );
+        User::create([
+            'id' => 1,
+            'name' => 'Chris Gmyr',
+            'email' => 'chris@test.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+
+        User::create([
+            'id' => 2,
+            'name' => 'Adam Wathan',
+            'email' => 'adam@test.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
+
+        User::create([
+            'id' => 3,
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@test.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ]);
     }
 }
