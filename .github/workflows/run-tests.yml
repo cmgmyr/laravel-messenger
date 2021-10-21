@@ -20,17 +20,21 @@ jobs:
         operating-system: [ubuntu-latest]
         php-versions: [ '8.0','7.4','7.3','7.2' ]
         dependency-stability: [ prefer-stable ]
-
         laravel: [ '8.*','7.*','6.*','5.8.*' ]
+
         include:
           - laravel:  8.*
             testbench: 6.*
+            dbal: ^3.1.2|^2.13.3
           - laravel:  7.*
             testbench: 5.*
+            dbal: ^2.6
           - laravel:  6.*
             testbench: 4.*
+            dbal: ^2.6
           - laravel:  5.8.*
             testbench: 3.8.*
+            dbal: ^2.6
         exclude:
           - laravel: 8.*
             php-versions: 7.3
@@ -64,7 +68,7 @@ jobs:
             ${{ runner.os }}-composer-
       - name: Install Laravel Dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "doctrine/dbal:${{ matrix.dbal }}" --no-interaction --no-update
           composer update --${{ matrix.dependency-stability }} --prefer-dist --no-interaction --no-suggest
 
       # Code quality
