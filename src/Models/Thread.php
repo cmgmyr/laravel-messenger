@@ -230,9 +230,9 @@ class Thread extends Eloquent
     {
         return $query->whereHas('participants', function (Builder $builder) use ($participants) {
             return $builder->whereIn('user_id', $participants)
-                           ->groupBy('thread_id')
-                           ->selectRaw('COUNT(*) AS total_participants')
-                           ->having('total_participants', '=', count($participants));
+                           ->groupBy('participants.thread_id')
+                           ->select('participants.thread_id')
+                           ->havingRaw('COUNT(participants.thread_id)=?', [count($participants)]);
         });
     }
 
