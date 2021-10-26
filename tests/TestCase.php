@@ -79,25 +79,31 @@ class TestCase extends OrchestraTestCase
 
     private function seedUsersTable(): void
     {
-        User::create([
+        $this->addUser([
             'id' => 1,
             'name' => 'Chris Gmyr',
             'email' => 'chris@test.com',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ]);
 
-        User::create([
+        $this->addUser([
             'id' => 2,
             'name' => 'Adam Wathan',
             'email' => 'adam@test.com',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ]);
 
-        User::create([
+        $this->addUser([
             'id' => 3,
             'name' => 'Taylor Otwell',
             'email' => 'taylor@test.com',
-            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ]);
+    }
+
+    protected function addUser(array $overrides = []): User
+    {
+        return User::create(array_merge([
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ], $overrides));
     }
 }
