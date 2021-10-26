@@ -9,12 +9,6 @@ use Illuminate\Support\Carbon;
 
 class MessagableTraitTest extends TestCase
 {
-    public function setUp(): void
-    {
-        parent::setUp();
-        Eloquent::unguard();
-    }
-
     /** @test */
     public function it_should_get_all_threads_with_new_messages()
     {

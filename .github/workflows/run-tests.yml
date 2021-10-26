@@ -20,7 +20,7 @@ jobs:
         operating-system: [ubuntu-latest]
         php-versions: [ '8.0','7.4','7.3','7.2' ]
         dependency-stability: [ prefer-stable ]
-        laravel: [ '8.*','7.*','6.*','5.8.*' ]
+        laravel: [ '8.*','7.*','6.*' ]
 
         include:
           - laravel:  8.*
@@ -32,9 +32,6 @@ jobs:
           - laravel:  6.*
             testbench: 4.*
             dbal: ^2.6
-          - laravel:  5.8.*
-            testbench: 3.8.*
-            dbal: ^2.6
         exclude:
           - laravel: 8.*
             php-versions: 7.3
@@ -43,8 +40,6 @@ jobs:
           - laravel: 7.*
             php-versions: 8.0
           - laravel: 6.*
-            php-versions: 8.0
-          - laravel: 5.8.*
             php-versions: 8.0
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}

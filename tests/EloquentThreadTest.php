@@ -317,7 +317,7 @@ class EloquentThreadTest extends TestCase
         $select = $method->invokeArgs($thread, [$columns]);
         $expectedString = '(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.name) as name';
 
-        if (in_array(config('database.connections.testbench.driver'), ['mysql', 'pgsql'])) {
+        if (config('database.connections.testbench.driver') === 'mysql') {
             $this->assertEquals('concat' . $expectedString, $select);
         } else {
             $this->assertEquals($expectedString, $select);
@@ -326,12 +326,10 @@ class EloquentThreadTest extends TestCase
         $columns = ['name', 'email'];
         $select = $method->invokeArgs($thread, [$columns]);
 
-        $expectedString = '(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name';
-
-        if (in_array(config('database.connections.testbench.driver'), ['mysql', 'pgsql'])) {
-            $this->assertEquals('concat' . $expectedString, $select);
+        if (config('database.connections.testbench.driver') === 'mysql') {
+            $this->assertEquals('concat(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name, ' ', " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
         } else {
-            $this->assertEquals($expectedString, $select);
+            $this->assertEquals('(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
         }
     }
 
