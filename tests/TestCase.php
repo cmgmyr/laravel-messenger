@@ -5,7 +5,6 @@ namespace Cmgmyr\Messenger\Tests;
 use AdamWathan\Faktory\Faktory;
 use Cmgmyr\Messenger\MessengerServiceProvider;
 use Cmgmyr\Messenger\Models\Message;
-use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
@@ -28,15 +27,12 @@ class TestCase extends OrchestraTestCase
         parent::setUp();
 
         $this->faktory = new Faktory;
-        $load_factories = function ($faktory) {
+        $load_factories = static function ($faktory) {
             require __DIR__ . '/factories.php';
         };
         $load_factories($this->faktory);
 
         Eloquent::unguard();
-        $userModel = User::class;
-        Models::setUserModel($userModel);
-
         $this->seedUsersTable();
     }
 
@@ -80,19 +76,16 @@ class TestCase extends OrchestraTestCase
     private function seedUsersTable(): void
     {
         $this->addUser([
-            'id' => 1,
             'name' => 'Chris Gmyr',
             'email' => 'chris@test.com',
         ]);
 
         $this->addUser([
-            'id' => 2,
             'name' => 'Adam Wathan',
             'email' => 'adam@test.com',
         ]);
 
         $this->addUser([
-            'id' => 3,
             'name' => 'Taylor Otwell',
             'email' => 'taylor@test.com',
         ]);

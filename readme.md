@@ -1,3 +1,7 @@
+![Test Suite](https://img.shields.io/github/workflow/status/cmgmyr/laravel-messenger/run-tests?style=flat-square)
+![Test Suite: MySQL](https://img.shields.io/github/workflow/status/cmgmyr/laravel-messenger/run-tests-mysql?style=flat-square)
+![Test Suite: Postgres](https://img.shields.io/github/workflow/status/cmgmyr/laravel-messenger/run-tests-postgres?style=flat-square)
+
 [![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg?style=flat-square)](https://github.com/cmgmyr/laravel-messenger/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg?style=flat-square)](https://packagist.org/packages/cmgmyr/messenger)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
