@@ -52,7 +52,7 @@ class TestCase extends OrchestraTestCase
 
     protected function defineDatabaseMigrations(): void
     {
-        $this->loadLaravelMigrations();
+//        $this->loadLaravelMigrations();
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
 
