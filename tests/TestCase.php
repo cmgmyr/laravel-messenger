@@ -97,12 +97,12 @@ class TestCase extends OrchestraTestCase
          * retry() is a "hack" to get the MySQL action to be less flaky
          * because sometimes the users table isn't available.
          */
-        return retry(3, static function () use ($overrides) {
+        return retry(5, static function () use ($overrides) {
             return User::create(array_merge([
                 'name' => 'John Doe',
                 'email' => 'john@example.com',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             ], $overrides));
-        }, 100);
+        }, 1000);
     }
 }
