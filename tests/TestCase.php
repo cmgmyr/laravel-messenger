@@ -77,15 +77,17 @@ class TestCase extends OrchestraTestCase
 
     private function ensureUsersTable($app): void
     {
-        $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->timestamps();
-        });
+        if (!$app['db']->connection()->getSchemaBuilder()->hasTable('users')) {
+            $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
+                $table->increments('id');
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->rememberToken();
+                $table->timestamps();
+            });
+        }
     }
 
     private function seedUsersTable(): void
