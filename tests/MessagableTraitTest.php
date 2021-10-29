@@ -3,8 +3,6 @@
 namespace Cmgmyr\Messenger\Tests;
 
 use Cmgmyr\Messenger\Models\Thread;
-use Cmgmyr\Messenger\Traits\Messagable;
-use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Support\Carbon;
 
 class MessagableTraitTest extends TestCase
@@ -77,13 +75,4 @@ class MessagableTraitTest extends TestCase
         $firstThread = $user->threads->first();
         $this->assertInstanceOf(Thread::class, $firstThread);
     }
-}
-
-class User extends Eloquent
-{
-    use Messagable;
-
-    protected $table = 'users';
-
-    protected $guarded = [];
 }
