@@ -8,6 +8,7 @@ use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -33,6 +34,7 @@ class TestCase extends OrchestraTestCase
         $load_factories($this->faktory);
 
         Eloquent::unguard();
+        $this->ensureUsersTable($this->app);
         $this->seedUsersTable();
     }
 
@@ -71,6 +73,21 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('messenger.message_model', Message::class);
         $app['config']->set('messenger.participant_model', Participant::class);
         $app['config']->set('messenger.thread_model', Thread::class);
+    }
+
+    private function ensureUsersTable($app): void
+    {
+        if (!$app['db']->connection()->getSchemaBuilder()->hasTable('users')) {
+            $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->string('email')->unique();
+                $table->timestamp('email_verified_at')->nullable();
+                $table->string('password');
+                $table->rememberToken();
+                $table->timestamps();
+            });
+        }
     }
 
     private function seedUsersTable(): void
