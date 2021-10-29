@@ -115,7 +115,7 @@ class TestCase extends OrchestraTestCase
          * because sometimes the users table isn't available.
          */
 //        return retry(5, static function () use ($overrides) {
-            return User::create(array_merge([
+        return User::create(array_merge([
                 'name' => 'John Doe',
                 'email' => 'john@example.com',
                 'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
