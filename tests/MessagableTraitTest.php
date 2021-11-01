@@ -8,7 +8,7 @@ use Illuminate\Support\Carbon;
 class MessagableTraitTest extends TestCase
 {
     /** @test */
-    public function it_should_get_all_threads_with_new_messages()
+    public function it_should_get_all_threads_with_new_messages(): void
     {
         $user = $this->userFactory();
 
@@ -35,7 +35,7 @@ class MessagableTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_get_all_incoming_messages_count_for_user()
+    public function it_get_all_incoming_messages_count_for_user(): void
     {
         $user = $this->userFactory();
 
@@ -63,7 +63,7 @@ class MessagableTraitTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_participant_threads()
+    public function it_should_get_participant_threads(): void
     {
         $user = $this->userFactory();
 
