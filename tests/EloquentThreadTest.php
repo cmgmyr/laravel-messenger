@@ -144,6 +144,8 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_get_all_user_entities_for_a_thread()
     {
+        $this->seedUsersTable();
+
         $thread = $this->faktory->create('thread');
         $user_1 = $this->faktory->build('participant');
         $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
@@ -336,6 +338,8 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_get_participants_string()
     {
+        $this->seedUsersTable();
+
         $thread = $this->faktory->create('thread');
 
         $participant_1 = $this->faktory->build('participant');
@@ -499,6 +503,8 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_get_the_creator_of_a_thread()
     {
+        $this->seedUsersTable();
+
         $thread = $this->faktory->create('thread');
 
         $user_1 = $this->faktory->build('participant');

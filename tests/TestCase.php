@@ -34,7 +34,6 @@ class TestCase extends OrchestraTestCase
         $load_factories($this->faktory);
 
         Eloquent::unguard();
-        $this->seedUsersTable();
     }
 
     protected function getApplicationTimezone($app): string
