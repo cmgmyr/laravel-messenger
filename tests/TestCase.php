@@ -76,16 +76,19 @@ class TestCase extends OrchestraTestCase
     private function seedUsersTable(): void
     {
         $this->addUser([
+            'id' => 1,
             'name' => 'Chris Gmyr',
             'email' => 'chris@test.com',
         ]);
 
         $this->addUser([
+            'id' => 2,
             'name' => 'Adam Wathan',
             'email' => 'adam@test.com',
         ]);
 
         $this->addUser([
+            'id' => 3,
             'name' => 'Taylor Otwell',
             'email' => 'taylor@test.com',
         ]);
