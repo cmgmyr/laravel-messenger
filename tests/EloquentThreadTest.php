@@ -32,8 +32,8 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function search_specific_thread_by_subject()
     {
-        $this->faktory->create('thread', ['id' => 1, 'subject' => 'first subject']);
-        $this->faktory->create('thread', ['id' => 2, 'subject' => 'second subject']);
+        $this->threadFactory(['id' => 1, 'subject' => 'first subject']);
+        $this->threadFactory(['id' => 2, 'subject' => 'second subject']);
 
         $threads = Thread::getBySubject('first subject');
 
@@ -45,8 +45,8 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function search_threads_by_subject()
     {
-        $this->faktory->create('thread', ['id' => 1, 'subject' => 'first subject']);
-        $this->faktory->create('thread', ['id' => 2, 'subject' => 'second subject']);
+        $this->threadFactory(['id' => 1, 'subject' => 'first subject']);
+        $this->threadFactory(['id' => 2, 'subject' => 'second subject']);
 
         $threads = Thread::getBySubject('%subject');
 
@@ -62,26 +62,26 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_create_a_new_thread()
     {
-        $thread = $this->faktory->build('thread');
+        $thread = $this->threadFactory();
         $this->assertEquals('Sample thread', $thread->subject);
 
-        $thread = $this->faktory->build('thread', ['subject' => 'Second sample thread']);
+        $thread = $this->threadFactory(['subject' => 'Second sample thread']);
         $this->assertEquals('Second sample thread', $thread->subject);
     }
 
     /** @test */
     public function it_should_return_the_latest_message()
     {
-        $oldMessage = $this->faktory->build('message', [
+        $oldMessage = $this->messageFactory([
             'created_at' => Carbon::yesterday(),
         ]);
 
-        $newMessage = $this->faktory->build('message', [
+        $newMessage = $this->messageFactory([
             'created_at' => Carbon::now(),
             'body' => 'This is the most recent message',
         ]);
 
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
         $thread->messages()->saveMany([$oldMessage, $newMessage]);
         $this->assertEquals($newMessage->body, $thread->latestMessage->body);
     }
@@ -92,7 +92,7 @@ class EloquentThreadTest extends TestCase
         $threadCount = rand(5, 20);
 
         foreach (range(1, $threadCount) as $index) {
-            $this->faktory->create('thread', ['id' => ($index + 1)]);
+            $this->threadFactory(['id' => ($index + 1)]);
         }
 
         $threads = Thread::getAllLatest()->get();
@@ -103,13 +103,13 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_get_all_thread_participants()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
         $participantIds = $thread->participantsUserIds();
         $this->assertCount(0, $participantIds);
 
-        $user_1 = $this->faktory->build('participant');
-        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
-        $user_3 = $this->faktory->build('participant', ['user_id' => 3]);
+        $user_1 = $this->participantFactory();
+        $user_2 = $this->participantFactory(['user_id' => 2]);
+        $user_3 = $this->participantFactory(['user_id' => 3]);
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 
@@ -129,12 +129,12 @@ class EloquentThreadTest extends TestCase
     {
         $userId = 1;
 
-        $participant_1 = $this->faktory->create('participant', ['user_id' => $userId]);
-        $thread = $this->faktory->create('thread');
+        $participant_1 = $this->participantFactory(['user_id' => $userId]);
+        $thread = $this->threadFactory();
         $thread->participants()->saveMany([$participant_1]);
 
-        $thread2 = $this->faktory->create('thread', ['subject' => 'Second Thread']);
-        $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id]);
+        $thread2 = $this->threadFactory(['subject' => 'Second Thread']);
+        $participant_2 = $this->participantFactory(['user_id' => $userId, 'thread_id' => $thread2->id]);
         $thread2->participants()->saveMany([$participant_2]);
 
         $threads = Thread::forUser($userId)->get();
@@ -146,9 +146,9 @@ class EloquentThreadTest extends TestCase
     {
         $this->seedUsersTable();
 
-        $thread = $this->faktory->create('thread');
-        $user_1 = $this->faktory->build('participant');
-        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $thread = $this->threadFactory();
+        $user_1 = $this->participantFactory();
+        $user_2 = $this->participantFactory(['user_id' => 2]);
         $thread->participants()->saveMany([$user_1, $user_2]);
 
         $threadUserIds = $thread->users()->get()->pluck('id')->values()->flip();
@@ -161,12 +161,12 @@ class EloquentThreadTest extends TestCase
     {
         $userId = 1;
 
-        $participant_1 = $this->faktory->create('participant', ['user_id' => $userId, 'last_read' => Carbon::now()]);
-        $thread = $this->faktory->create('thread', ['updated_at' => Carbon::yesterday()]);
+        $participant_1 = $this->participantFactory(['user_id' => $userId, 'last_read' => Carbon::now()]);
+        $thread = $this->threadFactory(['updated_at' => Carbon::yesterday()]);
         $thread->participants()->saveMany([$participant_1]);
 
-        $thread2 = $this->faktory->create('thread', ['subject' => 'Second Thread', 'updated_at' => Carbon::now()]);
-        $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id, 'last_read' => Carbon::yesterday()]);
+        $thread2 = $this->threadFactory(['subject' => 'Second Thread', 'updated_at' => Carbon::now()]);
+        $participant_2 = $this->participantFactory(['user_id' => $userId, 'thread_id' => $thread2->id, 'last_read' => Carbon::yesterday()]);
         $thread2->participants()->saveMany([$participant_2]);
 
         $threads = Thread::forUserWithNewMessages($userId)->get();
@@ -179,12 +179,12 @@ class EloquentThreadTest extends TestCase
         $userId = 1;
         $userId2 = 2;
 
-        $thread = $this->faktory->create('thread');
-        $thread2 = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
+        $thread2 = $this->threadFactory();
 
-        $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread->id]);
-        $this->faktory->create('participant', ['user_id' => $userId2, 'thread_id' => $thread->id]);
-        $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id]);
+        $this->participantFactory(['user_id' => $userId, 'thread_id' => $thread->id]);
+        $this->participantFactory(['user_id' => $userId2, 'thread_id' => $thread->id]);
+        $this->participantFactory(['user_id' => $userId, 'thread_id' => $thread2->id]);
 
         $threads = Thread::between([$userId, $userId2])->get();
         $this->assertCount(1, $threads);
@@ -195,7 +195,7 @@ class EloquentThreadTest extends TestCase
     {
         $participant = 1;
 
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
         $thread->addParticipant($participant);
 
@@ -207,7 +207,7 @@ class EloquentThreadTest extends TestCase
     {
         $participants = [1, 2, 3];
 
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
         $thread->addParticipant($participants);
 
@@ -217,7 +217,7 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_add_participants_to_a_thread_with_arguments()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
         $thread->addParticipant(1, 2);
 
@@ -230,8 +230,8 @@ class EloquentThreadTest extends TestCase
         $userId = 1;
         $last_read = Carbon::yesterday();
 
-        $participant = $this->faktory->create('participant', ['user_id' => $userId, 'last_read' => $last_read]);
-        $thread = $this->faktory->create('thread');
+        $participant = $this->participantFactory(['user_id' => $userId, 'last_read' => $last_read]);
+        $thread = $this->threadFactory();
         $thread->participants()->saveMany([$participant]);
 
         $thread->markAsRead($userId);
@@ -244,14 +244,14 @@ class EloquentThreadTest extends TestCase
     {
         $userId = 1;
 
-        $participant_1 = $this->faktory->create('participant', ['user_id' => $userId, 'last_read' => Carbon::now()]);
-        $thread = $this->faktory->create('thread', ['updated_at' => Carbon::yesterday()]);
+        $participant_1 = $this->participantFactory(['user_id' => $userId, 'last_read' => Carbon::now()]);
+        $thread = $this->threadFactory(['updated_at' => Carbon::yesterday()]);
         $thread->participants()->saveMany([$participant_1]);
 
         $this->assertFalse($thread->isUnread($userId));
 
-        $thread2 = $this->faktory->create('thread', ['subject' => 'Second Thread', 'updated_at' => Carbon::now()]);
-        $participant_2 = $this->faktory->create('participant', ['user_id' => $userId, 'thread_id' => $thread2->id, 'last_read' => Carbon::yesterday()]);
+        $thread2 = $this->threadFactory(['subject' => 'Second Thread', 'updated_at' => Carbon::now()]);
+        $participant_2 = $this->participantFactory(['user_id' => $userId, 'thread_id' => $thread2->id, 'last_read' => Carbon::yesterday()]);
         $thread2->participants()->saveMany([$participant_2]);
 
         $this->assertTrue($thread2->isUnread($userId));
@@ -262,8 +262,8 @@ class EloquentThreadTest extends TestCase
     {
         $userId = 1;
 
-        $participant = $this->faktory->create('participant', ['user_id' => $userId]);
-        $thread = $this->faktory->create('thread');
+        $participant = $this->participantFactory(['user_id' => $userId]);
+        $thread = $this->threadFactory();
         $thread->participants()->saveMany([$participant]);
 
         $newParticipant = $thread->getParticipantFromUser($userId);
@@ -275,7 +275,7 @@ class EloquentThreadTest extends TestCase
     public function it_should_throw_an_exception_when_participant_is_not_found()
     {
         try {
-            $thread = $this->faktory->create('thread');
+            $thread = $this->threadFactory();
 
             $thread->getParticipantFromUser(99);
         } catch (ModelNotFoundException $e) {
@@ -291,11 +291,11 @@ class EloquentThreadTest extends TestCase
     public function it_should_activate_all_deleted_participants()
     {
         $deleted_at = Carbon::yesterday();
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $user_1 = $this->faktory->build('participant', ['deleted_at' => $deleted_at]);
-        $user_2 = $this->faktory->build('participant', ['user_id' => 2, 'deleted_at' => $deleted_at]);
-        $user_3 = $this->faktory->build('participant', ['user_id' => 3, 'deleted_at' => $deleted_at]);
+        $user_1 = $this->participantFactory(['deleted_at' => $deleted_at]);
+        $user_2 = $this->participantFactory(['user_id' => 2, 'deleted_at' => $deleted_at]);
+        $user_3 = $this->participantFactory(['user_id' => 3, 'deleted_at' => $deleted_at]);
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 
@@ -340,11 +340,11 @@ class EloquentThreadTest extends TestCase
     {
         $this->seedUsersTable();
 
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $participant_1 = $this->faktory->build('participant');
-        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
-        $participant_3 = $this->faktory->build('participant', ['user_id' => 3]);
+        $participant_1 = $this->participantFactory();
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
+        $participant_3 = $this->participantFactory(['user_id' => 3]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2, $participant_3]);
 
@@ -361,10 +361,10 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_check_users_and_participants()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $participant_1 = $this->faktory->build('participant');
-        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $participant_1 = $this->participantFactory();
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
 
@@ -376,10 +376,10 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_remove_a_single_participant()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $participant_1 = $this->faktory->build('participant');
-        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $participant_1 = $this->participantFactory();
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
 
@@ -391,10 +391,10 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_remove_a_group_of_participants_with_array()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $participant_1 = $this->faktory->build('participant');
-        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $participant_1 = $this->participantFactory();
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
 
@@ -406,10 +406,10 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_remove_a_group_of_participants_with_arguments()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $participant_1 = $this->faktory->build('participant');
-        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $participant_1 = $this->participantFactory();
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
 
@@ -421,12 +421,12 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_get_all_unread_messages_for_user()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $participant_1 = $this->faktory->build('participant');
-        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $participant_1 = $this->participantFactory();
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
 
-        $message_1 = $this->faktory->build('message', [
+        $message_1 = $this->messageFactory([
             'created_at' => Carbon::now(),
             'body' => 'Message 1',
             'user_id' => $participant_1->user_id,
@@ -440,7 +440,7 @@ class EloquentThreadTest extends TestCase
         // Simulate delay after last read
         sleep(1);
 
-        $message_2 = $this->faktory->build('message', [
+        $message_2 = $this->messageFactory([
             'created_at' => Carbon::now(),
             'body' => 'Message 2',
             'user_id' => $participant_1->user_id,
@@ -458,12 +458,12 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_get_all_unread_messages_for_user_when_dates_not_set()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $participant_1 = $this->faktory->build('participant');
-        $participant_2 = $this->faktory->build('participant', ['user_id' => 2]);
+        $participant_1 = $this->participantFactory();
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
 
-        $message_1 = $this->faktory->build('message', [
+        $message_1 = $this->messageFactory([
 //            'created_at' => Carbon::now(),
             'body' => 'Message 1',
             'user_id' => $participant_1->user_id,
@@ -477,7 +477,7 @@ class EloquentThreadTest extends TestCase
         // Simulate delay after last read
         sleep(1);
 
-        $message_2 = $this->faktory->build('message', [
+        $message_2 = $this->messageFactory([
 //            'created_at' => Carbon::now(),
             'body' => 'Message 2',
             'user_id' => $participant_1->user_id,
@@ -495,7 +495,7 @@ class EloquentThreadTest extends TestCase
     /** @test */
     public function it_should_return_empty_collection_when_user_not_participant()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
         $this->assertEquals(0, $thread->userUnreadMessagesCount(1));
     }
@@ -505,17 +505,17 @@ class EloquentThreadTest extends TestCase
     {
         $this->seedUsersTable();
 
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $user_1 = $this->faktory->build('participant');
-        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
-        $user_3 = $this->faktory->build('participant', ['user_id' => 3]);
+        $user_1 = $this->participantFactory();
+        $user_2 = $this->participantFactory(['user_id' => 2]);
+        $user_3 = $this->participantFactory(['user_id' => 3]);
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 
-        $message_1 = $this->faktory->build('message', ['created_at' => Carbon::yesterday()]);
-        $message_2 = $this->faktory->build('message', ['user_id' => 2]);
-        $message_3 = $this->faktory->build('message', ['user_id' => 3]);
+        $message_1 = $this->messageFactory(['created_at' => Carbon::yesterday()]);
+        $message_2 = $this->messageFactory(['user_id' => 2]);
+        $message_3 = $this->messageFactory(['user_id' => 3]);
 
         $thread->messages()->saveMany([$message_1, $message_2, $message_3]);
 
@@ -529,11 +529,11 @@ class EloquentThreadTest extends TestCase
      */
     public function it_should_get_the_null_creator_of_a_thread_without_messages()
     {
-        $thread = $this->faktory->create('thread');
+        $thread = $this->threadFactory();
 
-        $user_1 = $this->faktory->build('participant');
-        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
-        $user_3 = $this->faktory->build('participant', ['user_id' => 3]);
+        $user_1 = $this->participantFactory();
+        $user_2 = $this->participantFactory(['user_id' => 2]);
+        $user_3 = $this->participantFactory(['user_id' => 3]);
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 

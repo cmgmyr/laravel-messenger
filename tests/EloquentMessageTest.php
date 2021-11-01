@@ -7,14 +7,14 @@ class EloquentMessageTest extends TestCase
     /** @test */
     public function it_should_get_the_recipients_of_a_message()
     {
-        $message = $this->faktory->build('message');
-        $thread = $this->faktory->create('thread');
+        $message = $this->messageFactory();
+        $thread = $this->threadFactory();
 
         $thread->messages()->saveMany([$message]);
 
-        $user_1 = $this->faktory->build('participant');
-        $user_2 = $this->faktory->build('participant', ['user_id' => 2]);
-        $user_3 = $this->faktory->build('participant', ['user_id' => 3]);
+        $user_1 = $this->participantFactory();
+        $user_2 = $this->participantFactory(['user_id' => 2]);
+        $user_3 = $this->participantFactory(['user_id' => 3]);
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 

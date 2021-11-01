@@ -2,7 +2,6 @@
 
 namespace Cmgmyr\Messenger\Tests;
 
-use AdamWathan\Faktory\Faktory;
 use Cmgmyr\Messenger\MessengerServiceProvider;
 use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
@@ -16,23 +15,11 @@ class TestCase extends OrchestraTestCase
 {
     use RefreshDatabase, WithFaker;
 
-    /**
-     * @var \AdamWathan\Faktory\Faktory
-     */
-    protected $faktory;
-
     protected $loadEnvironmentVariables = true;
 
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->faktory = new Faktory;
-        $load_factories = static function ($faktory) {
-            require __DIR__ . '/factories.php';
-        };
-        $load_factories($this->faktory);
-
         Eloquent::unguard();
     }
 
@@ -97,6 +84,30 @@ class TestCase extends OrchestraTestCase
             'name' => $this->faker->name,
             'email' => $this->faker->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ], $overrides));
+    }
+
+    protected function threadFactory(array $overrides = []): Thread
+    {
+        return Thread::create(array_merge([
+            'subject' => 'Sample thread',
+        ], $overrides));
+    }
+
+    protected function messageFactory(array $overrides = []): Message
+    {
+        return Message::create(array_merge([
+            'user_id' => 1,
+            'thread_id' => 1,
+            'body' => 'A message',
+        ], $overrides));
+    }
+
+    protected function participantFactory(array $overrides = []): Participant
+    {
+        return Participant::create(array_merge([
+            'user_id' => 1,
+            'thread_id' => 1,
         ], $overrides));
     }
 }
