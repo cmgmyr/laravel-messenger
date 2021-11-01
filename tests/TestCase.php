@@ -9,11 +9,12 @@ use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 class TestCase extends OrchestraTestCase
 {
-    use RefreshDatabase;
+    use RefreshDatabase, WithFaker;
 
     /**
      * @var \AdamWathan\Faktory\Faktory
@@ -97,8 +98,8 @@ class TestCase extends OrchestraTestCase
     protected function addUser(array $overrides = []): User
     {
         return User::create(array_merge([
-            'name' => 'John Doe',
-            'email' => 'john@example.com',
+            'name' => $this->faker->name,
+            'email' => $this->faker->safeEmail,
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
         ], $overrides));
     }
