@@ -8,7 +8,6 @@ use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Model as Eloquent;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
@@ -34,7 +33,6 @@ class TestCase extends OrchestraTestCase
         $load_factories($this->faktory);
 
         Eloquent::unguard();
-        $this->ensureUsersTable($this->app);
         $this->seedUsersTable();
     }
 
@@ -52,7 +50,7 @@ class TestCase extends OrchestraTestCase
 
     protected function defineDatabaseMigrations(): void
     {
-//        $this->loadLaravelMigrations();
+        $this->loadMigrationsFrom(__DIR__ . '/../tests/database');
         $this->loadMigrationsFrom(__DIR__ . '/../migrations');
     }
 
@@ -75,21 +73,6 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('messenger.thread_model', Thread::class);
     }
 
-    private function ensureUsersTable($app): void
-    {
-        if (!$app['db']->connection()->getSchemaBuilder()->hasTable('users')) {
-            $app['db']->connection()->getSchemaBuilder()->create('users', function (Blueprint $table) {
-                $table->increments('id');
-                $table->string('name');
-                $table->string('email')->unique();
-                $table->timestamp('email_verified_at')->nullable();
-                $table->string('password');
-                $table->rememberToken();
-                $table->timestamps();
-            });
-        }
-    }
-
     private function seedUsersTable(): void
     {
         $this->addUser([
@@ -110,16 +93,10 @@ class TestCase extends OrchestraTestCase
 
     protected function addUser(array $overrides = []): User
     {
-        /*
-         * retry() is a "hack" to get the MySQL action to be less flaky
-         * because sometimes the users table isn't available.
-         */
-//        return retry(5, static function () use ($overrides) {
         return User::create(array_merge([
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
-                'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            ], $overrides));
-//        }, 1000);
+            'name' => 'John Doe',
+            'email' => 'john@example.com',
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ], $overrides));
     }
 }
