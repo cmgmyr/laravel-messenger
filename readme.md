@@ -1,6 +1,6 @@
-![Test Suite](https://img.shields.io/github/workflow/status/cmgmyr/laravel-messenger/run-tests?style=flat-square)
-![Test Suite: MySQL](https://img.shields.io/github/workflow/status/cmgmyr/laravel-messenger/run-tests-mysql?style=flat-square)
-![Test Suite: Postgres](https://img.shields.io/github/workflow/status/cmgmyr/laravel-messenger/run-tests-postgres?style=flat-square)
+[![Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml)
+[![MySQL Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-mysql.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-mysql.yml)
+[![PostgreSQL Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-postgres.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-postgres.yml)
 
 [![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg?style=flat-square)](https://github.com/cmgmyr/laravel-messenger/releases)
 [![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg?style=flat-square)](https://packagist.org/packages/cmgmyr/messenger)
