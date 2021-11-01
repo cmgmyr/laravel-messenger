@@ -10,7 +10,7 @@ class MessagableTraitTest extends TestCase
     /** @test */
     public function it_should_get_all_threads_with_new_messages()
     {
-        $user = $this->addUser();
+        $user = $this->userFactory();
 
         $thread = $this->faktory->create('thread');
         $user_1 = $this->faktory->build('participant', ['user_id' => $user->id, 'last_read' => Carbon::yesterday()]);
@@ -37,7 +37,7 @@ class MessagableTraitTest extends TestCase
     /** @test */
     public function it_get_all_incoming_messages_count_for_user()
     {
-        $user = $this->addUser();
+        $user = $this->userFactory();
 
         $thread_1 = $this->faktory->create('thread');
         $participant_11 = $this->faktory->build('participant', ['user_id' => $user->id, 'last_read' => Carbon::now()->subDays(5)]);
@@ -65,7 +65,7 @@ class MessagableTraitTest extends TestCase
     /** @test */
     public function it_should_get_participant_threads()
     {
-        $user = $this->addUser();
+        $user = $this->userFactory();
 
         $thread = $this->faktory->create('thread');
         $user_1 = $this->faktory->build('participant', ['user_id' => $user->id]);

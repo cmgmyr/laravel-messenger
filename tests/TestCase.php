@@ -74,25 +74,25 @@ class TestCase extends OrchestraTestCase
         $app['config']->set('messenger.thread_model', Thread::class);
     }
 
-    private function seedUsersTable(): void
+    protected function seedUsersTable(): void
     {
-        $this->addUser([
+        $this->userFactory([
             'name' => 'Chris Gmyr',
             'email' => 'chris@test.com',
         ]);
 
-        $this->addUser([
+        $this->userFactory([
             'name' => 'Adam Wathan',
             'email' => 'adam@test.com',
         ]);
 
-        $this->addUser([
+        $this->userFactory([
             'name' => 'Taylor Otwell',
             'email' => 'taylor@test.com',
         ]);
     }
 
-    protected function addUser(array $overrides = []): User
+    protected function userFactory(array $overrides = []): User
     {
         return User::create(array_merge([
             'name' => $this->faker->name,
