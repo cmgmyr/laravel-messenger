@@ -40,7 +40,7 @@ class MessengerServiceProvider extends ServiceProvider
     protected function configure()
     {
         $this->mergeConfigFrom(
-            base_path('vendor/cmgmyr/messenger/config/config.php'),
+            __DIR__ . '/../config/config.php',
             'messenger'
         );
     }
@@ -54,11 +54,11 @@ class MessengerServiceProvider extends ServiceProvider
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                base_path('vendor/cmgmyr/messenger/config/config.php') => config_path('messenger.php'),
+                __DIR__ . '/../config/config.php' => config_path('messenger.php'),
             ], 'config');
 
             $this->publishes([
-                base_path('vendor/cmgmyr/messenger/migrations') => base_path('database/migrations'),
+                __DIR__ . '/../migrations' => base_path('database/migrations'),
             ], 'migrations');
         }
     }
