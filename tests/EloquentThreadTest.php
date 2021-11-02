@@ -75,12 +75,12 @@ class EloquentThreadTest extends TestCase
     public function it_should_return_the_latest_message(): void
     {
         $oldMessage = $this->messageFactory([
-            'created_at' => Carbon::yesterday(),
+          'created_at' => Carbon::yesterday(),
         ]);
 
         $newMessage = $this->messageFactory([
-            'created_at' => Carbon::now(),
-            'body' => 'This is the most recent message',
+          'created_at' => Carbon::now(),
+          'body' => 'This is the most recent message',
         ]);
 
         $thread = $this->threadFactory();
@@ -190,6 +190,59 @@ class EloquentThreadTest extends TestCase
 
         $threads = Thread::between([$userId, $userId2])->get();
         $this->assertCount(1, $threads);
+    }
+
+    /** @test **/
+    public function it_should_get_thread_between_participants(): void
+    {
+        $participant_1 = 1;
+        $participant_2 = 2;
+        $participant_3 = 3;
+        $participant_4 = 4;
+
+        $thread_1 = $this->threadFactory();
+        $this->participantFactory(['user_id' => $participant_1, 'thread_id' => $thread_1->id]);
+        $this->participantFactory(['user_id' => $participant_2, 'thread_id' => $thread_1->id]);
+        $this->participantFactory(['user_id' => $participant_3, 'thread_id' => $thread_1->id]);
+        $this->participantFactory(['user_id' => $participant_4, 'thread_id' => $thread_1->id]);
+
+
+        $thread_2 = $this->threadFactory();
+        $this->participantFactory(['user_id' => $participant_1, 'thread_id' => $thread_2->id]);
+        $this->participantFactory(['user_id' => $participant_2, 'thread_id' => $thread_2->id]);
+
+        $thread_3 = $this->threadFactory();
+        $this->participantFactory(['user_id' => $participant_1, 'thread_id' => $thread_3->id]);
+        $this->participantFactory(['user_id' => $participant_2, 'thread_id' => $thread_3->id]);
+        $this->participantFactory(['user_id' => $participant_3, 'thread_id' => $thread_3->id]);
+
+        $threads_1 = Thread::between([$participant_1, $participant_2, $participant_3]);
+        $threads_2 = Thread::between([$participant_1, $participant_2]);
+        $this->assertCount(2, $threads_1->get());
+        $this->assertCount(3, $threads_2->get());
+    }
+
+    /** @test **/
+    public function it_should_get_thread_between_only_participants(): void
+    {
+        $participant_1 = $this->participantFactory(['user_id' => 1]);
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
+        $participant_3 = $this->participantFactory(['user_id' => 3]);
+        $participant_4 = $this->participantFactory(['user_id' => 4]);
+
+        $thread_1 = $this->threadFactory();
+        $thread_1->participants()->saveMany([$participant_1, $participant_2, $participant_3, $participant_4]);
+
+        $thread_2 = $this->threadFactory();
+        $thread_2->participants()->saveMany([$participant_1, $participant_2]);
+
+        $thread_3 = $this->threadFactory();
+        $thread_3->participants()->saveMany([$participant_1, $participant_2, $participant_3]);
+
+        $threads_1 = Thread::betweenOnly([$participant_1->id, $participant_2->id, $participant_3->id]);
+        $threads_2 = Thread::betweenOnly([$participant_1->id, $participant_2->id]);
+        $this->assertCount(1, $threads_1->get());
+        $this->assertCount(1, $threads_2->get());
     }
 
     /** @test */
@@ -429,9 +482,9 @@ class EloquentThreadTest extends TestCase
         $participant_2 = $this->participantFactory(['user_id' => 2]);
 
         $message_1 = $this->messageFactory([
-            'created_at' => Carbon::now(),
-            'body' => 'Message 1',
-            'user_id' => $participant_1->user_id,
+          'created_at' => Carbon::now(),
+          'body' => 'Message 1',
+          'user_id' => $participant_1->user_id,
         ]);
 
         $thread->participants()->saveMany([$participant_1, $participant_2]);
@@ -443,9 +496,9 @@ class EloquentThreadTest extends TestCase
         sleep(1);
 
         $message_2 = $this->messageFactory([
-            'created_at' => Carbon::now(),
-            'body' => 'Message 2',
-            'user_id' => $participant_1->user_id,
+          'created_at' => Carbon::now(),
+          'body' => 'Message 2',
+          'user_id' => $participant_1->user_id,
         ]);
 
         $thread->messages()->saveMany([$message_2]);
@@ -466,7 +519,7 @@ class EloquentThreadTest extends TestCase
         $participant_2 = $this->participantFactory(['user_id' => 2]);
 
         $message_1 = $this->messageFactory([
-//            'created_at' => Carbon::now(),
+            //            'created_at' => Carbon::now(),
             'body' => 'Message 1',
             'user_id' => $participant_1->user_id,
         ]);
@@ -480,7 +533,7 @@ class EloquentThreadTest extends TestCase
         sleep(1);
 
         $message_2 = $this->messageFactory([
-//            'created_at' => Carbon::now(),
+            //            'created_at' => Carbon::now(),
             'body' => 'Message 2',
             'user_id' => $participant_1->user_id,
         ]);

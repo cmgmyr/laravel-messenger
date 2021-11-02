@@ -15,7 +15,7 @@ class MessengerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         $this->offerPublishing();
         $this->setMessengerModels();
@@ -27,7 +27,7 @@ class MessengerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->configure();
     }
@@ -37,7 +37,7 @@ class MessengerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function configure()
+    protected function configure(): void
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../config/config.php',
@@ -50,7 +50,7 @@ class MessengerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function offerPublishing()
+    protected function offerPublishing(): void
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -67,8 +67,9 @@ class MessengerServiceProvider extends ServiceProvider
      * Define Messenger's models in registry.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function setMessengerModels()
+    protected function setMessengerModels(): void
     {
         $config = $this->app->make('config');
 
@@ -87,8 +88,9 @@ class MessengerServiceProvider extends ServiceProvider
      * Define User model in Messenger's model registry.
      *
      * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function setUserModel()
+    protected function setUserModel(): void
     {
         $config = $this->app->make('config');
 
