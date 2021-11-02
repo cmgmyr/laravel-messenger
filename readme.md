@@ -1,9 +1,10 @@
-[![Build Status](https://img.shields.io/travis/cmgmyr/laravel-messenger.svg?style=flat-square)](https://travis-ci.org/cmgmyr/laravel-messenger)
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/cmgmyr/laravel-messenger.svg?style=flat-square)](https://scrutinizer-ci.com/g/cmgmyr/laravel-messenger/)
-[![Scrutinizer Coverage](https://img.shields.io/scrutinizer/coverage/g/cmgmyr/laravel-messenger.svg?style=flat-square)](https://scrutinizer-ci.com/g/cmgmyr/laravel-messenger/)
-[![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg?style=flat-square)](https://github.com/cmgmyr/laravel-messenger/releases)
-[![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg?style=flat-square)](https://packagist.org/packages/cmgmyr/messenger)
-[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
+[![Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml)
+[![MySQL Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-mysql.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-mysql.yml)
+[![PostgreSQL Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-postgres.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-postgres.yml)
+
+[![Latest Version](https://img.shields.io/github/release/cmgmyr/laravel-messenger.svg)](https://github.com/cmgmyr/laravel-messenger/releases)
+[![Total Downloads](https://img.shields.io/packagist/dt/cmgmyr/messenger.svg)](https://packagist.org/packages/cmgmyr/messenger)
+[![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg)](LICENSE)
 
 # Laravel Messenger
 This package will allow you to add a full user messaging system into your Laravel application.

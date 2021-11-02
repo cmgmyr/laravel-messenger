@@ -1,164 +1,113 @@
 <?php
 
-namespace Cmgmyr\Messenger\Test;
+namespace Cmgmyr\Messenger\Tests;
 
-date_default_timezone_set('America/New_York');
+use Cmgmyr\Messenger\MessengerServiceProvider;
+use Cmgmyr\Messenger\Models\Message;
+use Cmgmyr\Messenger\Models\Participant;
+use Cmgmyr\Messenger\Models\Thread;
+use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Foundation\Testing\WithFaker;
+use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
-use AdamWathan\Faktory\Faktory;
-use Cmgmyr\Messenger\Models\Models;
-use Illuminate\Database\Capsule\Manager as DB;
-use Orchestra\Testbench\TestCase as Orchestra;
-
-class TestCase extends Orchestra
+class TestCase extends OrchestraTestCase
 {
-    /**
-     * @var \AdamWathan\Faktory\Faktory
-     */
-    protected $faktory;
+    use RefreshDatabase, WithFaker;
 
-    /**
-     * Set up the database, migrations, and initial data.
-     */
+    protected $loadEnvironmentVariables = true;
+
     public function setUp(): void
     {
         parent::setUp();
-
-        $this->configureDatabase();
-        $this->migrateTables();
-        $this->faktory = new Faktory;
-        $load_factories = function ($faktory) {
-            require __DIR__ . '/factories.php';
-        };
-        $load_factories($this->faktory);
-
-        $userModel = User::class;
-        Models::setUserModel($userModel);
+        Eloquent::unguard();
     }
 
-    /**
-     * Define environment setup.
-     *
-     * @param  \Illuminate\Foundation\Application  $app
-     *
-     * @return void
-     */
+    protected function getApplicationTimezone($app): string
+    {
+        return 'America/New_York';
+    }
+
+    protected function getPackageProviders($app): array
+    {
+        return [
+            MessengerServiceProvider::class,
+        ];
+    }
+
+    protected function defineDatabaseMigrations(): void
+    {
+        $this->loadMigrationsFrom(__DIR__ . '/../tests/database');
+        $this->loadMigrationsFrom(__DIR__ . '/../migrations');
+    }
+
     protected function getEnvironmentSetUp($app): void
     {
-        $app['config']->set('messenger.message_model', 'Cmgmyr\Messenger\Models\Message');
-        $app['config']->set('messenger.participant_model', 'Cmgmyr\Messenger\Models\Participant');
-        $app['config']->set('messenger.thread_model', 'Cmgmyr\Messenger\Models\Thread');
+        $app['config']->set('database.default', 'testbench');
+        $app['config']->set('database.connections.testbench', [
+            'driver' => env('DB_CONNECTION', 'sqlite'),
+            'url' => env('DATABASE_URL'),
+            'host' => env('DB_HOST', '127.0.0.1'),
+            'port' => env('DB_PORT'),
+            'database' => env('DB_DATABASE', ':memory:'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+        ]);
+
+        $app['config']->set('messenger.user_model', User::class);
+        $app['config']->set('messenger.message_model', Message::class);
+        $app['config']->set('messenger.participant_model', Participant::class);
+        $app['config']->set('messenger.thread_model', Thread::class);
     }
 
-    /**
-     * Configure the database.
-     */
-    private function configureDatabase(): void
+    protected function seedUsersTable(): void
     {
-        $db = new DB;
-        $db->addConnection(
-            [
-                'driver' => 'sqlite',
-                'database' => ':memory:',
-                'charset' => 'utf8',
-                'collation' => 'utf8_unicode_ci',
-                'prefix' => '',
-            ]
-        );
+        $this->userFactory([
+            'name' => 'Chris Gmyr',
+            'email' => 'chris@test.com',
+        ]);
 
-        $db->bootEloquent();
-        $db->setAsGlobal();
+        $this->userFactory([
+            'name' => 'Adam Wathan',
+            'email' => 'adam@test.com',
+        ]);
+
+        $this->userFactory([
+            'name' => 'Taylor Otwell',
+            'email' => 'taylor@test.com',
+        ]);
     }
 
-    /**
-     * Run the migrations for the database.
-     */
-    private function migrateTables(): void
+    protected function userFactory(array $overrides = []): User
     {
-        $this->createUsersTable();
-        $this->createThreadsTable();
-        $this->createMessagesTable();
-        $this->createParticipantsTable();
-
-        $this->seedUsersTable();
+        return User::create(array_merge([
+            'name' => $this->faker->name,
+            'email' => $this->faker->safeEmail,
+            'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
+        ], $overrides));
     }
 
-    /**
-     * Create the users table in the database.
-     */
-    private function createUsersTable(): void
+    protected function threadFactory(array $overrides = []): Thread
     {
-        DB::schema()->create(
-            'users',
-            function ($table) {
-                $table->increments('id');
-                $table->string('name');
-                $table->string('email')->unique();
-                $table->enum('notify', ['y', 'n'])->default('y');
-                $table->timestamps();
-            }
-        );
+        return Thread::create(array_merge([
+            'subject' => 'Sample thread',
+        ], $overrides));
     }
 
-    /**
-     * Create some users for the tests to use.
-     */
-    private function seedUsersTable()
+    protected function messageFactory(array $overrides = []): Message
     {
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [1, 'Chris Gmyr', 'chris@test.com']);
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [2, 'Adam Wathan', 'adam@test.com']);
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [3, 'Taylor Otwell', 'taylor@test.com']);
-        DB::insert('INSERT INTO ' . DB::getTablePrefix() . 'users (id, name, email, created_at, updated_at) VALUES (?, ?, ?, datetime(), datetime())', [4, 'Abdullah Al-Faqeir', 'abdullah@test.com']);
+        return Message::create(array_merge([
+            'user_id' => 1,
+            'thread_id' => 1,
+            'body' => 'A message',
+        ], $overrides));
     }
 
-    /**
-     * Create the threads table in the database.
-     */
-    private function createThreadsTable(): void
+    protected function participantFactory(array $overrides = []): Participant
     {
-        DB::schema()->create(
-            'threads',
-            function ($table) {
-                $table->increments('id');
-                $table->string('subject');
-                $table->timestamps();
-                $table->softDeletes();
-            }
-        );
-    }
-
-    /**
-     * Create the messages table in the database.
-     */
-    private function createMessagesTable(): void
-    {
-        DB::schema()->create(
-            'messages',
-            function ($table) {
-                $table->increments('id');
-                $table->integer('thread_id')->unsigned();
-                $table->integer('user_id')->unsigned();
-                $table->text('body');
-                $table->timestamps();
-                $table->softDeletes();
-            }
-        );
-    }
-
-    /**
-     * Create the participants table in the database.
-     */
-    private function createParticipantsTable(): void
-    {
-        DB::schema()->create(
-            'participants',
-            function ($table) {
-                $table->increments('id');
-                $table->integer('thread_id')->unsigned();
-                $table->integer('user_id')->unsigned();
-                $table->timestamp('last_read')->nullable();
-                $table->timestamps();
-                $table->softDeletes();
-            }
-        );
+        return Participant::create(array_merge([
+            'user_id' => 1,
+            'thread_id' => 1,
+        ], $overrides));
     }
 }
