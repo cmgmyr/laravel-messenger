@@ -192,6 +192,59 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(1, $threads);
     }
 
+    /** @test **/
+    public function it_should_get_thread_between_participants(): void
+    {
+        $participant_1 = 1;
+        $participant_2 = 2;
+        $participant_3 = 3;
+        $participant_4 = 4;
+
+        $thread_1 = $this->threadFactory();
+        $this->participantFactory(['user_id' => $participant_1, 'thread_id' => $thread_1->id]);
+        $this->participantFactory(['user_id' => $participant_2, 'thread_id' => $thread_1->id]);
+        $this->participantFactory(['user_id' => $participant_3, 'thread_id' => $thread_1->id]);
+        $this->participantFactory(['user_id' => $participant_4, 'thread_id' => $thread_1->id]);
+
+
+        $thread_2 = $this->threadFactory();
+        $this->participantFactory(['user_id' => $participant_1, 'thread_id' => $thread_2->id]);
+        $this->participantFactory(['user_id' => $participant_2, 'thread_id' => $thread_2->id]);
+
+        $thread_3 = $this->threadFactory();
+        $this->participantFactory(['user_id' => $participant_1, 'thread_id' => $thread_3->id]);
+        $this->participantFactory(['user_id' => $participant_2, 'thread_id' => $thread_3->id]);
+        $this->participantFactory(['user_id' => $participant_3, 'thread_id' => $thread_3->id]);
+
+        $threads_1 = Thread::between([$participant_1, $participant_2, $participant_3]);
+        $threads_2 = Thread::between([$participant_1, $participant_2]);
+        $this->assertCount(2, $threads_1->get());
+        $this->assertCount(3, $threads_2->get());
+    }
+
+    /** @test **/
+    public function it_should_get_thread_between_only_participants(): void
+    {
+        $participant_1 = $this->participantFactory(['user_id' => 1]);
+        $participant_2 = $this->participantFactory(['user_id' => 2]);
+        $participant_3 = $this->participantFactory(['user_id' => 3]);
+        $participant_4 = $this->participantFactory(['user_id' => 4]);
+
+        $thread_1 = $this->threadFactory();
+        $thread_1->participants()->saveMany([$participant_1, $participant_2, $participant_3, $participant_4]);
+
+        $thread_2 = $this->threadFactory();
+        $thread_2->participants()->saveMany([$participant_1, $participant_2]);
+
+        $thread_3 = $this->threadFactory();
+        $thread_3->participants()->saveMany([$participant_1, $participant_2, $participant_3]);
+
+        $threads_1 = Thread::betweenOnly([$participant_1->id, $participant_2->id, $participant_3->id]);
+        $threads_2 = Thread::betweenOnly([$participant_1->id, $participant_2->id]);
+        $this->assertCount(1, $threads_1->get());
+        $this->assertCount(1, $threads_2->get());
+    }
+
     /** @test */
     public function it_should_add_a_participant_to_a_thread(): void
     {
