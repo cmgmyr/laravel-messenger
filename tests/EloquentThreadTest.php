@@ -2,7 +2,6 @@
 
 namespace Cmgmyr\Messenger\Test;
 
-use Illuminate\Support\Facades\DB;
 use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
@@ -27,7 +26,7 @@ class EloquentThreadTest extends TestCase
      *
      * @throws \ReflectionException
      */
-    protected static function getMethod($name): \ReflectionMethod
+    protected static function getMethod($name)
     {
         $class = new ReflectionClass(Thread::class);
         $method = $class->getMethod($name);
@@ -37,7 +36,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function search_specific_thread_by_subject(): void
+    public function search_specific_thread_by_subject()
     {
         $this->faktory->create('thread', ['id' => 1, 'subject' => 'first subject']);
         $this->faktory->create('thread', ['id' => 2, 'subject' => 'second subject']);
@@ -50,7 +49,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function search_threads_by_subject(): void
+    public function search_threads_by_subject()
     {
         $this->faktory->create('thread', ['id' => 1, 'subject' => 'first subject']);
         $this->faktory->create('thread', ['id' => 2, 'subject' => 'second subject']);
@@ -67,7 +66,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_create_a_new_thread(): void
+    public function it_should_create_a_new_thread()
     {
         $thread = $this->faktory->build('thread');
         $this->assertEquals('Sample thread', $thread->subject);
@@ -77,7 +76,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_the_latest_message(): void
+    public function it_should_return_the_latest_message()
     {
         $oldMessage = $this->faktory->build('message', [
             'created_at' => Carbon::yesterday(),
@@ -94,7 +93,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_all_threads(): void
+    public function it_should_return_all_threads()
     {
         $threadCount = rand(5, 20);
 
@@ -108,7 +107,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_thread_participants(): void
+    public function it_should_get_all_thread_participants()
     {
         $thread = $this->faktory->create('thread');
         $participantIds = $thread->participantsUserIds();
@@ -132,7 +131,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_threads_for_a_user(): void
+    public function it_should_get_all_threads_for_a_user()
     {
         $userId = 1;
 
@@ -149,7 +148,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_user_entities_for_a_thread(): void
+    public function it_should_get_all_user_entities_for_a_thread()
     {
         $thread = $this->faktory->create('thread');
         $user_1 = $this->faktory->build('participant');
@@ -162,7 +161,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_threads_for_a_user_with_new_messages(): void
+    public function it_should_get_all_threads_for_a_user_with_new_messages()
     {
         $userId = 1;
 
@@ -179,7 +178,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_threads_shared_by_specified_users(): void
+    public function it_should_get_all_threads_shared_by_specified_users()
     {
         $userId = 1;
         $userId2 = 2;
@@ -249,7 +248,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_add_a_participant_to_a_thread(): void
+    public function it_should_add_a_participant_to_a_thread()
     {
         $participant = 1;
 
@@ -261,7 +260,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_add_participants_to_a_thread_with_array(): void
+    public function it_should_add_participants_to_a_thread_with_array()
     {
         $participants = [1, 2, 3];
 
@@ -273,7 +272,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_add_participants_to_a_thread_with_arguments(): void
+    public function it_should_add_participants_to_a_thread_with_arguments()
     {
         $thread = $this->faktory->create('thread');
 
@@ -283,7 +282,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_mark_the_participant_as_read(): void
+    public function it_should_mark_the_participant_as_read()
     {
         $userId = 1;
         $last_read = Carbon::yesterday();
@@ -298,7 +297,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_see_if_thread_is_unread_by_user(): void
+    public function it_should_see_if_thread_is_unread_by_user()
     {
         $userId = 1;
 
@@ -316,7 +315,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_a_participant_from_userid(): void
+    public function it_should_get_a_participant_from_userid()
     {
         $userId = 1;
 
@@ -330,7 +329,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_throw_an_exception_when_participant_is_not_found(): void
+    public function it_should_throw_an_exception_when_participant_is_not_found()
     {
         try {
             $thread = $this->faktory->create('thread');
@@ -345,7 +344,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_activate_all_deleted_participants(): void
+    public function it_should_activate_all_deleted_participants()
     {
         $deleted_at = Carbon::yesterday();
         $thread = $this->faktory->create('thread');
@@ -366,7 +365,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_generate_participant_select_string(): void
+    public function it_should_generate_participant_select_string()
     {
         $method = self::getMethod('createSelectString');
         $thread = new Thread();
@@ -382,7 +381,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_participants_string(): void
+    public function it_should_get_participants_string()
     {
         $thread = $this->faktory->create('thread');
 
@@ -404,7 +403,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_check_users_and_participants(): void
+    public function it_should_check_users_and_participants()
     {
         $thread = $this->faktory->create('thread');
 
@@ -419,7 +418,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_remove_a_single_participant(): void
+    public function it_should_remove_a_single_participant()
     {
         $thread = $this->faktory->create('thread');
 
@@ -434,7 +433,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_remove_a_group_of_participants_with_array(): void
+    public function it_should_remove_a_group_of_participants_with_array()
     {
         $thread = $this->faktory->create('thread');
 
@@ -449,7 +448,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_remove_a_group_of_participants_with_arguments(): void
+    public function it_should_remove_a_group_of_participants_with_arguments()
     {
         $thread = $this->faktory->create('thread');
 
@@ -464,7 +463,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_unread_messages_for_user(): void
+    public function it_should_get_all_unread_messages_for_user()
     {
         $thread = $this->faktory->create('thread');
 
@@ -501,7 +500,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_all_unread_messages_for_user_when_dates_not_set(): void
+    public function it_should_get_all_unread_messages_for_user_when_dates_not_set()
     {
         $thread = $this->faktory->create('thread');
 
@@ -538,7 +537,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_empty_collection_when_user_not_participant(): void
+    public function it_should_return_empty_collection_when_user_not_participant()
     {
         $thread = $this->faktory->create('thread');
 
@@ -546,7 +545,7 @@ class EloquentThreadTest extends TestCase
     }
 
     /** @test */
-    public function it_should_get_the_creator_of_a_thread(): void
+    public function it_should_get_the_creator_of_a_thread()
     {
         $thread = $this->faktory->create('thread');
 
@@ -570,7 +569,7 @@ class EloquentThreadTest extends TestCase
      *
      * TODO: Need to get real creator of the thread without messages in future versions.
      */
-    public function it_should_get_the_null_creator_of_a_thread_without_messages(): void
+    public function it_should_get_the_null_creator_of_a_thread_without_messages()
     {
         $thread = $this->faktory->create('thread');
 
