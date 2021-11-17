@@ -7,6 +7,9 @@ use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 trait Messagable
 {
@@ -17,7 +20,7 @@ trait Messagable
      *
      * @codeCoverageIgnore
      */
-    public function messages()
+    public function messages(): HasMany
     {
         return $this->hasMany(Models::classname(Message::class));
     }
@@ -29,7 +32,7 @@ trait Messagable
      *
      * @codeCoverageIgnore
      */
-    public function participants()
+    public function participants(): HasMany
     {
         return $this->hasMany(Models::classname(Participant::class));
     }
@@ -41,7 +44,7 @@ trait Messagable
      *
      * @codeCoverageIgnore
      */
-    public function threads()
+    public function threads(): BelongsToMany
     {
         return $this->belongsToMany(
             Models::classname(Thread::class),
@@ -56,7 +59,7 @@ trait Messagable
      *
      * @return int
      */
-    public function newThreadsCount()
+    public function newThreadsCount(): int
     {
         return $this->threadsWithNewMessages()->count();
     }
@@ -66,7 +69,7 @@ trait Messagable
      *
      * @return int
      */
-    public function unreadMessagesCount()
+    public function unreadMessagesCount(): int
     {
         return Message::unreadForUser($this->getKey())->count();
     }
@@ -76,7 +79,7 @@ trait Messagable
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function threadsWithNewMessages()
+    public function threadsWithNewMessages(): Collection
     {
         return $this->threads()
             ->where(function (Builder $q) {

@@ -2,6 +2,8 @@
 
 namespace Cmgmyr\Messenger\Models;
 
+use Illuminate\Database\Eloquent\Model;
+
 class Models
 {
     /**
@@ -30,7 +32,7 @@ class Models
      *
      * @param string $model
      */
-    public static function setMessageModel($model)
+    public static function setMessageModel(string $model): void
     {
         static::$models[Message::class] = $model;
     }
@@ -40,7 +42,7 @@ class Models
      *
      * @param  string $model
      */
-    public static function setParticipantModel($model)
+    public static function setParticipantModel(string $model): void
     {
         static::$models[Participant::class] = $model;
     }
@@ -50,7 +52,7 @@ class Models
      *
      * @param  string $model
      */
-    public static function setThreadModel($model)
+    public static function setThreadModel(string $model): void
     {
         static::$models[Thread::class] = $model;
     }
@@ -60,7 +62,7 @@ class Models
      *
      * @param  string  $model
      */
-    public static function setUserModel($model)
+    public static function setUserModel(string $model): void
     {
         static::$models[self::$userModelLookupKey] = $model;
     }
@@ -70,7 +72,7 @@ class Models
      *
      * @param  array $map
      */
-    public static function setTables(array $map)
+    public static function setTables(array $map): void
     {
         static::$tables = array_merge(static::$tables, $map);
     }
@@ -81,7 +83,7 @@ class Models
      * @param  string $table
      * @return string
      */
-    public static function table($table)
+    public static function table(string $table): string
     {
         return static::$tables[$table] ?? $table;
     }
@@ -92,7 +94,7 @@ class Models
      * @param  string $model
      * @return string
      */
-    public static function classname($model)
+    public static function classname(string $model): string
     {
         return static::$models[$model] ?? $model;
     }
@@ -103,7 +105,7 @@ class Models
      * @param  array $attributes
      * @return \Cmgmyr\Messenger\Models\Message
      */
-    public static function message(array $attributes = [])
+    public static function message(array $attributes = []): Message
     {
         return static::make(Message::class, $attributes);
     }
@@ -114,7 +116,7 @@ class Models
      * @param  array $attributes
      * @return \Cmgmyr\Messenger\Models\Participant
      */
-    public static function participant(array $attributes = [])
+    public static function participant(array $attributes = []): Participant
     {
         return static::make(Participant::class, $attributes);
     }
@@ -125,7 +127,7 @@ class Models
      * @param  array $attributes
      * @return \Cmgmyr\Messenger\Models\Thread
      */
-    public static function thread(array $attributes = [])
+    public static function thread(array $attributes = []): Thread
     {
         return static::make(Thread::class, $attributes);
     }
@@ -136,7 +138,7 @@ class Models
      * @param  array  $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public static function user(array $attributes = [])
+    public static function user(array $attributes = []): Model
     {
         return static::make(self::$userModelLookupKey, $attributes);
     }
@@ -148,7 +150,7 @@ class Models
      * @param  array $attributes
      * @return \Illuminate\Database\Eloquent\Model
      */
-    protected static function make($model, array $attributes = [])
+    protected static function make(string $model, array $attributes = []): Model
     {
         $model = static::classname($model);
 

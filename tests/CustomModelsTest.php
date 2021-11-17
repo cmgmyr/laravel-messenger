@@ -1,6 +1,6 @@
 <?php
 
-namespace Cmgmyr\Messenger\Test;
+namespace Cmgmyr\Messenger\Tests;
 
 use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Models;
@@ -13,7 +13,7 @@ use Cmgmyr\Messenger\Tests\Stubs\Models\CustomThread;
 class CustomModelsTest extends TestCase
 {
     /** @test */
-    public function it_can_use_custom_message_model()
+    public function it_can_use_custom_message_model(): void
     {
         $this->setMessageCustomModel();
         $this->assertEquals(CustomMessage::class, get_class(Models::message()));
@@ -21,7 +21,7 @@ class CustomModelsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_use_custom_participant_model()
+    public function it_can_use_custom_participant_model(): void
     {
         $this->setParticipantCustomModel();
         $this->assertEquals(CustomParticipant::class, get_class(Models::participant()));
@@ -29,7 +29,7 @@ class CustomModelsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_use_custom_thread_model()
+    public function it_can_use_custom_thread_model(): void
     {
         $this->setThreadCustomModel();
         $this->assertEquals(CustomThread::class, get_class(Models::thread()));
@@ -37,7 +37,7 @@ class CustomModelsTest extends TestCase
     }
 
     /** @test */
-    public function it_can_use_custom_table()
+    public function it_can_use_custom_table(): void
     {
         $this->setMessageCustomModel();
         $this->setMessageCustomTable();
@@ -49,7 +49,7 @@ class CustomModelsTest extends TestCase
     }
 
     /** @test */
-    public function it_should_return_custom_name_when_not_available()
+    public function it_should_return_custom_name_when_not_available(): void
     {
         $modelName = 'ModelNotFound';
 
@@ -57,7 +57,7 @@ class CustomModelsTest extends TestCase
     }
 
     /** :TODO: test */
-    public function it_can_get_custom_model_table_property()
+    public function it_can_get_custom_model_table_property(): void
     {
         $this->setMessageCustomModel();
 
@@ -66,44 +66,44 @@ class CustomModelsTest extends TestCase
         $this->unsetMessageCustomModel();
     }
 
-    protected function setMessageCustomModel()
+    protected function setMessageCustomModel(): void
     {
         Models::setMessageModel(CustomMessage::class);
     }
 
-    protected function setParticipantCustomModel()
+    protected function setParticipantCustomModel(): void
     {
         Models::setParticipantModel(CustomParticipant::class);
     }
 
-    protected function setThreadCustomModel()
+    protected function setThreadCustomModel(): void
     {
         Models::setThreadModel(CustomThread::class);
     }
 
-    protected function unsetMessageCustomModel()
+    protected function unsetMessageCustomModel(): void
     {
         Models::setMessageModel(Message::class);
     }
 
-    protected function unsetParticipantCustomModel()
+    protected function unsetParticipantCustomModel(): void
     {
         Models::setParticipantModel(Participant::class);
     }
 
-    protected function unsetThreadCustomModel()
+    protected function unsetThreadCustomModel(): void
     {
         Models::setThreadModel(Thread::class);
     }
 
-    protected function setMessageCustomTable()
+    protected function setMessageCustomTable(): void
     {
         Models::setTables([
             'messages' => 'custom_messages',
         ]);
     }
 
-    protected function unsetMessageCustomTable()
+    protected function unsetMessageCustomTable(): void
     {
         Models::setTables([
             'messages' => 'messages',

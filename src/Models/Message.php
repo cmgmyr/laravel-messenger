@@ -4,8 +4,15 @@ namespace Cmgmyr\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
+/**
+ * Class Message.
+ *
+ * @method static Builder|self unreadForUser(int $userId)
+ */
 class Message extends Eloquent
 {
     use SoftDeletes;
@@ -32,7 +39,7 @@ class Message extends Eloquent
     protected $fillable = ['thread_id', 'user_id', 'body'];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be mutated to date's.
      *
      * @var array
      */
@@ -55,7 +62,7 @@ class Message extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function thread()
+    public function thread(): BelongsTo
     {
         return $this->belongsTo(Models::classname(Thread::class), 'thread_id', 'id');
     }
@@ -67,7 +74,7 @@ class Message extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(Models::user(), 'user_id');
     }
@@ -79,7 +86,7 @@ class Message extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function participants()
+    public function participants(): HasMany
     {
         return $this->hasMany(Models::classname(Participant::class), 'thread_id', 'thread_id');
     }
@@ -89,7 +96,7 @@ class Message extends Eloquent
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function recipients()
+    public function recipients(): HasMany
     {
         return $this->participants()->where('user_id', '!=', $this->user_id);
     }
@@ -101,7 +108,7 @@ class Message extends Eloquent
      * @param int $userId
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function scopeUnreadForUser(Builder $query, $userId)
+    public function scopeUnreadForUser(Builder $query, int $userId): Builder
     {
         return $query->has('thread')
             ->where('user_id', '!=', $userId)

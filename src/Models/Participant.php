@@ -3,6 +3,7 @@
 namespace Cmgmyr\Messenger\Models;
 
 use Illuminate\Database\Eloquent\Model as Eloquent;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Participant extends Eloquent
@@ -24,7 +25,7 @@ class Participant extends Eloquent
     protected $fillable = ['thread_id', 'user_id', 'last_read'];
 
     /**
-     * The attributes that should be mutated to dates.
+     * The attributes that should be mutated to date's.
      *
      * @var array
      */
@@ -47,7 +48,7 @@ class Participant extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function thread()
+    public function thread(): BelongsTo
     {
         return $this->belongsTo(Models::classname(Thread::class), 'thread_id', 'id');
     }
@@ -59,7 +60,7 @@ class Participant extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function user()
+    public function user(): BelongsTo
     {
         return $this->belongsTo(Models::user(), 'user_id');
     }
