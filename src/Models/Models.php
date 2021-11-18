@@ -40,7 +40,7 @@ class Models
     /**
      * Set the model to be used for participants.
      *
-     * @param  string $model
+     * @param string $model
      */
     public static function setParticipantModel(string $model): void
     {
@@ -50,7 +50,7 @@ class Models
     /**
      * Set the model to be used for threads.
      *
-     * @param  string $model
+     * @param string $model
      */
     public static function setThreadModel(string $model): void
     {
@@ -60,7 +60,7 @@ class Models
     /**
      * Set the model to be used for users.
      *
-     * @param  string  $model
+     * @param string $model
      */
     public static function setUserModel(string $model): void
     {
@@ -70,7 +70,7 @@ class Models
     /**
      * Set custom table names.
      *
-     * @param  array $map
+     * @param array $map
      */
     public static function setTables(array $map): void
     {
@@ -80,7 +80,7 @@ class Models
     /**
      * Get a custom table name mapping for the given table.
      *
-     * @param  string $table
+     * @param string $table
      * @return string
      */
     public static function table(string $table): string
@@ -91,7 +91,7 @@ class Models
     /**
      * Get the class name mapping for the given model.
      *
-     * @param  string $model
+     * @param string $model
      * @return string
      */
     public static function classname(string $model): string
@@ -103,9 +103,9 @@ class Models
      * Get an instance of the messages model.
      *
      * @param  array $attributes
-     * @return \Cmgmyr\Messenger\Models\Message
+     * @return Message|Model
      */
-    public static function message(array $attributes = []): Message
+    public static function message(array $attributes = [])
     {
         return static::make(Message::class, $attributes);
     }
@@ -114,9 +114,9 @@ class Models
      * Get an instance of the participants model.
      *
      * @param  array $attributes
-     * @return \Cmgmyr\Messenger\Models\Participant
+     * @return Participant|Model
      */
-    public static function participant(array $attributes = []): Participant
+    public static function participant(array $attributes = [])
     {
         return static::make(Participant::class, $attributes);
     }
@@ -125,9 +125,9 @@ class Models
      * Get an instance of the threads model.
      *
      * @param  array $attributes
-     * @return \Cmgmyr\Messenger\Models\Thread
+     * @return Thread|Model
      */
-    public static function thread(array $attributes = []): Thread
+    public static function thread(array $attributes = [])
     {
         return static::make(Thread::class, $attributes);
     }
@@ -136,7 +136,7 @@ class Models
      * Get an instance of the user model.
      *
      * @param  array  $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return Model
      */
     public static function user(array $attributes = []): Model
     {
@@ -148,7 +148,7 @@ class Models
      *
      * @param  string $model
      * @param  array $attributes
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return Model
      */
     protected static function make(string $model, array $attributes = []): Model
     {
