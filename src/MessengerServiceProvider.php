@@ -103,7 +103,7 @@ class MessengerServiceProvider extends ServiceProvider
         Models::setUserModel($model);
 
         Models::setTables([
-            'users' => (new $model)->getTable(),
+            'users' => (new $model())->getTable(),
         ]);
     }
 }

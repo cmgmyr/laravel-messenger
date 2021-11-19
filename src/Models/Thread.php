@@ -48,7 +48,7 @@ class Thread extends Eloquent
      * @var null|Models::user()|\Illuminate\Database\Eloquent\Model
      */
     protected $creatorCache;
-    
+
     /**
      * {@inheritDoc}
      */
@@ -433,7 +433,7 @@ class Thread extends Eloquent
             return collect();
         }
 
-        if (!$participant->last_read) {
+        if (! $participant->last_read) {
             return $messages;
         }
 
