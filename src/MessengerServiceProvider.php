@@ -35,7 +35,7 @@ class MessengerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the configuration for Messenger.
+     * Set up the configuration for Messenger.
      *
      * @return void
      */
@@ -48,7 +48,7 @@ class MessengerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the resource publishing groups for Messenger.
+     * Set up the resource publishing groups for Messenger.
      *
      * @return void
      */

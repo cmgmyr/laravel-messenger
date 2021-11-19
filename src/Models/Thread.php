@@ -14,8 +14,8 @@ use Illuminate\Support\Collection;
 /**
  * @method static Builder|self between(array $participants)
  * @method static Builder|self betweenOnly(array $participants)
- * @method static Builder|self forUser(int $userId)
- * @method static Builder|self forUserWithNewMessages(int $userId)
+ * @method static Builder|self forUser(mixed $userId)
+ * @method static Builder|self forUserWithNewMessages(mixed $userId)
  */
 class Thread extends Eloquent
 {
@@ -74,7 +74,7 @@ class Thread extends Eloquent
     /**
      * Returns the latest message from a thread.
      *
-     * @return null|Message
+     * @return ?Message
      */
     public function getLatestMessageAttribute()
     {
@@ -121,7 +121,7 @@ class Thread extends Eloquent
     }
 
     /**
-     * Returns all of the latest threads by updated_at date.
+     * Returns all the latest threads by updated_at date.
      *
      * @return Builder|static
      */
@@ -145,11 +145,11 @@ class Thread extends Eloquent
     /**
      * Returns an array of user ids that are associated with the thread.
      *
-     * @param null|int $userId
+     * @param mixed $userId
      *
      * @return array
      */
-    public function participantsUserIds(?int $userId = null): array
+    public function participantsUserIds($userId = null): array
     {
         $users = $this->participants()->withTrashed()->select('user_id')->get()->map(function ($participant) {
             return $participant->user_id;
@@ -166,11 +166,11 @@ class Thread extends Eloquent
      * Returns threads that the user is associated with.
      *
      * @param Builder $query
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return Builder
      */
-    public function scopeForUser(Builder $query, int $userId): Builder
+    public function scopeForUser(Builder $query, $userId): Builder
     {
         $participantsTable = Models::table('participants');
         $threadsTable = Models::table('threads');
@@ -185,11 +185,11 @@ class Thread extends Eloquent
      * Returns threads with new messages that the user is associated with.
      *
      * @param Builder $query
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return Builder
      */
-    public function scopeForUserWithNewMessages(Builder $query, int $userId): Builder
+    public function scopeForUserWithNewMessages(Builder $query, $userId): Builder
     {
         $participantTable = Models::table('participants');
         $threadsTable = Models::table('threads');
@@ -243,13 +243,13 @@ class Thread extends Eloquent
     /**
      * Add users to thread as participants.
      *
-     * @param array|mixed $userId
+     * @param mixed $userId
      *
      * @return void
      */
     public function addParticipant($userId): void
     {
-        $userIds = is_array($userId) ? $userId : (array) func_get_args();
+        $userIds = is_array($userId) ? $userId : func_get_args();
 
         collect($userIds)->each(function ($userId) {
             Models::participant()->firstOrCreate([
@@ -262,13 +262,13 @@ class Thread extends Eloquent
     /**
      * Remove participants from thread.
      *
-     * @param array|mixed $userId
+     * @param mixed $userId
      *
      * @return void
      */
     public function removeParticipant($userId): void
     {
-        $userIds = is_array($userId) ? $userId : (array) func_get_args();
+        $userIds = is_array($userId) ? $userId : func_get_args();
 
         Models::participant()->where('thread_id', $this->id)->whereIn('user_id', $userIds)->delete();
     }
@@ -276,11 +276,11 @@ class Thread extends Eloquent
     /**
      * Mark a thread as read for a user.
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return void
      */
-    public function markAsRead(int $userId): void
+    public function markAsRead($userId): void
     {
         try {
             $participant = $this->getParticipantFromUser($userId);
@@ -294,11 +294,11 @@ class Thread extends Eloquent
     /**
      * See if the current thread is unread by the user.
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return bool
      */
-    public function isUnread(int $userId): bool
+    public function isUnread($userId): bool
     {
         try {
             $participant = $this->getParticipantFromUser($userId);
@@ -316,7 +316,7 @@ class Thread extends Eloquent
     /**
      * Finds the participant record from a user id.
      *
-     * @param $userId
+     * @param mixed $userId
      *
      * @return mixed
      *
@@ -344,12 +344,12 @@ class Thread extends Eloquent
     /**
      * Generates a string of participant information.
      *
-     * @param null|int $userId
+     * @param mixed $userId
      * @param array $columns
      *
      * @return string
      */
-    public function participantsString(?int $userId = null, array $columns = ['name']): string
+    public function participantsString($userId = null, array $columns = ['name']): string
     {
         $participantsTable = Models::table('participants');
         $usersTable = Models::table('users');
@@ -372,11 +372,11 @@ class Thread extends Eloquent
     /**
      * Checks to see if a user is a current participant of the thread.
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return bool
      */
-    public function hasParticipant(int $userId): bool
+    public function hasParticipant($userId): bool
     {
         $participants = $this->participants()->where('user_id', '=', $userId);
 
@@ -419,11 +419,11 @@ class Thread extends Eloquent
     /**
      * Returns array of unread messages in thread for given user.
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return Collection
      */
-    public function userUnreadMessages(int $userId): Collection
+    public function userUnreadMessages($userId): Collection
     {
         $messages = $this->messages()->where('user_id', '!=', $userId)->get();
 
@@ -445,11 +445,11 @@ class Thread extends Eloquent
     /**
      * Returns count of unread messages in thread for given user.
      *
-     * @param int $userId
+     * @param mixed $userId
      *
      * @return int
      */
-    public function userUnreadMessagesCount(int $userId): int
+    public function userUnreadMessagesCount($userId): int
     {
         return $this->userUnreadMessages($userId)->count();
     }

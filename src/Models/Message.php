@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
- * @method static Builder|self unreadForUser(int $userId)
+ * @method static Builder|self unreadForUser(mixed $userId)
  */
 class Message extends Eloquent
 {
@@ -103,10 +103,10 @@ class Message extends Eloquent
      * Returns unread messages given the userId.
      *
      * @param Builder $query
-     * @param int $userId
+     * @param mixed $userId
      * @return Builder
      */
-    public function scopeUnreadForUser(Builder $query, int $userId): Builder
+    public function scopeUnreadForUser(Builder $query, $userId): Builder
     {
         return $query->has('thread')
             ->where('user_id', '!=', $userId)
