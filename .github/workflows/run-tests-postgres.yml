@@ -1,14 +1,6 @@
 name: Laravel Messenger - PostgreSQL Tests
-on:
-  push:
-    branches:
-      - master
-      - develop
-      - feature/**
-  pull_request:
-    branches:
-      - master
-      - develop
+
+on: [push, pull_request]
 
 jobs:
   laravel-tests:
