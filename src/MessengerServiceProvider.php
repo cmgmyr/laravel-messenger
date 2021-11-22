@@ -6,6 +6,7 @@ use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Models;
 use Cmgmyr\Messenger\Models\Participant;
 use Cmgmyr\Messenger\Models\Thread;
+use Illuminate\Contracts\Container\BindingResolutionException;
 use Illuminate\Support\ServiceProvider;
 
 class MessengerServiceProvider extends ServiceProvider
@@ -14,6 +15,7 @@ class MessengerServiceProvider extends ServiceProvider
      * Bootstrap the application services.
      *
      * @return void
+     * @throws BindingResolutionException
      */
     public function boot(): void
     {
@@ -33,7 +35,7 @@ class MessengerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the configuration for Messenger.
+     * Set up the configuration for Messenger.
      *
      * @return void
      */
@@ -46,7 +48,7 @@ class MessengerServiceProvider extends ServiceProvider
     }
 
     /**
-     * Setup the resource publishing groups for Messenger.
+     * Set up the resource publishing groups for Messenger.
      *
      * @return void
      */
@@ -67,7 +69,7 @@ class MessengerServiceProvider extends ServiceProvider
      * Define Messenger's models in registry.
      *
      * @return void
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
     protected function setMessengerModels(): void
     {
@@ -88,7 +90,7 @@ class MessengerServiceProvider extends ServiceProvider
      * Define User model in Messenger's model registry.
      *
      * @return void
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws BindingResolutionException
      */
     protected function setUserModel(): void
     {
@@ -101,7 +103,7 @@ class MessengerServiceProvider extends ServiceProvider
         Models::setUserModel($model);
 
         Models::setTables([
-            'users' => (new $model)->getTable(),
+            'users' => (new $model())->getTable(),
         ]);
     }
 }

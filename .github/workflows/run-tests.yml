@@ -1,14 +1,6 @@
 name: Laravel Messenger - Tests
-on:
-  push:
-    branches:
-      - master
-      - develop
-      - feature/**
-  pull_request:
-    branches:
-      - master
-      - develop
+
+on: [push, pull_request]
 
 jobs:
   laravel-tests:
@@ -18,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: [ '8.0','7.4','7.3','7.2' ]
+        php-versions: [ '8.1','8.0','7.4','7.3','7.2' ]
         dependency-stability: [ prefer-stable ]
         laravel: [ '8.*','7.*','6.*' ]
 
@@ -38,7 +30,11 @@ jobs:
           - laravel: 8.*
             php-versions: 7.2
           - laravel: 7.*
+            php-versions: 8.1
+          - laravel: 7.*
             php-versions: 8.0
+          - laravel: 6.*
+            php-versions: 8.1
           - laravel: 6.*
             php-versions: 8.0
 

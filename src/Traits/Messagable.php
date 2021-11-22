@@ -16,7 +16,7 @@ trait Messagable
     /**
      * Message relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      *
      * @codeCoverageIgnore
      */
@@ -28,7 +28,7 @@ trait Messagable
     /**
      * Participants relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     * @return HasMany
      *
      * @codeCoverageIgnore
      */
@@ -40,7 +40,7 @@ trait Messagable
     /**
      * Thread relationship.
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     * @return BelongsToMany
      *
      * @codeCoverageIgnore
      */
@@ -77,7 +77,7 @@ trait Messagable
     /**
      * Returns all threads with new messages.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
     public function threadsWithNewMessages(): Collection
     {

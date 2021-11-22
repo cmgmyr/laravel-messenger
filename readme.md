@@ -119,16 +119,13 @@ class User extends Authenticatable {
 * [WIP] [Lumen API](https://github.com/cmgmyr/lumen-messenger-api)
 
 
-## Contributing? 
-Please format your code before creating a pull-request. This will format all files as specified in `.php_cs`:
+## Contributing
 
-```
-vendor/bin/php-cs-fixer fix .
-```
+Please see [CONTRIBUTING](.github/CONTRIBUTING.md) for details.
 
-## Security
+## Security Vulnerabilities
 
-If you discover any security related issues, please email [Chris Gmyr](mailto:cmgmyr@gmail.com) instead of using the issue tracker.
+Please review [our security policy](../../security/policy) on how to report security vulnerabilities.
 
 ## Credits
 
