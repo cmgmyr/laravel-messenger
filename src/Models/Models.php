@@ -32,7 +32,7 @@ class Models
      *
      * @param string $model
      */
-    public static function setMessageModel(string $model): void
+    public static function setMessageModel($model)
     {
         static::$models[Message::class] = $model;
     }
@@ -42,7 +42,7 @@ class Models
      *
      * @param string $model
      */
-    public static function setParticipantModel(string $model): void
+    public static function setParticipantModel($model)
     {
         static::$models[Participant::class] = $model;
     }
@@ -52,7 +52,7 @@ class Models
      *
      * @param string $model
      */
-    public static function setThreadModel(string $model): void
+    public static function setThreadModel($model)
     {
         static::$models[Thread::class] = $model;
     }
@@ -62,7 +62,7 @@ class Models
      *
      * @param string $model
      */
-    public static function setUserModel(string $model): void
+    public static function setUserModel($model)
     {
         static::$models[self::$userModelLookupKey] = $model;
     }
@@ -72,7 +72,7 @@ class Models
      *
      * @param array $map
      */
-    public static function setTables(array $map): void
+    public static function setTables(array $map)
     {
         static::$tables = array_merge(static::$tables, $map);
     }
@@ -83,7 +83,7 @@ class Models
      * @param string $table
      * @return string
      */
-    public static function table(string $table): string
+    public static function table($table)
     {
         return static::$tables[$table] ?? $table;
     }
@@ -94,7 +94,7 @@ class Models
      * @param string $model
      * @return string
      */
-    public static function classname(string $model): string
+    public static function classname($model)
     {
         return static::$models[$model] ?? $model;
     }
@@ -138,7 +138,7 @@ class Models
      * @param  array  $attributes
      * @return Model
      */
-    public static function user(array $attributes = []): Model
+    public static function user(array $attributes = [])
     {
         return static::make(self::$userModelLookupKey, $attributes);
     }
@@ -150,7 +150,7 @@ class Models
      * @param  array $attributes
      * @return Model
      */
-    protected static function make(string $model, array $attributes = []): Model
+    protected static function make($model, array $attributes = [])
     {
         $model = static::classname($model);
 
