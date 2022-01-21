@@ -75,4 +75,31 @@ class MessagableTraitTest extends TestCase
         $firstThread = $user->threads->first();
         $this->assertInstanceOf(Thread::class, $firstThread);
     }
+
+    /** @test */
+    public function it_should_not_include_deleted_threads(): void
+    {
+        $user = $this->userFactory();
+
+        $thread1 = $this->threadFactory();
+        $user_thread1 = $this->participantFactory([
+            'user_id' => $user->id,
+            'thread_id' => $thread1->id,
+        ]);
+
+
+        $thread2 = $this->threadFactory();
+        $user_thread2 = $this->participantFactory([
+            'user_id' => $user->id,
+            'thread_id' => $thread2->id,
+        ]);
+
+        $this->assertSame(2, $user->threads()->count());
+        $this->assertSame(1, $thread1->users()->count());
+
+        $thread1->removeParticipant($user->id);
+
+        $this->assertSame(1, $user->threads()->count());
+        $this->assertSame(0, $thread1->users()->count());
+    }
 }
