@@ -137,7 +137,7 @@ class Thread extends Eloquent
      *
      * @return Collection|static[]
      */
-    public static function getBySubject(string $subject)
+    public static function getBySubject($subject)
     {
         return static::where('subject', 'like', $subject)->get();
     }
@@ -349,7 +349,7 @@ class Thread extends Eloquent
      *
      * @return string
      */
-    public function participantsString($userId = null, array $columns = ['name'])
+    public function participantsString($userId = null, $columns = ['name'])
     {
         $participantsTable = Models::table('participants');
         $usersTable = Models::table('users');
