@@ -17,7 +17,7 @@ class MessengerServiceProvider extends ServiceProvider
      * @return void
      * @throws BindingResolutionException
      */
-    public function boot(): void
+    public function boot()
     {
         $this->offerPublishing();
         $this->setMessengerModels();
@@ -29,7 +29,7 @@ class MessengerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register(): void
+    public function register()
     {
         $this->configure();
     }
@@ -39,7 +39,7 @@ class MessengerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function configure(): void
+    protected function configure()
     {
         $this->mergeConfigFrom(
             __DIR__ . '/../config/config.php',
@@ -52,7 +52,7 @@ class MessengerServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function offerPublishing(): void
+    protected function offerPublishing()
     {
         if ($this->app->runningInConsole()) {
             $this->publishes([
@@ -71,7 +71,7 @@ class MessengerServiceProvider extends ServiceProvider
      * @return void
      * @throws BindingResolutionException
      */
-    protected function setMessengerModels(): void
+    protected function setMessengerModels()
     {
         $config = $this->app->make('config');
 
@@ -92,7 +92,7 @@ class MessengerServiceProvider extends ServiceProvider
      * @return void
      * @throws BindingResolutionException
      */
-    protected function setUserModel(): void
+    protected function setUserModel()
     {
         $config = $this->app->make('config');
 
