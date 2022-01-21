@@ -60,7 +60,7 @@ class Message extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function thread(): BelongsTo
+    public function thread()
     {
         return $this->belongsTo(Models::classname(Thread::class), 'thread_id', 'id');
     }
@@ -72,7 +72,7 @@ class Message extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function user(): BelongsTo
+    public function user()
     {
         return $this->belongsTo(Models::user(), 'user_id');
     }
@@ -84,7 +84,7 @@ class Message extends Eloquent
      *
      * @codeCoverageIgnore
      */
-    public function participants(): HasMany
+    public function participants()
     {
         return $this->hasMany(Models::classname(Participant::class), 'thread_id', 'thread_id');
     }
@@ -94,7 +94,7 @@ class Message extends Eloquent
      *
      * @return HasMany
      */
-    public function recipients(): HasMany
+    public function recipients()
     {
         return $this->participants()->where('user_id', '!=', $this->user_id);
     }
@@ -106,7 +106,7 @@ class Message extends Eloquent
      * @param mixed $userId
      * @return Builder
      */
-    public function scopeUnreadForUser(Builder $query, $userId): Builder
+    public function scopeUnreadForUser(Builder $query, $userId)
     {
         return $query->has('thread')
             ->where('user_id', '!=', $userId)
