@@ -46,12 +46,15 @@ trait Messagable
      */
     public function threads()
     {
-        return $this->belongsToMany(
-            Models::classname(Thread::class),
-            Models::table('participants'),
-            'user_id',
-            'thread_id'
-        );
+        return $this
+            ->belongsToMany(
+                Models::classname(Thread::class),
+                Models::table('participants'),
+                'user_id',
+                'thread_id'
+            )
+            ->whereNull(Models::table('participants') . '.deleted_at')
+            ->withTimestamps();
     }
 
     /**
