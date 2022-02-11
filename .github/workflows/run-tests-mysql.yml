@@ -1,4 +1,4 @@
-name: Laravel Messenger - MySQL Tests
+name: MySQL Tests
 
 on: [push, pull_request]
 
@@ -31,10 +31,10 @@ jobs:
         php-versions: [ '8.1','8.0' ]
         dependency-stability: [ prefer-stable ]
 
-        laravel: [ '8.*' ]
+        laravel: [ '9.*' ]
         include:
-          - laravel:  8.*
-            testbench: 6.*
+          - laravel:  9.*
+            testbench: 7.*
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
