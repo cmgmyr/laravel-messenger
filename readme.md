@@ -1,4 +1,4 @@
-[![Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml)
+[![SQLite Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests.yml)
 [![MySQL Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-mysql.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-mysql.yml)
 [![PostgreSQL Tests](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-postgres.yml/badge.svg)](https://github.com/cmgmyr/laravel-messenger/actions/workflows/run-tests-postgres.yml)
 
