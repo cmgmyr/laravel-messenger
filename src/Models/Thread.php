@@ -222,11 +222,13 @@ class Thread extends Eloquent
      */
     public function scopeBetweenOnly(Builder $query, array $participants)
     {
-        return $query->whereHas('participants', function (Builder $builder) use ($participants) {
+        $participantTable = Models::table('participants');
+
+        return $query->whereHas('participants', function (Builder $builder) use ($participants, $participantTable) {
             return $builder->whereIn('user_id', $participants)
-                           ->groupBy('participants.thread_id')
-                           ->select('participants.thread_id')
-                           ->havingRaw('COUNT(participants.thread_id)=?', [count($participants)]);
+                           ->groupBy($participantTable.'.thread_id')
+                           ->select($participantTable.'.thread_id')
+                           ->havingRaw('COUNT('.$participantTable.'.thread_id)=?', [count($participants)]);
         });
     }
 
