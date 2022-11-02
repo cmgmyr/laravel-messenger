@@ -226,9 +226,9 @@ class Thread extends Eloquent
 
         return $query->whereHas('participants', function (Builder $builder) use ($participants, $participantTable) {
             return $builder->whereIn('user_id', $participants)
-                           ->groupBy($participantTable.'.thread_id')
-                           ->select($participantTable.'.thread_id')
-                           ->havingRaw('COUNT('.$participantTable.'.thread_id)=?', [count($participants)]);
+                           ->groupBy($participantTable . '.thread_id')
+                           ->select($participantTable . '.thread_id')
+                           ->havingRaw('COUNT(' . $participantTable . '.thread_id)=?', [count($participants)]);
         });
     }
 
@@ -407,20 +407,20 @@ class Thread extends Eloquent
         $usersTable = Models::table('users');
 
         switch ($dbDriver) {
-        case 'pgsql':
-        case 'sqlite':
-            $columnString = implode(" || ' ' || " . $tablePrefix . $usersTable . '.', $columns);
-            $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+            case 'pgsql':
+            case 'sqlite':
+                $columnString = implode(" || ' ' || " . $tablePrefix . $usersTable . '.', $columns);
+                $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
 
-            break;
-        case 'sqlsrv':
-            $columnString = implode(" + ' ' + " . $tablePrefix . $usersTable . '.', $columns);
-            $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+                break;
+            case 'sqlsrv':
+                $columnString = implode(" + ' ' + " . $tablePrefix . $usersTable . '.', $columns);
+                $selectString = '(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
 
-            break;
-        default:
-            $columnString = implode(", ' ', " . $tablePrefix . $usersTable . '.', $columns);
-            $selectString = 'concat(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
+                break;
+            default:
+                $columnString = implode(", ' ', " . $tablePrefix . $usersTable . '.', $columns);
+                $selectString = 'concat(' . $tablePrefix . $usersTable . '.' . $columnString . ') as name';
         }
 
         return $selectString;
