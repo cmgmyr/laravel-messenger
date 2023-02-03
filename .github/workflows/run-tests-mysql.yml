@@ -31,8 +31,10 @@ jobs:
         php-versions: [ '8.1','8.0' ]
         dependency-stability: [ prefer-stable ]
 
-        laravel: [ '9.*' ]
+        laravel: [ '9.*' , 10.*]
         include:
+          - laravel: 10.*
+            testbench: 8.*
           - laravel:  9.*
             testbench: 7.*
 
