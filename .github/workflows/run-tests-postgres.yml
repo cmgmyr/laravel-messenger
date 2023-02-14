@@ -29,13 +29,18 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: [ '8.1','8.0' ]
+        php-versions: [ '8.1', '8.0' ]
         dependency-stability: [ prefer-stable ]
 
-        laravel: [ '9.*' ]
+        laravel: [ '10.*', '9.*']
         include:
+          - laravel: 10.*
+            testbench: 8.*
           - laravel:  9.*
             testbench: 7.*
+        exclude:
+          - laravel: 10.*
+            php-versions: 8.0
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
