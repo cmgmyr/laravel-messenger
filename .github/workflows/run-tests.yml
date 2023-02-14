@@ -10,11 +10,14 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: [ '8.1','8.0','7.4','7.3','7.2' ]
+        php-versions: [ '8.1', '8.0', '7.4', '7.3', '7.2' ]
         dependency-stability: [ prefer-stable ]
-        laravel: [ '9.*','8.*','7.*','6.*' ]
+        laravel: [ '10.*', '9.*', '8.*', '7.*', '6.*' ]
 
         include:
+          - laravel: 10.*
+            testbench: 8.*
+            dbal: ^3.1.2
           - laravel:  9.*
             testbench: 7.*
             dbal: ^3.1.2
@@ -28,6 +31,14 @@ jobs:
             testbench: 4.*
             dbal: ^2.6
         exclude:
+          - laravel: 10.*
+            php-versions: 8.0
+          - laravel: 10.*
+            php-versions: 7.4
+          - laravel: 10.*
+            php-versions: 7.3
+          - laravel: 10.*
+            php-versions: 7.2
           - laravel: 9.*
             php-versions: 7.2
           - laravel: 9.*
