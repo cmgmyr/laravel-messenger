@@ -11,4 +11,4 @@ contact_links:
     about: Learn how to notify us for sensitive bugs
   - name: Report a bug
     url: https://github.com/cmgmyr/laravel-messenger/issues/new
-    about: Report a reproducable bug
+    about: Report a reproducible bug
