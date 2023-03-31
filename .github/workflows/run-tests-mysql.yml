@@ -28,7 +28,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: [ '8.1', '8.0' ]
+        php-versions: [ '8.2', '8.1' ]
         dependency-stability: [ prefer-stable ]
 
         laravel: [ '10.*', '9.*' ]
@@ -44,7 +44,7 @@ jobs:
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Install PHP versions
         uses: shivammathur/setup-php@v2
         with:
@@ -52,8 +52,8 @@ jobs:
       - name: Get Composer Cache Directory 2
         id: composer-cache
         run: |
-          echo "::set-output name=dir::$(composer config cache-files-dir)"
-      - uses: actions/cache@v2
+          echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
+      - uses: actions/cache@v3
         id: actions-cache
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
