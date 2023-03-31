@@ -36,13 +36,6 @@ class Thread extends Eloquent
     protected $fillable = ['subject'];
 
     /**
-     * The attributes that should be mutated to date's.
-     *
-     * @var array
-     */
-    protected $dates = ['deleted_at'];
-
-    /**
      * Internal cache for creator.
      *
      * @var null|Models::user()|\Illuminate\Database\Eloquent\Model
