@@ -29,9 +29,9 @@ class MessagableTraitTest extends TestCase
         $thread2->messages()->saveMany([$message_1b]);
 
         $threads = $user->threadsWithNewMessages();
-        $this->assertEquals(1, $threads->first()->id);
+        $this->assertSame(1, $threads->first()->id);
 
-        $this->assertEquals(1, $user->newThreadsCount());
+        $this->assertSame(1, $user->newThreadsCount());
     }
 
     /** @test */
@@ -59,7 +59,7 @@ class MessagableTraitTest extends TestCase
 
         $thread_2->messages()->saveMany([$this->messageFactory(['user_id' => 2])]);
 
-        $this->assertEquals(10, $user->unreadMessagesCount());
+        $this->assertSame(10, $user->unreadMessagesCount());
     }
 
     /** @test */
