@@ -12,7 +12,7 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.3', '8.2', '8.1', '8.0', '7.4', '7.3', '7.2']
+        php-versions: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
         dependency-stability: [prefer-stable]
         laravel: ['6.*', '7.*', '8.*', '9.*', '10.*', '11.*']
         include:
@@ -32,46 +32,46 @@ jobs:
             testbench: 4.*
             dbal: ^2.6
         exclude:
-          - laravel: 10.*
+          - laravel: 6.*
+            php-versions: 8.1
+          - laravel: 6.*
+            php-versions: 8.2
+          - laravel: 6.*
+            php-versions: 8.3
+          - laravel: 7.*
+            php-versions: 8.1
+          - laravel: 7.*
+            php-versions: 8.2
+          - laravel: 7.*
+            php-versions: 8.3
+          - laravel: 7.*
             php-versions: 8.0
-          - laravel: 10.*
-            php-versions: 7.4
-          - laravel: 10.*
-            php-versions: 7.3
-          - laravel: 10.*
-            php-versions: 7.2
-          - laravel: 9.*
-            php-versions: 7.2
-          - laravel: 9.*
-            php-versions: 7.3
-          - laravel: 9.*
-            php-versions: 7.4
           - laravel: 8.*
             php-versions: 7.2
-          - laravel: 7.*
-            php-versions: 8.3
-          - laravel: 7.*
-            php-versions: 8.2
-          - laravel: 7.*
-            php-versions: 8.1
-          - laravel: 7.*
+          - laravel: 9.*
+            php-versions: 7.2
+          - laravel: 9.*
+            php-versions: 7.3
+          - laravel: 9.*
+            php-versions: 7.4
+          - laravel: 10.*
             php-versions: 8.0
-          - laravel: 6.*
-            php-versions: 8.3
-          - laravel: 6.*
-            php-versions: 8.2
-          - laravel: 6.*
+          - laravel: 10.*
+            php-versions: 7.2
+          - laravel: 10.*
+            php-versions: 7.3
+          - laravel: 10.*
+            php-versions: 7.4
+          - laravel: 11.*
+            php-versions: 8.0
+          - laravel: 11.*
             php-versions: 8.1
           - laravel: 11.*
-            php-versions: '8.1'
+            php-versions: 7.2
           - laravel: 11.*
-            php-versions: '8.0'
+            php-versions: 7.3
           - laravel: 11.*
-            php-versions: '7.4'
-          - laravel: 11.*
-            php-versions: '7.3'
-          - laravel: 11.*
-            php-versions: '7.2'
+            php-versions: 7.4
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
@@ -98,8 +98,8 @@ jobs:
 
       - name: Install Laravel Dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "doctrine/dbal:${{ matrix.dbal }}" --no-interaction --no-update
-          composer update --${{ matrix.dependency-stability }} --prefer-dist --no-interaction --no-suggest
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" "doctrine/dbal:${{ matrix.dbal }}" --no-interaction --no-update --dev
+          composer update --${{ matrix.dependency-stability }} --prefer-dist --no-interaction
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:

@@ -22,21 +22,21 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.3', '8.2', '8.1']
+        php-versions: ['8.1', '8.2', '8.3']
         dependency-stability: [prefer-stable]
         laravel: ['9.*', '10.*', '11.*']
         include:
-          - laravel: 10.*
-            testbench: 8.*
           - laravel: 9.*
             testbench: 7.*
+          - laravel: 10.*
+            testbench: 8.*
           - laravel: 11.*
             testbench: 9.*
         exclude:
           - laravel: 10.*
             php-versions: 8.0
           - laravel: 11.*
-            php-versions: '8.1'
+            php-versions: 8.1
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
@@ -63,8 +63,8 @@ jobs:
 
       - name: Install Laravel Dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --${{ matrix.dependency-stability }} --prefer-dist --no-interaction --no-suggest
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev
+          composer update --${{ matrix.dependency-stability }} --prefer-dist --no-interaction
 
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
