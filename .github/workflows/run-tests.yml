@@ -16,21 +16,24 @@ jobs:
         dependency-stability: [prefer-stable]
         laravel: ['6.*', '7.*', '8.*', '9.*', '10.*', '11.*']
         include:
-          - laravel: 10.*
-            testbench: 8.*
-            dbal: ^3.1.2
-          - laravel: 9.*
-            testbench: 7.*
-            dbal: ^3.1.2
-          - laravel: 8.*
-            testbench: 6.*
-            dbal: ^3.1.2|^2.13.3
-          - laravel: 7.*
-            testbench: 5.*
-            dbal: ^2.6
           - laravel: 6.*
             testbench: 4.*
             dbal: ^2.6
+          - laravel: 7.*
+            testbench: 5.*
+            dbal: ^2.6
+          - laravel: 8.*
+            testbench: 6.*
+            dbal: ^3.1.2|^2.13.3
+          - laravel: 9.*
+            testbench: 7.*
+            dbal: ^3.1.2
+          - laravel: 10.*
+            testbench: 8.*
+            dbal: ^3.1.2
+          - laravel: 11.*
+            testbench: 9.*
+            dbal: ^3.1.2
         exclude:
           - laravel: 6.*
             php-versions: 8.1
