@@ -39,9 +39,9 @@ class EloquentThreadTest extends TestCase
 
         $threads = Thread::getBySubject('first subject');
 
-        $this->assertEquals(1, $threads->count());
-        $this->assertEquals(1, $threads->first()->id);
-        $this->assertEquals('first subject', $threads->first()->subject);
+        $this->assertSame(1, $threads->count());
+        $this->assertSame(1, $threads->first()->id);
+        $this->assertSame('first subject', $threads->first()->subject);
     }
 
     /** @test */
@@ -52,23 +52,23 @@ class EloquentThreadTest extends TestCase
 
         $threads = Thread::getBySubject('%subject');
 
-        $this->assertEquals(2, $threads->count());
+        $this->assertSame(2, $threads->count());
 
-        $this->assertEquals(1, $threads->first()->id);
-        $this->assertEquals('first subject', $threads->first()->subject);
+        $this->assertSame(1, $threads->first()->id);
+        $this->assertSame('first subject', $threads->first()->subject);
 
-        $this->assertEquals(2, $threads->last()->id);
-        $this->assertEquals('second subject', $threads->last()->subject);
+        $this->assertSame(2, $threads->last()->id);
+        $this->assertSame('second subject', $threads->last()->subject);
     }
 
     /** @test */
     public function it_should_create_a_new_thread(): void
     {
         $thread = $this->threadFactory();
-        $this->assertEquals('Sample thread', $thread->subject);
+        $this->assertSame('Sample thread', $thread->subject);
 
         $thread = $this->threadFactory(['subject' => 'Second sample thread']);
-        $this->assertEquals('Second sample thread', $thread->subject);
+        $this->assertSame('Second sample thread', $thread->subject);
     }
 
     /** @test */
@@ -85,7 +85,7 @@ class EloquentThreadTest extends TestCase
 
         $thread = $this->threadFactory();
         $thread->messages()->saveMany([$oldMessage, $newMessage]);
-        $this->assertEquals($newMessage->body, $thread->latestMessage->body);
+        $this->assertSame($newMessage->body, $thread->latestMessage->body);
     }
 
     /** @test */
@@ -117,11 +117,11 @@ class EloquentThreadTest extends TestCase
 
         $participantIds = $thread->participantsUserIds();
         $this->assertCount(3, $participantIds);
-        $this->assertEquals(2, $participantIds[1]);
+        $this->assertSame(2, (int) $participantIds[1]);
 
         $participantIds = $thread->participantsUserIds(999);
         $this->assertCount(4, $participantIds);
-        $this->assertEquals(999, end($participantIds));
+        $this->assertSame(999, end($participantIds));
 
         $this->assertIsArray($participantIds);
     }
@@ -254,7 +254,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->addParticipant($participant);
 
-        $this->assertEquals(1, $thread->participants()->count());
+        $this->assertSame(1, $thread->participants()->count());
     }
 
     /** @test */
@@ -266,7 +266,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->addParticipant($participants);
 
-        $this->assertEquals(3, $thread->participants()->count());
+        $this->assertSame(3, $thread->participants()->count());
     }
 
     /** @test */
@@ -276,7 +276,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->addParticipant(1, 2);
 
-        $this->assertEquals(2, $thread->participants()->count());
+        $this->assertSame(2, $thread->participants()->count());
     }
 
     /** @test */
@@ -291,7 +291,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->markAsRead($userId);
 
-        $this->assertNotEquals($thread->getParticipantFromUser($userId)->last_read, $last_read);
+        $this->assertNotSame($thread->getParticipantFromUser($userId)->last_read, $last_read);
     }
 
     /** @test */
@@ -355,12 +355,12 @@ class EloquentThreadTest extends TestCase
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 
         $participants = $thread->participants();
-        $this->assertEquals(0, $participants->count());
+        $this->assertSame(0, $participants->count());
 
         $thread->activateAllParticipants();
 
         $participants = $thread->participants();
-        $this->assertEquals(3, $participants->count());
+        $this->assertSame(3, $participants->count());
     }
 
     /** @test */
@@ -375,18 +375,18 @@ class EloquentThreadTest extends TestCase
         $expectedString = '(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.name) as name';
 
         if (config('database.connections.testbench.driver') === 'mysql') {
-            $this->assertEquals('concat' . $expectedString, $select);
+            $this->assertSame('concat' . $expectedString, $select);
         } else {
-            $this->assertEquals($expectedString, $select);
+            $this->assertSame($expectedString, $select);
         }
 
         $columns = ['name', 'email'];
         $select = $method->invokeArgs($thread, [$columns]);
 
         if (config('database.connections.testbench.driver') === 'mysql') {
-            $this->assertEquals('concat(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name, ' ', " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
+            $this->assertSame('concat(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name, ' ', " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
         } else {
-            $this->assertEquals('(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
+            $this->assertSame('(' . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . ".name || ' ' || " . Eloquent::getConnectionResolver()->getTablePrefix() . $tableName . '.email) as name', $select);
         }
     }
 
@@ -404,13 +404,13 @@ class EloquentThreadTest extends TestCase
         $thread->participants()->saveMany([$participant_1, $participant_2, $participant_3]);
 
         $string = $thread->participantsString();
-        $this->assertEquals('Chris Gmyr, Adam Wathan, Taylor Otwell', $string);
+        $this->assertSame('Chris Gmyr, Adam Wathan, Taylor Otwell', $string);
 
         $string = $thread->participantsString(1);
-        $this->assertEquals('Adam Wathan, Taylor Otwell', $string);
+        $this->assertSame('Adam Wathan, Taylor Otwell', $string);
 
         $string = $thread->participantsString(1, ['email']);
-        $this->assertEquals('adam@test.com, taylor@test.com', $string);
+        $this->assertSame('adam@test.com, taylor@test.com', $string);
     }
 
     /** @test */
@@ -440,7 +440,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->removeParticipant(2);
 
-        $this->assertEquals(1, $thread->participants()->count());
+        $this->assertSame(1, $thread->participants()->count());
     }
 
     /** @test */
@@ -455,7 +455,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->removeParticipant([1, 2]);
 
-        $this->assertEquals(0, $thread->participants()->count());
+        $this->assertSame(0, $thread->participants()->count());
     }
 
     /** @test */
@@ -470,7 +470,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->removeParticipant(1, 2);
 
-        $this->assertEquals(0, $thread->participants()->count());
+        $this->assertSame(0, $thread->participants()->count());
     }
 
     /** @test */
@@ -507,7 +507,7 @@ class EloquentThreadTest extends TestCase
 
         $secondParticipantUnreadMessages = $thread->userUnreadMessages($participant_2->user_id);
         $this->assertCount(1, $secondParticipantUnreadMessages);
-        $this->assertEquals('Message 2', $secondParticipantUnreadMessages->first()->body);
+        $this->assertSame('Message 2', $secondParticipantUnreadMessages->first()->body);
     }
 
     /** @test */
@@ -544,7 +544,7 @@ class EloquentThreadTest extends TestCase
 
         $secondParticipantUnreadMessages = $thread->userUnreadMessages($participant_2->user_id);
         $this->assertCount(1, $secondParticipantUnreadMessages);
-        $this->assertEquals('Message 2', $secondParticipantUnreadMessages->first()->body);
+        $this->assertSame('Message 2', $secondParticipantUnreadMessages->first()->body);
     }
 
     /** @test */
@@ -552,7 +552,7 @@ class EloquentThreadTest extends TestCase
     {
         $thread = $this->threadFactory();
 
-        $this->assertEquals(0, $thread->userUnreadMessagesCount(1));
+        $this->assertSame(0, $thread->userUnreadMessagesCount(1));
     }
 
     /** @test */
@@ -574,7 +574,7 @@ class EloquentThreadTest extends TestCase
 
         $thread->messages()->saveMany([$message_1, $message_2, $message_3]);
 
-        $this->assertEquals('Chris Gmyr', $thread->creator()->name);
+        $this->assertSame('Chris Gmyr', $thread->creator()->name);
     }
 
     /**

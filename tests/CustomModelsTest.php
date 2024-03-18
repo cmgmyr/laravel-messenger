@@ -42,7 +42,7 @@ class CustomModelsTest extends TestCase
         $this->setMessageCustomModel();
         $this->setMessageCustomTable();
 
-        $this->assertEquals('custom_messages', Models::table('messages'));
+        $this->assertSame('custom_messages', Models::table('messages'));
 
         $this->unsetMessageCustomModel();
         $this->unsetMessageCustomTable();
@@ -53,7 +53,7 @@ class CustomModelsTest extends TestCase
     {
         $modelName = 'ModelNotFound';
 
-        $this->assertEquals('ModelNotFound', Models::classname($modelName));
+        $this->assertSame('ModelNotFound', Models::classname($modelName));
     }
 
     /** :TODO: test */
@@ -61,7 +61,7 @@ class CustomModelsTest extends TestCase
     {
         $this->setMessageCustomModel();
 
-        $this->assertEquals('custom_messages', Models::message()->getTable());
+        $this->assertSame('custom_messages', Models::message()->getTable());
 
         $this->unsetMessageCustomModel();
     }

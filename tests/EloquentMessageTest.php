@@ -18,6 +18,6 @@ class EloquentMessageTest extends TestCase
 
         $thread->participants()->saveMany([$user_1, $user_2, $user_3]);
 
-        $this->assertEquals(2, $message->recipients()->count());
+        $this->assertSame(2, $message->recipients()->count());
     }
 }
