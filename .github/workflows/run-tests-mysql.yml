@@ -1,23 +1,21 @@
 name: MySQL Tests
 
-on: [push, pull_request]
+on:
+  - push
+  - pull_request
 
 jobs:
   laravel-tests:
     runs-on: ubuntu-latest
-    # Service container Mysql mysql
+
     services:
-      # Label used to access the service container
       mysql:
-        # Docker Hub image (also with version)
         image: mysql:8.0
         env:
           MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_DATABASE:  db_test_laravel
-        ## map the "external" 33306 port with the "internal" 3306
+          MYSQL_DATABASE: db_test_laravel
         ports:
           - 33306:3306
-        # Set health checks to wait until mysql database has started (it takes some seconds to start)
         options: >-
           --health-cmd="mysqladmin ping"
           --health-interval=10s
@@ -28,50 +26,54 @@ jobs:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: [ '8.3', '8.2', '8.1' ]
-        dependency-stability: [ prefer-stable ]
-
-        laravel: [ '10.*', '9.*' ]
+        php-versions: ['8.1', '8.2', '8.3']
+        dependency-stability: [prefer-stable]
+        laravel: ['9.*', '10.*', '11.*']
         include:
+          - laravel: 9.*
+            testbench: 7.*
           - laravel: 10.*
             testbench: 8.*
-          - laravel:  9.*
-            testbench: 7.*
+          - laravel: 11.*
+            testbench: 9.*
         exclude:
           - laravel: 10.*
             php-versions: 8.0
+          - laravel: 11.*
+            php-versions: 8.1
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
+
       - name: Install PHP versions
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php-versions }}
+
       - name: Get Composer Cache Directory 2
         id: composer-cache
         run: |
           echo "dir=$(composer config cache-files-dir)" >> $GITHUB_OUTPUT
-      - uses: actions/cache@v3
+
+      - uses: actions/cache@v4
         id: actions-cache
         with:
           path: ${{ steps.composer-cache.outputs.dir }}
           key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-composer-
+
       - name: Install Laravel Dependencies
         run: |
-          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update
-          composer update --${{ matrix.dependency-stability }} --prefer-dist --no-interaction --no-suggest
+          composer require "laravel/framework:${{ matrix.laravel }}" "orchestra/testbench:${{ matrix.testbench }}" --no-interaction --no-update --dev
+          composer update --${{ matrix.dependency-stability }} --prefer-dist --no-interaction
 
-      # Code quality
       - name: Execute tests (Unit and Feature tests) via PHPUnit
-        # Set environment
         env:
           DB_CONNECTION: mysql
           DB_DATABASE: db_test_laravel
           DB_PORT: 33306
           DB_USERNAME: root
-
         run: vendor/bin/phpunit --testdox
