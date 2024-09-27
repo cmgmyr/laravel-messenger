@@ -1,9 +1,10 @@
 <?php
+use App\Http\Controllers\MessagesController;
 
 Route::group(['prefix' => 'messages'], function () {
-    Route::get('/', ['as' => 'messages', 'uses' => 'MessagesController@index']);
-    Route::get('create', ['as' => 'messages.create', 'uses' => 'MessagesController@create']);
-    Route::post('/', ['as' => 'messages.store', 'uses' => 'MessagesController@store']);
-    Route::get('{id}', ['as' => 'messages.show', 'uses' => 'MessagesController@show']);
-    Route::put('{id}', ['as' => 'messages.update', 'uses' => 'MessagesController@update']);
+    Route::get('/', [MessagesController::class, 'index'])->name('messages');
+    Route::get('/create', [MessagesController::class, 'create'])->name('messages.create');
+    Route::post('/', [MessagesController::class, 'store'])->name('messages.store');
+    Route::post('/{id}', [MessagesController::class, 'show'])->name('messages.show');
+    Route::put('/{id}', [MessagesController::class, 'update'])->name('messages.update');
 });
