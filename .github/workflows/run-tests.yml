@@ -14,7 +14,7 @@ jobs:
         operating-system: [ubuntu-latest]
         php-versions: ['7.2', '7.3', '7.4', '8.0', '8.1', '8.2', '8.3']
         dependency-stability: [prefer-stable]
-        laravel: ['6.*', '7.*', '8.*', '9.*', '10.*', '11.*']
+        laravel: ['6.*', '7.*', '8.*', '9.*', '10.*', '11.*', '12.*']
         include:
           - laravel: 6.*
             testbench: 4.*
@@ -75,6 +75,16 @@ jobs:
             php-versions: 7.3
           - laravel: 11.*
             php-versions: 7.4
+          - laravel: 12.*
+            php-versions: '7.2'
+          - laravel: 12.*
+            php-versions: '7.3'
+          - laravel: 12.*
+            php-versions: '7.4'
+          - laravel: 12.*
+            php-versions: '8.0'
+          - laravel: 12.*
+            php-versions: '8.1'
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
@@ -107,5 +117,5 @@ jobs:
       - name: Execute tests (Unit and Feature tests) via PHPUnit
         env:
           DB_CONNECTION: sqlite
-          DB_DATABASE: ":memory:"
+          DB_DATABASE: :memory:
         run: vendor/bin/phpunit --testdox

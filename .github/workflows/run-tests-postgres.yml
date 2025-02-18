@@ -17,11 +17,7 @@ jobs:
           POSTGRES_DB: db_test_laravel
         ports:
           - 55432:5432
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     strategy:
       fail-fast: false
@@ -29,7 +25,7 @@ jobs:
         operating-system: [ubuntu-latest]
         php-versions: ['8.1', '8.2', '8.3']
         dependency-stability: [prefer-stable]
-        laravel: ['9.*', '10.*', '11.*']
+        laravel: ['9.*', '10.*', '11.*', '12.*']
         include:
           - laravel: 9.*
             testbench: 7.*
@@ -37,11 +33,15 @@ jobs:
             testbench: 8.*
           - laravel: 11.*
             testbench: 9.*
+          - laravel: 12.*
+            testbench: 10.*
         exclude:
           - laravel: 10.*
             php-versions: 8.0
           - laravel: 11.*
             php-versions: 8.1
+          - laravel: 12.*
+            php-versions: '8.1'
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
