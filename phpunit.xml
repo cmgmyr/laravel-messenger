@@ -17,19 +17,6 @@
         beStrictAboutOutputDuringTests="true"
         verbose="true"
 >
-    <coverage>
-        <include>
-            <directory suffix=".php">src</directory>
-        </include>
-        <exclude>
-            <file>src/MessengerServiceProvider.php</file>
-        </exclude>
-        <report>
-            <clover outputFile="build/logs/clover.xml"/>
-            <html outputDirectory="build/coverage"/>
-            <text outputFile="build/coverage.txt"/>
-        </report>
-    </coverage>
     <testsuites>
         <testsuite name="Messenger Test Suite">
             <directory suffix="Test.php">./tests/</directory>

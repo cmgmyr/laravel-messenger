@@ -16,31 +16,20 @@ jobs:
           MYSQL_DATABASE: db_test_laravel
         ports:
           - 33306:3306
-        options: >-
-          --health-cmd="mysqladmin ping"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=3
+        options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
 
     strategy:
       fail-fast: false
       matrix:
         operating-system: [ubuntu-latest]
-        php-versions: ['8.1', '8.2', '8.3']
+        php-versions: ['8.3', '8.4']
         dependency-stability: [prefer-stable]
-        laravel: ['9.*', '10.*', '11.*']
+        laravel: ['11.*', '12.*']
         include:
-          - laravel: 9.*
-            testbench: 7.*
-          - laravel: 10.*
-            testbench: 8.*
           - laravel: 11.*
             testbench: 9.*
-        exclude:
-          - laravel: 10.*
-            php-versions: 8.0
-          - laravel: 11.*
-            php-versions: 8.1
+          - laravel: 12.*
+            testbench: 10.*
 
     name: P${{ matrix.php-versions }} - L${{ matrix.laravel }} - ${{ matrix.dependency-stability }} - ${{ matrix.operating-system}}
 
