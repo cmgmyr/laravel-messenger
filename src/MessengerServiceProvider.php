@@ -62,6 +62,18 @@ class MessengerServiceProvider extends ServiceProvider
             $this->publishes([
                 __DIR__ . '/../migrations' => base_path('database/migrations'),
             ], 'migrations');
+
+            $this->publishes([
+               __DIR__ . '/../examples/views/messenger' => resource_path('views/messenger'),
+            ], 'messenger-assets');
+
+            $this->publishes([
+                __DIR__ . '/../examples/views/layouts/master.blade.php' => resource_path('views/layouts/master.blade.php'),
+            ], 'messenger-assets');
+
+            $this->publishes([
+               __DIR__ . '/../examples/MessagesController.php' => app_path('Http/Controllers/MessagesController.php'),
+           ], 'messenger-assets');
         }
     }
 
