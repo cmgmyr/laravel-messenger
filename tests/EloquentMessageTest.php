@@ -4,8 +4,7 @@ namespace Cmgmyr\Messenger\Tests;
 
 class EloquentMessageTest extends TestCase
 {
-    /** @test */
-    public function it_should_get_the_recipients_of_a_message(): void
+    public function test_it_should_get_the_recipients_of_a_message(): void
     {
         $message = $this->messageFactory();
         $thread = $this->threadFactory();

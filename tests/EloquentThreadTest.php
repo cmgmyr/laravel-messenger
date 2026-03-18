@@ -31,8 +31,7 @@ class EloquentThreadTest extends TestCase
         return $method;
     }
 
-    /** @test */
-    public function search_specific_thread_by_subject(): void
+    public function test_search_specific_thread_by_subject(): void
     {
         $this->threadFactory(['id' => 1, 'subject' => 'first subject']);
         $this->threadFactory(['id' => 2, 'subject' => 'second subject']);
@@ -44,8 +43,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame('first subject', $threads->first()->subject);
     }
 
-    /** @test */
-    public function search_threads_by_subject(): void
+    public function test_search_threads_by_subject(): void
     {
         $this->threadFactory(['id' => 1, 'subject' => 'first subject']);
         $this->threadFactory(['id' => 2, 'subject' => 'second subject']);
@@ -61,8 +59,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame('second subject', $threads->last()->subject);
     }
 
-    /** @test */
-    public function it_should_create_a_new_thread(): void
+    public function test_it_should_create_a_new_thread(): void
     {
         $thread = $this->threadFactory();
         $this->assertSame('Sample thread', $thread->subject);
@@ -71,8 +68,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame('Second sample thread', $thread->subject);
     }
 
-    /** @test */
-    public function it_should_return_the_latest_message(): void
+    public function test_it_should_return_the_latest_message(): void
     {
         $oldMessage = $this->messageFactory([
           'created_at' => Carbon::yesterday(),
@@ -88,8 +84,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame($newMessage->body, $thread->latestMessage->body);
     }
 
-    /** @test */
-    public function it_should_return_all_threads(): void
+    public function test_it_should_return_all_threads(): void
     {
         $threadCount = random_int(5, 20);
 
@@ -102,8 +97,7 @@ class EloquentThreadTest extends TestCase
         $this->assertCount($threadCount, $threads);
     }
 
-    /** @test */
-    public function it_should_get_all_thread_participants(): void
+    public function test_it_should_get_all_thread_participants(): void
     {
         $thread = $this->threadFactory();
         $participantIds = $thread->participantsUserIds();
@@ -126,8 +120,7 @@ class EloquentThreadTest extends TestCase
         $this->assertIsArray($participantIds);
     }
 
-    /** @test */
-    public function it_should_get_all_threads_for_a_user(): void
+    public function test_it_should_get_all_threads_for_a_user(): void
     {
         $userId = 1;
 
@@ -143,8 +136,7 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(2, $threads);
     }
 
-    /** @test */
-    public function it_should_get_all_user_entities_for_a_thread(): void
+    public function test_it_should_get_all_user_entities_for_a_thread(): void
     {
         $this->seedUsersTable();
 
@@ -158,8 +150,7 @@ class EloquentThreadTest extends TestCase
         $this->assertArrayHasKey(2, $threadUserIds);
     }
 
-    /** @test */
-    public function it_should_get_all_threads_for_a_user_with_new_messages(): void
+    public function test_it_should_get_all_threads_for_a_user_with_new_messages(): void
     {
         $userId = 1;
 
@@ -175,8 +166,7 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(1, $threads);
     }
 
-    /** @test */
-    public function it_should_get_all_threads_shared_by_specified_users(): void
+    public function test_it_should_get_all_threads_shared_by_specified_users(): void
     {
         $userId = 1;
         $userId2 = 2;
@@ -192,8 +182,7 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(1, $threads);
     }
 
-    /** @test **/
-    public function it_should_get_thread_between_participants(): void
+    public function test_it_should_get_thread_between_participants(): void
     {
         $participant_1 = 1;
         $participant_2 = 2;
@@ -222,8 +211,7 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(3, $threads_2->get());
     }
 
-    /** @test **/
-    public function it_should_get_thread_between_only_participants(): void
+    public function test_it_should_get_thread_between_only_participants(): void
     {
         $participant_1 = $this->participantFactory(['user_id' => 1]);
         $participant_2 = $this->participantFactory(['user_id' => 2]);
@@ -245,8 +233,7 @@ class EloquentThreadTest extends TestCase
         $this->assertCount(1, $threads_2->get());
     }
 
-    /** @test */
-    public function it_should_add_a_participant_to_a_thread(): void
+    public function test_it_should_add_a_participant_to_a_thread(): void
     {
         $participant = 1;
 
@@ -257,8 +244,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame(1, $thread->participants()->count());
     }
 
-    /** @test */
-    public function it_should_add_participants_to_a_thread_with_array(): void
+    public function test_it_should_add_participants_to_a_thread_with_array(): void
     {
         $participants = [1, 2, 3];
 
@@ -269,8 +255,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame(3, $thread->participants()->count());
     }
 
-    /** @test */
-    public function it_should_add_participants_to_a_thread_with_arguments(): void
+    public function test_it_should_add_participants_to_a_thread_with_arguments(): void
     {
         $thread = $this->threadFactory();
 
@@ -279,8 +264,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame(2, $thread->participants()->count());
     }
 
-    /** @test */
-    public function it_should_mark_the_participant_as_read(): void
+    public function test_it_should_mark_the_participant_as_read(): void
     {
         $userId = 1;
         $last_read = Carbon::yesterday();
@@ -294,8 +278,7 @@ class EloquentThreadTest extends TestCase
         $this->assertNotSame($thread->getParticipantFromUser($userId)->last_read, $last_read);
     }
 
-    /** @test */
-    public function it_should_see_if_thread_is_unread_by_user(): void
+    public function test_it_should_see_if_thread_is_unread_by_user(): void
     {
         $userId = 1;
 
@@ -312,8 +295,7 @@ class EloquentThreadTest extends TestCase
         $this->assertTrue($thread2->isUnread($userId));
     }
 
-    /** @test */
-    public function it_should_get_a_participant_from_userid(): void
+    public function test_it_should_get_a_participant_from_userid(): void
     {
         $userId = 1;
 
@@ -326,8 +308,7 @@ class EloquentThreadTest extends TestCase
         $this->assertInstanceOf(Participant::class, $newParticipant);
     }
 
-    /** @test */
-    public function it_should_throw_an_exception_when_participant_is_not_found(): void
+    public function test_it_should_throw_an_exception_when_participant_is_not_found(): void
     {
         try {
             $thread = $this->threadFactory();
@@ -342,8 +323,7 @@ class EloquentThreadTest extends TestCase
         $this->fail('ModelNotFoundException was not called.');
     }
 
-    /** @test */
-    public function it_should_activate_all_deleted_participants(): void
+    public function test_it_should_activate_all_deleted_participants(): void
     {
         $deleted_at = Carbon::yesterday();
         $thread = $this->threadFactory();
@@ -363,8 +343,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame(3, $participants->count());
     }
 
-    /** @test */
-    public function it_should_generate_participant_select_string(): void
+    public function test_it_should_generate_participant_select_string(): void
     {
         $method = self::getMethod('createSelectString');
         $thread = new Thread();
@@ -390,8 +369,7 @@ class EloquentThreadTest extends TestCase
         }
     }
 
-    /** @test */
-    public function it_should_get_participants_string(): void
+    public function test_it_should_get_participants_string(): void
     {
         $this->seedUsersTable();
 
@@ -413,8 +391,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame('adam@test.com, taylor@test.com', $string);
     }
 
-    /** @test */
-    public function it_should_check_users_and_participants(): void
+    public function test_it_should_check_users_and_participants(): void
     {
         $thread = $this->threadFactory();
 
@@ -428,8 +405,7 @@ class EloquentThreadTest extends TestCase
         $this->assertFalse($thread->hasParticipant(3));
     }
 
-    /** @test */
-    public function it_should_remove_a_single_participant(): void
+    public function test_it_should_remove_a_single_participant(): void
     {
         $thread = $this->threadFactory();
 
@@ -443,8 +419,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame(1, $thread->participants()->count());
     }
 
-    /** @test */
-    public function it_should_remove_a_group_of_participants_with_array(): void
+    public function test_it_should_remove_a_group_of_participants_with_array(): void
     {
         $thread = $this->threadFactory();
 
@@ -458,8 +433,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame(0, $thread->participants()->count());
     }
 
-    /** @test */
-    public function it_should_remove_a_group_of_participants_with_arguments(): void
+    public function test_it_should_remove_a_group_of_participants_with_arguments(): void
     {
         $thread = $this->threadFactory();
 
@@ -473,8 +447,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame(0, $thread->participants()->count());
     }
 
-    /** @test */
-    public function it_should_get_all_unread_messages_for_user(): void
+    public function test_it_should_get_all_unread_messages_for_user(): void
     {
         $thread = $this->threadFactory();
 
@@ -510,8 +483,7 @@ class EloquentThreadTest extends TestCase
         $this->assertSame('Message 2', $secondParticipantUnreadMessages->first()->body);
     }
 
-    /** @test */
-    public function it_should_get_all_unread_messages_for_user_when_dates_not_set(): void
+    public function test_it_should_get_all_unread_messages_for_user_when_dates_not_set(): void
     {
         $thread = $this->threadFactory();
 
@@ -547,16 +519,14 @@ class EloquentThreadTest extends TestCase
         $this->assertSame('Message 2', $secondParticipantUnreadMessages->first()->body);
     }
 
-    /** @test */
-    public function it_should_return_empty_collection_when_user_not_participant(): void
+    public function test_it_should_return_empty_collection_when_user_not_participant(): void
     {
         $thread = $this->threadFactory();
 
         $this->assertSame(0, $thread->userUnreadMessagesCount(1));
     }
 
-    /** @test */
-    public function it_should_get_the_creator_of_a_thread(): void
+    public function test_it_should_get_the_creator_of_a_thread(): void
     {
         $this->seedUsersTable();
 
@@ -578,11 +548,9 @@ class EloquentThreadTest extends TestCase
     }
 
     /**
-     * @test
-     *
      * TODO: Need to get real creator of the thread without messages in future versions.
      */
-    public function it_should_get_the_null_creator_of_a_thread_without_messages(): void
+    public function test_it_should_get_the_null_creator_of_a_thread_without_messages(): void
     {
         $thread = $this->threadFactory();
 
