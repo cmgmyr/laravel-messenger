@@ -110,6 +110,12 @@ class User extends Authenticatable {
 ```
 
 ## Examples
+publish example using following command. This will publish controller and views. you can copy route and put in your routes file.
+
+```
+php artisan vendor:publish --provider="Cmgmyr\Messenger\MessengerServiceProvider" --tag="messenger-assets"
+```
+
 * [Controller](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/MessagesController.php)
 * [Routes](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/routes.php)
 * [Views](https://github.com/cmgmyr/laravel-messenger/tree/master/examples/views)

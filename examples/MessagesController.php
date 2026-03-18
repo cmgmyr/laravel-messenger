@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\User;
+use App\Models\User;
 use Carbon\Carbon;
 use Cmgmyr\Messenger\Models\Message;
 use Cmgmyr\Messenger\Models\Participant;
