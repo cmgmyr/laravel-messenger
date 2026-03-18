@@ -3,19 +3,13 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
         backupGlobals="false"
-        backupStaticAttributes="false"
         bootstrap="vendor/autoload.php"
         colors="true"
-        convertErrorsToExceptions="true"
-        convertNoticesToExceptions="true"
-        convertWarningsToExceptions="true"
         processIsolation="false"
         stopOnFailure="false"
         failOnWarning="true"
         failOnRisky="true"
         failOnEmptyTestSuite="true"
-        beStrictAboutOutputDuringTests="true"
-        verbose="true"
 >
     <testsuites>
         <testsuite name="Messenger Test Suite">
